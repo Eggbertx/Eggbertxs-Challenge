@@ -1,0 +1,10 @@
+docs/
+sounds/
+music/
+images/old/
+CHIPS.DAT
+*.blend1
+.import/
+
+# images is just temporary until I get a new tileset set up
+images/
