@@ -12,12 +12,12 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "DatFile",
 "language": "GDScript",
-"path": "res://datfile.gd"
+"path": "res://src/data/datfile.gd"
 }, {
 "base": "Node",
 "class": "Level",
 "language": "GDScript",
-"path": "res://Level.gd"
+"path": "res://src/level/Level.gd"
 } ]
 _global_script_class_icons={
 "DatFile": "",
@@ -28,7 +28,7 @@ _global_script_class_icons={
 
 config/name="Eggbertx's Challenge"
 config/description="A \"Chip's Challenge\" implementation in Godot"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://src/Main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
