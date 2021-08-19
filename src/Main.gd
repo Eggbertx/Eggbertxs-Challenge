@@ -34,6 +34,7 @@ func register_commands():
 		.register()
 
 	Console.add_command("levelInfo", self, "level_info")\
+		.set_description("Prints info about the current level")\
 		.add_argument("level", TYPE_INT)\
 		.register()
 

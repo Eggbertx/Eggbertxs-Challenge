@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/hud/UI.gd" type="Script" id=1]
+
+[node name="UI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.667419
+margin_top = -0.667419
+margin_right = 0.667419
+margin_bottom = -0.667419
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+rect_min_size = Vector2( 35, 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+margin_right = 35.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuButton" type="MenuButton" parent="Panel/HBoxContainer"]
+margin_right = 50.0
+margin_bottom = 20.0
+size_flags_vertical = 3
+text = "Game"
+flat = false
+items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Restart level", null, 0, false, false, 1, 0, null, "", false, "High scores", null, 0, false, false, 2, 0, null, "", false, "Music", null, 1, true, false, 3, 0, null, "", false, "", null, 0, false, false, 4, 0, null, "", true, "GitHub repo", null, 0, false, false, 5, 0, null, "", false, "Quit", null, 0, false, false, 6, 0, null, "", false ]
