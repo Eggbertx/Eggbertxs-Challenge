@@ -14,6 +14,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="FileDialog" type="FileDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -216.5
+margin_top = -121.5
+margin_right = 216.5
+margin_bottom = 121.5
+rect_min_size = Vector2( 150, 52.5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
 rect_min_size = Vector2( 35, 20 )
@@ -34,4 +48,8 @@ margin_bottom = 20.0
 size_flags_vertical = 3
 text = "Game"
 flat = false
-items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Restart level", null, 0, false, false, 1, 0, null, "", false, "High scores", null, 0, false, false, 2, 0, null, "", false, "Music", null, 1, true, false, 3, 0, null, "", false, "", null, 0, false, false, 4, 0, null, "", true, "GitHub repo", null, 0, false, false, 5, 0, null, "", false, "Quit", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Restart level", null, 0, false, false, 1, 0, null, "", false, "Load CHIPS.DAT file", null, 0, false, false, 2, 0, null, "", false, "Music", null, 1, true, false, 3, 0, null, "", false, "", null, 0, false, false, 4, 0, null, "", true, "GitHub repo", null, 0, false, false, 5, 0, null, "", false, "Quit", null, 0, false, false, 6, 0, null, "", false ]
+
+[connection signal="about_to_show" from="FileDialog" to="." method="_on_FileDialog_about_to_show"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="popup_hide" from="FileDialog" to="." method="_on_FileDialog_popup_hide"]

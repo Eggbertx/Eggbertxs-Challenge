@@ -7,6 +7,9 @@ var loaded_file = ""
 func _ready() -> void:
 	pass
 
+func set_visibility(vis: bool):
+	$VBoxContainer.visible = vis
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta: float) -> void:
 #	pass

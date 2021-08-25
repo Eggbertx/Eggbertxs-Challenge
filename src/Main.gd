@@ -54,7 +54,6 @@ func _ready():
 	register_commands()
 	load_file("CHIPS.DAT")
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -62,3 +61,9 @@ func _ready():
 
 func _on_LoaderScreen_file_selected(path: String) -> void:
 	load_file(path)
+
+func _on_UI_file_dialog_opened():
+	$LoaderScreen.set_visibility(false)
+
+func _on_UI_file_dialog_visible_changed(visibility: bool):
+	$LoaderScreen.set_visibility(!visibility)
