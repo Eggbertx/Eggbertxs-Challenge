@@ -1,6 +1,7 @@
 extends Control
 
 signal file_dialog_visible_changed
+signal file_selected
 
 onready var game_menu = $Panel/HBoxContainer/MenuButton.get_popup()
 
@@ -10,6 +11,7 @@ const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 
 func _ready() -> void:
 	game_menu.connect("id_pressed", self, "handle_menu")
+	$FileDialog.add_filter("*.dat ; CC levelset")
 
 func handle_menu(id):
 	# Console.write_line("Selected item text: %s" % menu.get_item_text(id))
@@ -42,6 +44,7 @@ func handle_menu(id):
 
 func _on_FileDialog_file_selected(path):
 	Console.write_line("Loading %s" % path)
+	emit_signal("file_selected", path)
 
 func _on_FileDialog_about_to_show():
 	emit_signal("file_dialog_visible_changed", true)

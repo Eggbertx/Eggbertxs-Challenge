@@ -13,3 +13,4 @@ script = ExtResource( 1 )
 
 [connection signal="file_selected" from="LoaderScreen" to="." method="_on_LoaderScreen_file_selected"]
 [connection signal="file_dialog_visible_changed" from="UI" to="." method="_on_UI_file_dialog_visible_changed"]
+[connection signal="file_selected" from="UI" to="." method="_on_UI_file_selected"]

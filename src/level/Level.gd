@@ -48,13 +48,19 @@ func read_file(file: File, debug = false):
 
 	var num_optional = file.get_16()
 	var optional_read = 0
-	Console.write_line("Number of optional field bytes: %d" % num_optional)
+	Console.write_line("\tNumber of optional field bytes: %d" % num_optional)
 	# var optional_buf = file.get_buffer(num_optional)
-	while optional_read < num_optional and num_optional > 0:
+	while optional_read <= num_optional and num_optional > 0:
 		var field_type = file.get_8()
 		var field_numbytes = file.get_8()
-		#Console.write_line("Number of bytes in field type %d: %d" % [field_type, field_numbytes])
+		# Console.write_line("Number of bytes in field type %d: %d" % [field_type, field_numbytes])
 		match field_type:
+			1:
+				Console.write_line("Invalid map field (level time field isn't used)")
+				return false
+			2:
+				Console.write_line("Invalid map field (number of chips field isn't used")
+				return false
 			3:
 				map_title = file.get_buffer(field_numbytes).get_string_from_ascii()
 			4:
@@ -66,6 +72,12 @@ func read_file(file: File, debug = false):
 					password += "%c" % (file.get_8() ^ 0x99)
 			7:
 				hint = file.get_buffer(field_numbytes).get_string_from_ascii()
+			8:
+				Console.write_line("Invalid map field (unencrypted password isn't used)")
+				return false
+			9:
+				Console.write_line("Field not used")
+				return false
 			10:
 				if (field_numbytes % 2) > 0:
 					Console.write_line("Invalid monster field, must be a multiple of 2 bytes (got %d)" % field_numbytes)
@@ -123,7 +135,7 @@ func print_info():
 	Console.write_line("\tPassword: %s" % password)
 	Console.write_line("\tHint: %s" % hint)
 	for loc in monster_locations:
-		Console.write_line("\t\tMonster at %d,%d" % [loc.x, loc.y])
+		Console.write_line("\tMonster at %d,%d" % [loc.x, loc.y])
 
 
 

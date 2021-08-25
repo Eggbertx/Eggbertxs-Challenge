@@ -5,7 +5,7 @@ signal file_selected
 var loaded_file = ""
 
 func _ready() -> void:
-	pass
+	$FileDialog.add_filter("*.dat ; CC levelset")
 
 func set_visibility(vis: bool):
 	$VBoxContainer.visible = vis

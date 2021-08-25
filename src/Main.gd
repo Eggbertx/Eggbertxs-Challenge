@@ -52,7 +52,7 @@ func _input(event):
 func _ready():
 	df = DatFile.new()
 	register_commands()
-	load_file("CHIPS.DAT")
+	# load_file("CHIPS.DAT")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -67,3 +67,6 @@ func _on_UI_file_dialog_opened():
 
 func _on_UI_file_dialog_visible_changed(visibility: bool):
 	$LoaderScreen.set_visibility(!visibility)
+
+func _on_UI_file_selected(path: String):
+	load_file(path)

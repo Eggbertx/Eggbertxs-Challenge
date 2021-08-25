@@ -36,13 +36,16 @@ size_flags_vertical = 3
 text = "Load .DAT file"
 
 [node name="FileDialog" type="FileDialog" parent="."]
-margin_left = 40.0
-margin_top = 36.0
-margin_right = 451.0
-margin_bottom = 304.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -217.5
+margin_top = -137.0
+margin_right = 217.5
+margin_bottom = 137.0
 rect_min_size = Vector2( 150, 52.5 )
 window_title = "Open a File"
-mode = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
