@@ -16,7 +16,7 @@ func print_info():
 	Console.write_line("Currently loaded dat file: %s" % df.file_path)
 	Console.write_line("Number of levels: %d" % df.num_levels)
 
-func level_info(level = -1):
+func level_info(level):
 	if df.file_path == "":
 		Console.write_line("No dat file loaded")
 		return
@@ -24,8 +24,9 @@ func level_info(level = -1):
 		Console.write_line("No level specified")
 		return
 
-	Console.write_line("Level %d info:" % level)
-	Console.write_line("(todo)")
+	# Console.write_line("Level %d info:" % level)
+	if !df.level_info(level):
+		Console.write_line("Level #%d not found" % level)
 
 func register_commands():
 	Console.add_command("loadDAT", self, "load_file")\
@@ -47,6 +48,9 @@ func _input(event):
 		match event.scancode:
 			KEY_ESCAPE:
 				get_tree().quit(0)
+			KEY_R:
+				if event.control and !event.pressed:
+					Console.write_line("Restarting level")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

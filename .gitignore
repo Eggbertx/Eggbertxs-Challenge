@@ -2,7 +2,8 @@ docs/
 sounds/
 music/
 images/old/
-CHIPS.DAT
+*.DAT
+*.dat
 *.blend1
 .import/
 out/

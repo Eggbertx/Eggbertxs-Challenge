@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "Level",
 "language": "GDScript",
-"path": "res://src/level/Level.gd"
+"path": "res://src/data/Level.gd"
 }, {
 "base": "Node",
 "class": "Objects",

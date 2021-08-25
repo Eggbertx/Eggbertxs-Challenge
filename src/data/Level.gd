@@ -48,7 +48,7 @@ func read_file(file: File, debug = false):
 
 	var num_optional = file.get_16()
 	var optional_read = 0
-	Console.write_line("\tNumber of optional field bytes: %d" % num_optional)
+	# Console.write_line("\tNumber of optional field bytes: %d" % num_optional)
 	# var optional_buf = file.get_buffer(num_optional)
 	while optional_read <= num_optional and num_optional > 0:
 		var field_type = file.get_8()
@@ -136,8 +136,6 @@ func print_info():
 	Console.write_line("\tHint: %s" % hint)
 	for loc in monster_locations:
 		Console.write_line("\tMonster at %d,%d" % [loc.x, loc.y])
-
-
 
 
 # Called when the node enters the scene tree for the first time.

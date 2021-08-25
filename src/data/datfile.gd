@@ -18,6 +18,13 @@ func load_file(filepath: String):
 	file.set_endian_swap(false)
 	parse_file(file)
 	file.close()
+	
+func level_info(l:int):
+	for level in levels:
+		if level.level_num == l:
+			level.print_info()
+			return true
+	return false
 
 func parse_file(datfile: File):
 	var signature = datfile.get_32()
@@ -26,10 +33,9 @@ func parse_file(datfile: File):
 		return false
 
 	num_levels = datfile.get_16()
-	Console.write_line("Num levels: %d" % num_levels)
+	Console.write_line("Number of levels: %d" % num_levels)
 	for l in range(num_levels):
 		var level = Level.new()
-		if !level.read_file(datfile, true):
+		if !level.read_file(datfile, false):
 			return false
-		# level.print_info()
 		levels.append(level)
