@@ -5,6 +5,9 @@ class_name DatFile
 var file_path = ""
 var num_levels = 0
 var levels = []
+var stream = StreamPeerBuffer.new()
+var signature = 0
+
 func _init():
 	pass
 
@@ -15,9 +18,9 @@ func load_file(filepath: String):
 	if err:
 		return err
 
-	file.set_endian_swap(false)
-	parse_file(file)
+	stream.data_array = file.get_buffer(file.get_len())
 	file.close()
+	parse_file()
 	
 func level_info(l:int):
 	for level in levels:
@@ -26,16 +29,26 @@ func level_info(l:int):
 			return true
 	return false
 
-func parse_file(datfile: File):
-	var signature = datfile.get_32()
-	if signature != 0x0002AAAC and signature != 0x0102AAAC:
-		Console.write_line("Invalid datfile signature in %s" % datfile.get_path().get_file())
+func valid_signature():
+	return signature == 0x0002AAAC or signature == 0x0102AAAC
+
+func parse_file(debug = false):
+	signature = stream.get_u32()
+	if !valid_signature():
+		Console.write_line("Invalid datfile signature in %s" % file_path.get_file())
 		return false
 
-	num_levels = datfile.get_16()
+	num_levels = stream.get_u16()
 	Console.write_line("Number of levels: %d" % num_levels)
 	for l in range(num_levels):
 		var level = Level.new()
-		if !level.read_file(datfile, false):
+		if !level.parse_data(stream, debug):
 			return false
 		levels.append(level)
+	return true
+
+# clean up
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		for level in levels:
+			level.free()
