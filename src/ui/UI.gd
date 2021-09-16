@@ -1,12 +1,13 @@
 extends Control
 
-signal file_dialog_visible_changed
 signal file_selected
 
 onready var game_menu = $Panel/HBoxContainer/MenuButton.get_popup()
 
 enum {ITEM_NEWGAME, ITEM_RESTARTLVL, ITEM_DATFILE, ITEM_MUSIC, SEPARATOR, ITEM_REPO, ITEM_QUIT}
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
+
+var viewport_size: Vector2
 
 func _ready() -> void:
 	game_menu.connect("id_pressed", self, "handle_menu")
@@ -18,6 +19,18 @@ func _ready() -> void:
 	var ui_tex = ImageTexture.new()
 	ui_tex.load("res://images/background-new.png")
 	$UIImage.set_texture(ui_tex)
+	viewport_size = get_viewport_rect().size
+
+func alert(text:String, console = false):
+	$AcceptDialog.dialog_text = text
+	$AcceptDialog.visible = true
+	var center = Vector2(
+		viewport_size.x/2 - $AcceptDialog.get_rect().size.x/2,
+		viewport_size.y/2 - $AcceptDialog.get_rect().size.y/2
+	)
+	$AcceptDialog.set_position(center)
+	if console:
+		Console.write_line(text)
 
 func handle_menu(id):
 	# Console.write_line("Selected item text: %s" % menu.get_item_text(id))

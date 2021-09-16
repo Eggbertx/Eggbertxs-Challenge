@@ -10,8 +10,6 @@ var df: DatFile
 func _ready():
 	print("Loading CC tileset graphics")
 
-
-
 func attach_datfile(file: DatFile):
 	df = file
 	var err = $CCTileset.set_image("images/tiles.bmp")

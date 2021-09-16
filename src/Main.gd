@@ -4,11 +4,10 @@ var df: DatFile
 
 func load_file(file = ""):
 	if file == "":
-		Console.write_line("File path required")
+		$UI.alert("File path required", true)
 		return
 	Console.write_line("Loading %s" % file)
 	df.load_file(file)
-	$LoaderScreen.set_visibility(false)
 
 func print_info():
 	if df.file_path == "":
@@ -19,10 +18,10 @@ func print_info():
 
 func level_info(level):
 	if df.file_path == "":
-		Console.write_line("No dat file loaded")
+		$UI.alert("No dat file loaded", true)
 		return
 	if level == -1:
-		Console.write_line("No level specified")
+		$UI.alert("No level specified", true)
 		return
 
 	# Console.write_line("Level %d info:" % level)
@@ -57,22 +56,12 @@ func _input(event):
 func _ready():
 	df = DatFile.new()
 	register_commands()
-
 	if df.default_exists():
 		load_file("CHIPS.DAT")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-
-func _on_LoaderScreen_file_selected(path: String) -> void:
-	load_file(path)
-
-func _on_UI_file_dialog_opened():
-	$LoaderScreen.set_visibility(false)
-
-func _on_UI_file_dialog_visible_changed(visibility: bool):
-	$LoaderScreen.set_visibility(!visibility)
 
 func _on_UI_file_selected(path: String):
 	load_file(path)
