@@ -38,8 +38,7 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 	chips_left = stream.get_u16() 
 	level_detail = stream.get_u16()
 	if level_detail > 1:
-		Console.write_line("Level detail value must be 0 or 1, got %d in level %d" % [level_detail, level_num])
-		return false
+		return "Level detail value must be 0 or 1, got %d in level %d" % [level_detail, level_num]
 
 	layer1_numbytes = stream.get_u16()
 	layer1_bytes = decode_rle(stream, layer1_numbytes)
@@ -56,11 +55,9 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 		# Console.write_line("Number of bytes in field type %d: %d" % [field_type, field_numbytes])
 		match field_type:
 			1:
-				Console.write_line("Invalid map field (level time field isn't used)")
-				return false
+				return "Invalid map field (level time field isn't used)"
 			2:
-				Console.write_line("Invalid map field (number of chips field isn't used")
-				return false
+				return "Invalid map field (number of chips field isn't used"
 			3:
 				map_title = stream.get_string(field_numbytes)
 			4:
@@ -73,27 +70,23 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 			7:
 				hint = stream.get_string(field_numbytes)
 			8:
-				Console.write_line("Invalid map field (unencrypted password isn't used)")
-				return false
+				return "Invalid map field (unencrypted password isn't used)"
 			9:
-				Console.write_line("Field not used")
-				return false
+				return "Field not used"
 			10:
 				if (field_numbytes % 2) > 0:
-					Console.write_line("Invalid monster field, must be a multiple of 2 bytes (got %d)" % field_numbytes)
-					return false
+					return "Invalid monster field, must be a multiple of 2 bytes (got %d)" % field_numbytes
 				for f in range(field_numbytes / 2):
 					var monster_x = stream.get_u8()
 					var monster_y = stream.get_u8()
 					monster_locations.append(Vector2(monster_x, monster_y))
 			_:
-				Console.write_line("Unrecognized optional field type %d" % field_type)
-				return false
+				return "Unrecognized optional field type %d" % field_type
 		optional_read += 3 + field_numbytes
 
 	if debug:
 		print_info()
-	return true
+	return ""
 
 func decode_rle(stream: StreamPeerBuffer, num_bytes: int):
 	# 0xFF,<num_bytes>,<byte_to_copy>

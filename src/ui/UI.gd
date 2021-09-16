@@ -16,9 +16,6 @@ func _ready() -> void:
 	$UIImage.set_size(get_viewport().size, false)
 	$UIImage.set_position(Vector2(0, $Panel.get_rect().size.y))
 	
-	var ui_tex = ImageTexture.new()
-	ui_tex.load("res://images/background-new.png")
-	$UIImage.set_texture(ui_tex)
 	viewport_size = get_viewport_rect().size
 
 func alert(text:String, console = false):
@@ -63,9 +60,3 @@ func handle_menu(id):
 func _on_FileDialog_file_selected(path):
 	Console.write_line("Loading %s" % path)
 	emit_signal("file_selected", path)
-
-func _on_FileDialog_about_to_show():
-	emit_signal("file_dialog_visible_changed", true)
-
-func _on_FileDialog_popup_hide():
-	emit_signal("file_dialog_visible_changed", false)

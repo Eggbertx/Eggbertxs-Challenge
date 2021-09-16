@@ -20,7 +20,7 @@ func load_file(filepath: String):
 
 	stream.data_array = file.get_buffer(file.get_len())
 	file.close()
-	parse_file()
+	return parse_file()
 	
 func default_exists():
 	var file = File.new()
@@ -41,17 +41,17 @@ func valid_signature():
 func parse_file(debug = false):
 	signature = stream.get_u32()
 	if !valid_signature():
-		Console.write_line("Invalid datfile signature in %s" % file_path.get_file())
-		return false
+		return "Invalid datfile signature in %s" % file_path.get_file()
 
 	num_levels = stream.get_u16()
 	Console.write_line("Number of levels: %d" % num_levels)
 	for l in range(num_levels):
 		var level = Level.new()
-		if !level.parse_data(stream, debug):
-			return false
+		var err = level.parse_data(stream, debug)
+		if err != "":
+			return err
 		levels.append(level)
-	return true
+	return ""
 
 # clean up
 func _notification(what: int) -> void:

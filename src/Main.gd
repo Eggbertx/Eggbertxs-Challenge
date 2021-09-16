@@ -7,7 +7,9 @@ func load_file(file = ""):
 		$UI.alert("File path required", true)
 		return
 	Console.write_line("Loading %s" % file)
-	df.load_file(file)
+	var err = df.load_file(file)
+	if err != "":
+		$UI.alert(err, true)
 
 func print_info():
 	if df.file_path == "":

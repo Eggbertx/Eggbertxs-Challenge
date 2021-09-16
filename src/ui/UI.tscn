@@ -1,22 +1,21 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=1]
+[ext_resource path="res://images/background-new.png" type="Texture" id=2]
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 0.667419
-margin_top = -0.667419
-margin_right = 0.667419
-margin_bottom = -0.667419
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="UIImage" type="TextureRect" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_top = 20.0
+margin_right = 480.0
+margin_bottom = 340.0
+texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -63,6 +62,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="about_to_show" from="FileDialog" to="." method="_on_FileDialog_about_to_show"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
-[connection signal="popup_hide" from="FileDialog" to="." method="_on_FileDialog_popup_hide"]
