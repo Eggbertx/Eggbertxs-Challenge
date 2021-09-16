@@ -1,6 +1,7 @@
 extends Node
 
 var df: DatFile
+var tiles: CCTileset
 
 func load_file(file = ""):
 	if file == "":
@@ -8,6 +9,7 @@ func load_file(file = ""):
 		return
 	Console.write_line("Loading %s" % file)
 	df.load_file(file)
+	remove_child($LoaderScreen)
 
 func print_info():
 	if df.file_path == "":
@@ -56,7 +58,14 @@ func _input(event):
 func _ready():
 	df = DatFile.new()
 	register_commands()
-	# load_file("CHIPS.DAT")
+
+	tiles = CCTileset.new()
+	var err = tiles.set_image("images/tiles.bmp")
+	if err != OK:
+		Console.write_line("Error loading tileset")
+	add_child(tiles)
+	if df.default_exists():
+		load_file("CHIPS.DAT")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

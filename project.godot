@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node2D",
+"class": "CCTileset",
+"language": "GDScript",
+"path": "res://src/graphics/CCTileset.gd"
+}, {
 "base": "Node",
 "class": "DatFile",
 "language": "GDScript",
@@ -25,6 +30,7 @@ _global_script_classes=[ {
 "path": "res://src/data/objects.gd"
 } ]
 _global_script_class_icons={
+"CCTileset": "",
 "DatFile": "",
 "Level": "",
 "Objects": ""

@@ -22,6 +22,12 @@ func load_file(filepath: String):
 	file.close()
 	parse_file()
 	
+func default_exists():
+	var file = File.new()
+	var exists = file.file_exists("CHIPS.DAT")
+	file.close()
+	return exists
+	
 func level_info(l:int):
 	for level in levels:
 		if level.level_num == l:

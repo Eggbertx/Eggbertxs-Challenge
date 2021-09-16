@@ -110,7 +110,7 @@ const SUCTION_BOOTS = 0x6B
 const CHIP_N = 0x6C
 const CHIP_W = 0x6D
 const CHIP_S = 0x6E
-const CHIP = 0x6F
+const CHIP_E = 0x6F
 
 # returns true if the given tile id represents a recognized tile type, false otherwise
 func valid_tile_value(tile: int):
@@ -119,7 +119,7 @@ func valid_tile_value(tile: int):
 		&& tile != _UNUSED2\
 		&& tile != _UNUSED3\
 		&& tile != _UNUSED4\
-		&& tile <= CHIP
+		&& tile <= CHIP_E
 
 func _ready():
 	pass
