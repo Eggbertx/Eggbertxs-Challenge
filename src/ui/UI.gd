@@ -8,10 +8,16 @@ onready var game_menu = $Panel/HBoxContainer/MenuButton.get_popup()
 enum {ITEM_NEWGAME, ITEM_RESTARTLVL, ITEM_DATFILE, ITEM_MUSIC, SEPARATOR, ITEM_REPO, ITEM_QUIT}
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 
-
 func _ready() -> void:
 	game_menu.connect("id_pressed", self, "handle_menu")
 	$FileDialog.add_filter("*.dat ; CC levelset")
+
+	$UIImage.set_size(get_viewport().size, false)
+	$UIImage.set_position(Vector2(0, $Panel.get_rect().size.y))
+	
+	var ui_tex = ImageTexture.new()
+	ui_tex.load("res://images/background-new.png")
+	$UIImage.set_texture(ui_tex)
 
 func handle_menu(id):
 	# Console.write_line("Selected item text: %s" % menu.get_item_text(id))
@@ -40,7 +46,6 @@ func handle_menu(id):
 		ITEM_QUIT:
 			Console.write_line("Goodbye")
 			get_tree().quit(0)
-
 
 func _on_FileDialog_file_selected(path):
 	Console.write_line("Loading %s" % path)

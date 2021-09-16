@@ -56,7 +56,7 @@ Console="*res://addons/quentincaffeino/console/src/Console.tscn"
 [display]
 
 window/size/width=480
-window/size/height=320
+window/size/height=340
 window/size/resizable=false
 
 [editor_plugins]

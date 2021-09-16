@@ -9,6 +9,3 @@ images/old/
 out/
 export.cfg
 export_presets.cfg
-
-# images is just temporary until I get a new tileset set up
-images/

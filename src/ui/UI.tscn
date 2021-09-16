@@ -14,6 +14,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="UIImage" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="FileDialog" type="FileDialog" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
