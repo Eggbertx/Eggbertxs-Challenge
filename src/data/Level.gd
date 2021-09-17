@@ -88,22 +88,22 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 		print_info()
 	return ""
 
-func decode_rle(stream: StreamPeerBuffer, num_bytes: int):
-	# 0xFF,<num_bytes>,<byte_to_copy>
-	var can_read = (stream.get_position() + num_bytes) <= stream.get_size()
+func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):
+	# 0xFF,<num_rel_bytes>,<byte_to_copy>
+	var can_read = (stream.get_position() + num_rel_bytes) <= stream.get_size()
 	if not can_read:
 		Console.write_line(rle_too_large)
 		return null
 	var decoded = []
-	while num_bytes > 0:
-		num_bytes -= 1
+	while num_rel_bytes > 0:
+		num_rel_bytes -= 1
 		var byte = stream.get_u8()
 		if byte >= 0x00 and byte <= 0x6F:
 			decoded.append(byte)
 		elif byte == 0xFF:
 			var num_repeats = stream.get_u8()
 			var data = stream.get_u8()
-			num_bytes -= 2
+			num_rel_bytes -= 2
 			while num_repeats > 0:
 				num_repeats -= 1
 				decoded.append(data)

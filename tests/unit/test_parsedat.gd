@@ -25,7 +25,7 @@ func _init():
 func test_parse_file():
 	levelset.stream.data_array = PoolByteArray(sample_dat)
 	# assert_true(true, "true test")
-	assert_true(levelset.parse_file(true), "tests Chip's Challenge levelset parsing")
+	assert_eq(levelset.parse_file(true), "", "tests Chip's Challenge levelset parsing")
 	finish_test()
 
 
