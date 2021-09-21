@@ -6,6 +6,9 @@ class_name LevelGfx
 
 var df: DatFile
 
+func _init(n:int):
+	print("int: %d" % n)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("Loading CC tileset graphics")
@@ -15,6 +18,9 @@ func attach_datfile(file: DatFile):
 	var err = $CCTileset.set_image("images/tiles.bmp")
 	if err != OK:
 		Console.write_line("Error loading tileset")
+
+func set_tile(pos: Vector2, tile: int):
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
