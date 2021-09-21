@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=1]
 [ext_resource path="res://images/background-new.png" type="Texture" id=2]
+[ext_resource path="res://src/ui/SevenSegmentDisplay.tscn" type="PackedScene" id=3]
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
@@ -74,5 +75,14 @@ margin_bottom = 304.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="LevelDisplay" parent="." instance=ExtResource( 3 )]
+position = Vector2( 368, 66 )
+
+[node name="TimeDisplay" parent="." instance=ExtResource( 3 )]
+position = Vector2( 368, 142 )
+
+[node name="ChipsDisplay" parent="." instance=ExtResource( 3 )]
+position = Vector2( 368, 217 )
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]

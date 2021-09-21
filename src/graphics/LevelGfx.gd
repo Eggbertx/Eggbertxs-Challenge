@@ -7,11 +7,11 @@ class_name LevelGfx
 var df: DatFile
 
 func _init(n:int):
-	print("int: %d" % n)
+	Console.write("int: %d" % n)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("Loading CC tileset graphics")
+	Console.write("Loading CC tileset graphics")
 
 func attach_datfile(file: DatFile):
 	df = file

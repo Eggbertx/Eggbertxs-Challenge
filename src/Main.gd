@@ -10,6 +10,8 @@ func load_file(file = ""):
 	var err = df.load_file(file)
 	if err != "":
 		$UI.alert(err, true)
+		return
+	$UI/LevelDisplay.set_number(1)
 
 func print_info():
 	if df.file_path == "":

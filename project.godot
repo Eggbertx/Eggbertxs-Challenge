@@ -33,13 +33,19 @@ _global_script_classes=[ {
 "class": "Objects",
 "language": "GDScript",
 "path": "res://src/data/objects.gd"
+}, {
+"base": "Node2D",
+"class": "SevenSegmentDisplay",
+"language": "GDScript",
+"path": "res://src/ui/SevenSegmentDisplay.gd"
 } ]
 _global_script_class_icons={
 "CCTileset": "",
 "DatFile": "",
 "Level": "",
 "LevelGfx": "",
-"Objects": ""
+"Objects": "",
+"SevenSegmentDisplay": ""
 }
 
 [application]
@@ -58,6 +64,7 @@ Console="*res://addons/quentincaffeino/console/src/Console.tscn"
 window/size/width=480
 window/size/height=340
 window/size/resizable=false
+window/filters/use_nearest_mipmap_filter=false
 
 [editor_plugins]
 
@@ -96,5 +103,6 @@ quality/driver/driver_name="GLES2"
 2d/options/use_nvidia_rect_flicker_workaround=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+quality/filters/use_nearest_mipmap_filter=true
 environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"
