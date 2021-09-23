@@ -42,6 +42,7 @@ __meta__ = {
 
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
+margin_bottom = 20.0
 rect_min_size = Vector2( 35, 20 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -54,13 +55,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MenuButton" type="MenuButton" parent="Panel/HBoxContainer"]
+[node name="GameMenu" type="MenuButton" parent="Panel/HBoxContainer"]
 margin_right = 50.0
 margin_bottom = 20.0
 size_flags_vertical = 3
 text = "Game"
 flat = false
-items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Restart level", null, 0, false, false, 1, 0, null, "", false, "Load levelset", null, 0, false, false, 2, 0, null, "", false, "Change tileset", null, 0, false, false, 3, 0, null, "", false, "Music", null, 1, true, false, 4, 0, null, "", false, "", null, 0, false, false, 5, 0, null, "", true, "GitHub repo", null, 0, false, false, 6, 0, null, "", false, "Quit", null, 0, false, false, 7, 0, null, "", false ]
+items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Pause", null, 0, false, false, 1, 0, null, "", false, "Load levelset", null, 0, false, false, 2, 0, null, "", false, "Change tileset", null, 0, false, false, 3, 0, null, "", false, "Music", null, 1, true, false, 4, 0, null, "", false, "", null, 0, false, false, 5, 0, null, "", true, "GitHub repo", null, 0, false, false, 6, 0, null, "", false, "Quit", null, 0, false, false, 7, 0, null, "", false ]
+
+[node name="LevelMenu" type="MenuButton" parent="Panel/HBoxContainer"]
+margin_left = 54.0
+margin_right = 100.0
+margin_bottom = 20.0
+text = "Level"
+flat = false
+items = [ "Restart", null, 0, false, false, 0, 0, null, "", false, "Next", null, 0, false, false, 1, 0, null, "", false, "Previous", null, 0, false, true, 2, 0, null, "", false, "Go to", null, 0, false, false, 3, 0, null, "", false ]
 
 [node name="AcceptDialog" type="AcceptDialog" parent="."]
 __meta__ = {
@@ -77,12 +86,18 @@ __meta__ = {
 }
 
 [node name="LevelDisplay" parent="." instance=ExtResource( 3 )]
+visible = false
 position = Vector2( 368, 66 )
 
 [node name="TimeDisplay" parent="." instance=ExtResource( 3 )]
+visible = false
 position = Vector2( 368, 142 )
 
 [node name="ChipsDisplay" parent="." instance=ExtResource( 3 )]
+visible = false
 position = Vector2( 368, 217 )
 
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

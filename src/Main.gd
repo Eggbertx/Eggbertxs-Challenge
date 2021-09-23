@@ -1,6 +1,26 @@
 extends Node
 
 var df: DatFile
+var escape_enabled: bool
+
+enum {
+	GAME_ITEM_NEWGAME,
+	GAME_ITEM_PAUSE,
+	GAME_ITEM_DATFILE,
+	GAME_ITEM_TILESET,
+	GAME_ITEM_MUSIC,
+	GAME_ITEM_SEPARATOR,
+	GAME_ITEM_REPO,
+	GAME_ITEM_QUIT
+}
+enum {
+	LEVEL_ITEM_RESTART,
+	LEVEL_ITEM_NEXT,
+	LEVEL_ITEM_PREVIOUS,
+	LEVEL_ITEM_GOTO
+}
+
+const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 
 func load_file(file = ""):
 	if file == "":
@@ -11,7 +31,7 @@ func load_file(file = ""):
 	if err != "":
 		$UI.alert(err, true)
 		return
-	$UI/LevelDisplay.set_number(1)
+	escape_enabled = false
 
 func print_info():
 	if df.file_path == "":
@@ -51,13 +71,14 @@ func _input(event):
 	if event is InputEventKey:
 		match event.scancode:
 			KEY_ESCAPE:
-				get_tree().quit(0)
+				if escape_enabled:
+					get_tree().quit(0)
 			KEY_R:
 				if event.control and !event.pressed:
 					Console.write_line("Restarting level")
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	escape_enabled = true
 	df = DatFile.new()
 	register_commands()
 	if df.default_exists():
@@ -69,3 +90,42 @@ func _ready():
 
 func _on_UI_file_selected(path: String):
 	load_file(path)
+
+func _on_UI_game_item_selected(id):
+	$UI/FileDialog.clear_filters()
+	match id:
+		GAME_ITEM_NEWGAME:
+			Console.write_line("Starting a new game")
+		GAME_ITEM_PAUSE:
+			Console.write_line("Pausing level")
+		GAME_ITEM_DATFILE:
+			if $UI/FileDialog.visible:
+				return
+			$UI/FileDialog.add_filter("*.dat ; CC levelset")
+			$UI/FileDialog.popup()
+		GAME_ITEM_TILESET:
+			if $UI/FileDialog.visible:
+				return
+			$UI/FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
+			$UI/FileDialog.popup()
+		GAME_ITEM_MUSIC:
+			$UI.game_menu.toggle_item_checked(id)
+			if $UI.game_menu.is_item_checked(id):
+				Console.write_line("Playing music")
+			else:
+				Console.write_line("Stopped playing music")
+		GAME_ITEM_REPO:
+			OS.shell_open(REPO_URL)
+		GAME_ITEM_QUIT:
+			get_tree().quit(0)
+
+func _on_UI_level_item_selected(id):
+	match id:
+		LEVEL_ITEM_RESTART:
+			Console.write_line("Restarting level")
+		LEVEL_ITEM_NEXT:
+			Console.write_line("Next level")
+		LEVEL_ITEM_PREVIOUS:
+			Console.write_line("Previous level")
+		LEVEL_ITEM_GOTO:
+			Console.write_line("Going to level")
