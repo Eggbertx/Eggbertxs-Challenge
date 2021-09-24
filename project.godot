@@ -54,6 +54,7 @@ config/name="Eggbertx's Challenge"
 config/description="A \"Chip's Challenge\" implementation in Godot"
 run/main_scene="res://src/Main.tscn"
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 

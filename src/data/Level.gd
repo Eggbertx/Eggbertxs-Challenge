@@ -65,7 +65,7 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 			5:
 				red_button_field = stream.get_data(field_numbytes)
 			6:
-				for b in range(field_numbytes):
+				for _b in range(field_numbytes):
 					password += "%c" % (stream.get_u8() ^ 0x99)
 			7:
 				hint = stream.get_string(field_numbytes)
@@ -76,7 +76,7 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 			10:
 				if (field_numbytes % 2) > 0:
 					return "Invalid monster field, must be a multiple of 2 bytes (got %d)" % field_numbytes
-				for f in range(field_numbytes / 2):
+				for _f in range(field_numbytes / 2):
 					var monster_x = stream.get_u8()
 					var monster_y = stream.get_u8()
 					monster_locations.append(Vector2(monster_x, monster_y))

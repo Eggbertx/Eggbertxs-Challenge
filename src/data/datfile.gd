@@ -45,7 +45,7 @@ func parse_file(debug = false):
 
 	num_levels = stream.get_u16()
 	Console.write_line("Number of levels: %d" % num_levels)
-	for l in range(num_levels):
+	for _l in range(num_levels):
 		var level = Level.new()
 		var err = level.parse_data(stream, debug)
 		if err != "":
