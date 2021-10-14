@@ -1,7 +1,6 @@
 extends Node
 
 var df: DatFile
-var escape_enabled: bool
 
 enum {
 	GAME_ITEM_NEWGAME,
@@ -21,17 +20,17 @@ enum {
 }
 
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
+var is_debug: bool
 
 func load_file(file = ""):
 	if file == "":
-		$UI.alert("File path required", true)
+		$UI.alert("File path required", is_debug)
 		return
 	Console.write_line("Loading %s" % file)
 	var err = df.load_file(file)
 	if err != "":
-		$UI.alert(err, true)
+		$UI.alert(err, is_debug)
 		return
-	escape_enabled = false
 
 func print_info():
 	if df.file_path == "":
@@ -42,10 +41,10 @@ func print_info():
 
 func level_info(level):
 	if df.file_path == "":
-		$UI.alert("No dat file loaded", true)
+		$UI.alert("No dat file loaded", is_debug)
 		return
 	if level == -1:
-		$UI.alert("No level specified", true)
+		$UI.alert("No level specified", is_debug)
 		return
 
 	# Console.write_line("Level %d info:" % level)
@@ -71,18 +70,21 @@ func _input(event):
 	if event is InputEventKey:
 		match event.scancode:
 			KEY_ESCAPE:
-				if escape_enabled:
+				if is_debug:
 					get_tree().quit(0)
 			KEY_R:
 				if event.control and !event.pressed:
 					Console.write_line("Restarting level")
 
 func _ready():
-	escape_enabled = true
+	is_debug = OS.is_debug_build()
 	df = DatFile.new()
 	register_commands()
 	if df.default_exists():
 		load_file("CHIPS.DAT")
+
+	# var toolbar_height = $UI/Panel/HBoxContainer.rect_size.y
+	$LevelMap.position = $UI/ViewWindow.rect_position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

@@ -76,11 +76,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ReferenceRect" type="ReferenceRect" parent="."]
+[node name="ViewWindow" type="ReferenceRect" parent="."]
 margin_left = 16.0
-margin_top = 16.0
+margin_top = 36.0
 margin_right = 304.0
-margin_bottom = 304.0
+margin_bottom = 324.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

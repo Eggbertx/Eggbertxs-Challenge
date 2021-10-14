@@ -17,8 +17,8 @@ func _ready() -> void:
 	$UIImage.set_size(get_viewport().size, false)
 	$UIImage.set_position(Vector2(0, $Panel.get_rect().size.y))
 
-	$ReferenceRect.set_position(Vector2(16, 16 + $Panel.rect_size.y))
-	$ReferenceRect.visible = false
+	$ViewWindow.set_position(Vector2(16, 16 + $Panel.rect_size.y))
+	$ViewWindow.visible = false
 	# print("tiles: (%d, %d)" % [$ReferenceRect.rect_size.x / 48, $ReferenceRect.rect_size.y / 48])
 	viewport_size = get_viewport_rect().size
 
