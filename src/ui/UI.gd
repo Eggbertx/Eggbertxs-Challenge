@@ -3,6 +3,7 @@ extends Control
 signal file_selected
 signal game_item_selected
 signal level_item_selected
+signal level_selected
 
 onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
 onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
@@ -33,6 +34,9 @@ func alert(text:String, console = false):
 	if console:
 		Console.write_line(text)
 
+func show_goto():
+	$GotoLevelDialog/PopupDialog.show()
+
 func game_menu_selected(id):
 	emit_signal("game_item_selected", id)
 
@@ -49,3 +53,7 @@ func _on_Timer_timeout():
 	if time_left == 0:
 		alert("Ding!")
 		$Timer.stop()
+
+
+func _on_GotoLevelDialog_level_selected(level: int, password: String):
+	emit_signal("level_selected", level, password)

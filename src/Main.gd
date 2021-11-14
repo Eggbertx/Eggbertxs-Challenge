@@ -66,12 +66,20 @@ func register_commands():
 		.set_description("Prints info about the loaded dat file if one is currently loaded")\
 		.register()
 
+
+func quit(status:int = 0):
+	df.free()
+	get_tree().quit(status)
+	
+# 	Resource still in use: res://src/data/Level.gd (GDScript)
+# Resource still in use: res://src/data/datfile.gd (GDScript)
+
 func _input(event):
 	if event is InputEventKey:
 		match event.scancode:
 			KEY_ESCAPE:
 				if is_debug:
-					get_tree().quit(0)
+					quit()
 			KEY_R:
 				if event.control and !event.pressed:
 					Console.write_line("Restarting level")
@@ -85,6 +93,11 @@ func _ready():
 
 	# var toolbar_height = $UI/Panel/HBoxContainer.rect_size.y
 	$LevelMap.position = $UI/ViewWindow.rect_position
+
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		quit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -119,7 +132,7 @@ func _on_UI_game_item_selected(id):
 		GAME_ITEM_REPO:
 			OS.shell_open(REPO_URL)
 		GAME_ITEM_QUIT:
-			get_tree().quit(0)
+			quit()
 
 func _on_UI_level_item_selected(id):
 	match id:
@@ -130,4 +143,9 @@ func _on_UI_level_item_selected(id):
 		LEVEL_ITEM_PREVIOUS:
 			Console.write_line("Previous level")
 		LEVEL_ITEM_GOTO:
-			Console.write_line("Going to level")
+			$UI.show_goto()
+			Console.write_line("Opening Go To dialog")
+
+
+func _on_UI_level_selected(level:int, password:String):
+	Console.write_line("Going to level %d (password: %s)" % [level, password])

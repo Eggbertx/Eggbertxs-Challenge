@@ -1,0 +1,103 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/ui/GotoLevelDialog.gd" type="Script" id=1]
+
+[node name="GotoLevelDialog" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.943878
+margin_right = -0.943878
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupDialog" type="PopupDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -134.5
+margin_top = -74.5
+margin_right = 134.5
+margin_bottom = 74.5
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupDialog"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -121.5
+margin_top = -59.5
+margin_right = 121.5
+margin_bottom = 59.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InfoLabel" type="Label" parent="PopupDialog/VBoxContainer"]
+margin_right = 243.0
+margin_bottom = 31.0
+text = "Enter a level number and a password, or just a password."
+autowrap = true
+
+[node name="GridContainer" type="GridContainer" parent="PopupDialog/VBoxContainer"]
+margin_left = 36.0
+margin_top = 35.0
+margin_right = 206.0
+margin_bottom = 87.0
+size_flags_horizontal = 4
+columns = 2
+
+[node name="LevelNoLabel" type="Label" parent="PopupDialog/VBoxContainer/GridContainer"]
+margin_top = 5.0
+margin_right = 92.0
+margin_bottom = 19.0
+text = "Level number:"
+
+[node name="LevelNoEdit" type="SpinBox" parent="PopupDialog/VBoxContainer/GridContainer"]
+margin_left = 96.0
+margin_right = 170.0
+margin_bottom = 24.0
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+rounded = true
+allow_greater = true
+
+[node name="PasswordLabel" type="Label" parent="PopupDialog/VBoxContainer/GridContainer"]
+margin_top = 33.0
+margin_right = 92.0
+margin_bottom = 47.0
+text = "Password:"
+
+[node name="PasswordEdit" type="LineEdit" parent="PopupDialog/VBoxContainer/GridContainer"]
+margin_left = 96.0
+margin_top = 28.0
+margin_right = 170.0
+margin_bottom = 52.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupDialog/VBoxContainer"]
+margin_left = 77.0
+margin_top = 91.0
+margin_right = 166.0
+margin_bottom = 111.0
+size_flags_horizontal = 4
+
+[node name="OkButton" type="Button" parent="PopupDialog/VBoxContainer/HBoxContainer"]
+margin_right = 31.0
+margin_bottom = 20.0
+text = "OK"
+
+[node name="CancelButton" type="Button" parent="PopupDialog/VBoxContainer/HBoxContainer"]
+margin_left = 35.0
+margin_right = 89.0
+margin_bottom = 20.0
+text = "Cancel"
+
+[connection signal="pressed" from="PopupDialog/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_OkButton_pressed"]
+[connection signal="pressed" from="PopupDialog/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_CancelButton_pressed"]
