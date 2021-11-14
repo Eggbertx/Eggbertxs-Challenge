@@ -13,6 +13,7 @@ var time_left = 100
 var viewport_size: Vector2
 
 func _ready() -> void:
+	enable_level_menu(false)
 	game_menu.connect("id_pressed", self, "game_menu_selected")
 	level_menu.connect("id_pressed", self, "level_menu_selected")
 	$UIImage.set_size(get_viewport().size, false)
@@ -20,7 +21,6 @@ func _ready() -> void:
 
 	$ViewWindow.set_position(Vector2(16, 16 + $Panel.rect_size.y))
 	$ViewWindow.visible = false
-	# print("tiles: (%d, %d)" % [$ReferenceRect.rect_size.x / 48, $ReferenceRect.rect_size.y / 48])
 	viewport_size = get_viewport_rect().size
 
 func alert(text:String, console = false):
@@ -42,9 +42,14 @@ func game_menu_selected(id):
 
 func level_menu_selected(id):
 	emit_signal("level_item_selected", id)
+	
+func set_max_level(levels:int):
+	$GotoLevelDialog/PopupDialog/VBoxContainer/GridContainer/LevelNoEdit.max_value = levels
+
+func enable_level_menu(enabled = true):
+		$Panel/HBoxContainer/LevelMenu.disabled = !enabled
 
 func _on_FileDialog_file_selected(path):
-	Console.write_line("Loading %s" % path)
 	emit_signal("file_selected", path)
 
 func _on_Timer_timeout():
@@ -53,7 +58,6 @@ func _on_Timer_timeout():
 	if time_left == 0:
 		alert("Ding!")
 		$Timer.stop()
-
 
 func _on_GotoLevelDialog_level_selected(level: int, password: String):
 	emit_signal("level_selected", level, password)

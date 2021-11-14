@@ -65,8 +65,9 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 			5:
 				red_button_field = stream.get_data(field_numbytes)
 			6:
-				for _b in range(field_numbytes):
+				for _b in range(field_numbytes-1):
 					password += "%c" % (stream.get_u8() ^ 0x99)
+				var _skip = stream.get_u8() # null byte
 			7:
 				hint = stream.get_string(field_numbytes)
 			8:

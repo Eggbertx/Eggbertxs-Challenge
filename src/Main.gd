@@ -31,6 +31,8 @@ func load_file(file = ""):
 	if err != "":
 		$UI.alert(err, is_debug)
 		return
+	$UI.set_max_level(df.num_levels)
+	$UI.enable_level_menu()
 
 func print_info():
 	if df.file_path == "":
@@ -90,7 +92,7 @@ func _ready():
 	register_commands()
 	if df.default_exists():
 		load_file("CHIPS.DAT")
-
+		
 	# var toolbar_height = $UI/Panel/HBoxContainer.rect_size.y
 	$LevelMap.position = $UI/ViewWindow.rect_position
 
@@ -144,8 +146,17 @@ func _on_UI_level_item_selected(id):
 			Console.write_line("Previous level")
 		LEVEL_ITEM_GOTO:
 			$UI.show_goto()
-			Console.write_line("Opening Go To dialog")
-
 
 func _on_UI_level_selected(level:int, password:String):
-	Console.write_line("Going to level %d (password: %s)" % [level, password])
+	if df.file_path == "":
+		$UI.alert("No datfile loaded")
+		return
+
+	var password_success = df.check_password(level, password)
+	match password_success:
+		DatFile.CORRECT_PASSWORD:
+			Console.write_line("Going to level %d" % level)
+		DatFile.WRONG_PASSWORD:
+			$UI.alert("Wrong password")
+		DatFile.NONEXISTENT_LEVEL:
+			$UI.alert("%s has fewer than %d levels" % [df.filename(), level])

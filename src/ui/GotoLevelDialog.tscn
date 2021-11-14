@@ -67,7 +67,6 @@ min_value = 1.0
 max_value = 10.0
 value = 1.0
 rounded = true
-allow_greater = true
 
 [node name="PasswordLabel" type="Label" parent="PopupDialog/VBoxContainer/GridContainer"]
 margin_top = 33.0
