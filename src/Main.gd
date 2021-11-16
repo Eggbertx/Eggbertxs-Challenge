@@ -114,7 +114,11 @@ func _on_UI_game_item_selected(id):
 		GAME_ITEM_NEWGAME:
 			Console.write_line("Starting a new game")
 		GAME_ITEM_PAUSE:
-			Console.write_line("Pausing level")
+			$UI.game_menu.toggle_item_checked(id)
+			if $UI.game_menu.is_item_checked(id):
+				Console.write_line("Pausing level")
+			else:
+				Console.write_line("Unpausing level")
 		GAME_ITEM_DATFILE:
 			if $UI/FileDialog.visible:
 				return

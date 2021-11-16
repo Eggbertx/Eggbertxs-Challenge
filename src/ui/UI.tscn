@@ -62,7 +62,7 @@ margin_bottom = 20.0
 size_flags_vertical = 3
 text = "Game"
 flat = false
-items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Pause", null, 0, false, false, 1, 0, null, "", false, "Load levelset", null, 0, false, false, 2, 0, null, "", false, "Change tileset", null, 0, false, false, 3, 0, null, "", false, "Music", null, 1, true, false, 4, 0, null, "", false, "", null, 0, false, false, 5, 0, null, "", true, "GitHub repo", null, 0, false, false, 6, 0, null, "", false, "Quit", null, 0, false, false, 7, 0, null, "", false ]
+items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Pause", null, 1, false, false, 1, 0, null, "", false, "Load levelset", null, 0, false, false, 2, 0, null, "", false, "Change tileset", null, 0, false, false, 3, 0, null, "", false, "Music", null, 1, false, false, 4, 0, null, "", false, "", null, 0, false, false, 5, 0, null, "", true, "GitHub repo", null, 0, false, false, 6, 0, null, "", false, "Quit", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="LevelMenu" type="MenuButton" parent="Panel/HBoxContainer"]

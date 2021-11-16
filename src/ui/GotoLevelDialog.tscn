@@ -42,7 +42,7 @@ __meta__ = {
 [node name="InfoLabel" type="Label" parent="PopupDialog/VBoxContainer"]
 margin_right = 243.0
 margin_bottom = 31.0
-text = "Enter a level number and a password, or just a password."
+text = "Enter a level number and a password"
 autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="PopupDialog/VBoxContainer"]

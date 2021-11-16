@@ -4,7 +4,7 @@ var tiles_img: Image
 var tiles_tex: ImageTexture
 
 func _ready():
-	print("tile_set: %s" % $TileMap.tile_set.to_string())
+	# print("tile_set: %s" % $TileMap.tile_set.to_string())
 	tiles_img = Image.new()
 	set_tileset("res://images/old/tileset.png", 32)
 	#$TileMap.tile_set.tile_get_texture()
