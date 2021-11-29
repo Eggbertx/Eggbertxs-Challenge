@@ -2,6 +2,9 @@
 
 An implementation of Chip's Challenge in the Godot game engine.
 
+## Preview
+![Preview](./level1demo.png)
+
 ## Tests
 There are unit tests in `./tests/` that can be executed using [Gut](https://github.com/bitwes/Gut). To use it, run `godot --debug-collisions --path $PWD -d -s addons/gut/gut_cmdln.gd`
 
