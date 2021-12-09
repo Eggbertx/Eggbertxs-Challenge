@@ -23,6 +23,11 @@ const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
 
 func load_file(file = ""):
+	if $UI.file_mode == $UI.FILEMODE_TILESET:
+		var err = $LevelMap.set_tileset(file, 32)
+		if err != "":
+			$UI.alert(err)
+		return
 	if file == "":
 		$UI.alert("File path required", is_debug)
 		return
@@ -49,7 +54,6 @@ func level_info(level):
 		$UI.alert("No level specified", is_debug)
 		return
 
-	# Console.write_line("Level %d info:" % level)
 	if !df.level_info(level):
 		Console.write_line("Level #%d not found" % level)
 
@@ -72,9 +76,6 @@ func register_commands():
 func quit(status:int = 0):
 	df.free()
 	get_tree().quit(status)
-	
-# 	Resource still in use: res://src/data/Level.gd (GDScript)
-# Resource still in use: res://src/data/datfile.gd (GDScript)
 
 func _input(event):
 	if event is InputEventKey:
@@ -92,10 +93,8 @@ func _ready():
 	register_commands()
 	if df.default_exists():
 		load_file("CHIPS.DAT")
-		
-	# var toolbar_height = $UI/Panel/HBoxContainer.rect_size.y
-	$LevelMap.position = $UI/ViewWindow.rect_position
 
+	$LevelMap.position = $UI/ViewWindow.rect_position
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
@@ -120,15 +119,9 @@ func _on_UI_game_item_selected(id):
 			else:
 				Console.write_line("Unpausing level")
 		GAME_ITEM_DATFILE:
-			if $UI/FileDialog.visible:
-				return
-			$UI/FileDialog.add_filter("*.dat ; CC levelset")
-			$UI/FileDialog.popup()
+			$UI.show_file_dialog($UI.FILEMODE_DATFILE)
 		GAME_ITEM_TILESET:
-			if $UI/FileDialog.visible:
-				return
-			$UI/FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
-			$UI/FileDialog.popup()
+			$UI.show_file_dialog($UI.FILEMODE_TILESET)
 		GAME_ITEM_MUSIC:
 			$UI.game_menu.toggle_item_checked(id)
 			if $UI.game_menu.is_item_checked(id):

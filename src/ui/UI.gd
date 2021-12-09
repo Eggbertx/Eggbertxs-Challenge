@@ -5,11 +5,16 @@ signal game_item_selected
 signal level_item_selected
 signal level_selected
 
+enum {
+	FILEMODE_DATFILE,
+	FILEMODE_TILESET
+}
+
 onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
 onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
 
 var time_left = 100
-
+var file_mode = FILEMODE_DATFILE
 var viewport_size: Vector2
 
 func _ready() -> void:
@@ -48,6 +53,18 @@ func set_max_level(levels:int):
 
 func enable_level_menu(enabled = true):
 		$Panel/HBoxContainer/LevelMenu.disabled = !enabled
+
+func show_file_dialog(filemode = FILEMODE_DATFILE):
+	file_mode = filemode
+	if $FileDialog.visible:
+		return
+	$FileDialog.clear_filters()
+	match filemode:
+		FILEMODE_DATFILE:
+			$FileDialog.add_filter("*.dat ; CC levelset")
+		FILEMODE_TILESET:
+			$FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
+	$FileDialog.popup()
 
 func _on_FileDialog_file_selected(path):
 	emit_signal("file_selected", path)
