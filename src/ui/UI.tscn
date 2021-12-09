@@ -61,7 +61,6 @@ margin_right = 50.0
 margin_bottom = 20.0
 size_flags_vertical = 3
 text = "Game"
-flat = false
 items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Pause", null, 1, false, false, 1, 0, null, "", false, "Load levelset", null, 0, false, false, 2, 0, null, "", false, "Change tileset", null, 0, false, false, 3, 0, null, "", false, "Music", null, 1, false, false, 4, 0, null, "", false, "", null, 0, false, false, 5, 0, null, "", true, "GitHub repo", null, 0, false, false, 6, 0, null, "", false, "Quit", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 
@@ -70,7 +69,6 @@ margin_left = 54.0
 margin_right = 100.0
 margin_bottom = 20.0
 text = "Level"
-flat = false
 items = [ "Restart", null, 0, false, false, 0, 0, null, "", false, "Next", null, 0, false, false, 1, 0, null, "", false, "Previous", null, 0, false, true, 2, 0, null, "", false, "Go To...", null, 0, false, false, 3, 0, null, "", false ]
 switch_on_hover = true
 
