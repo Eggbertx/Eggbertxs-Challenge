@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=1]
 [ext_resource path="res://images/background-new.png" type="Texture" id=2]
 [ext_resource path="res://src/ui/SevenSegmentDisplay.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/ui/GotoLevelDialog.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/ui/TilesetSelectDialog.tscn" type="PackedScene" id=5]
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
@@ -103,6 +104,10 @@ position = Vector2( 368, 217 )
 [node name="GotoLevelDialog" parent="." instance=ExtResource( 4 )]
 visible = false
 
+[node name="TilesetSelectDialog" parent="." instance=ExtResource( 5 )]
+visible = false
+
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="level_selected" from="GotoLevelDialog" to="." method="_on_GotoLevelDialog_level_selected"]
+[connection signal="browse_activated" from="TilesetSelectDialog" to="." method="_on_TilesetSelectDialog_browse_activated"]

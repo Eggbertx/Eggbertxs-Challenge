@@ -41,15 +41,15 @@ __meta__ = {
 
 [node name="InfoLabel" type="Label" parent="PopupDialog/VBoxContainer"]
 margin_right = 243.0
-margin_bottom = 31.0
+margin_bottom = 14.0
 text = "Enter a level number and a password"
 autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="PopupDialog/VBoxContainer"]
 margin_left = 36.0
-margin_top = 35.0
+margin_top = 18.0
 margin_right = 206.0
-margin_bottom = 87.0
+margin_bottom = 70.0
 size_flags_horizontal = 4
 columns = 2
 
@@ -82,9 +82,9 @@ margin_bottom = 52.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PopupDialog/VBoxContainer"]
 margin_left = 77.0
-margin_top = 91.0
+margin_top = 74.0
 margin_right = 166.0
-margin_bottom = 111.0
+margin_bottom = 94.0
 size_flags_horizontal = 4
 
 [node name="OkButton" type="Button" parent="PopupDialog/VBoxContainer/HBoxContainer"]

@@ -52,7 +52,7 @@ func set_max_level(levels:int):
 	$GotoLevelDialog/PopupDialog/VBoxContainer/GridContainer/LevelNoEdit.max_value = levels
 
 func enable_level_menu(enabled = true):
-		$Panel/HBoxContainer/LevelMenu.disabled = !enabled
+	$Panel/HBoxContainer/LevelMenu.disabled = !enabled
 
 func show_file_dialog(filemode = FILEMODE_DATFILE):
 	file_mode = filemode
@@ -63,6 +63,7 @@ func show_file_dialog(filemode = FILEMODE_DATFILE):
 		FILEMODE_DATFILE:
 			$FileDialog.add_filter("*.dat ; CC levelset")
 		FILEMODE_TILESET:
+			$TilesetSelectDialog.show_dialog()
 			$FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
 	$FileDialog.popup()
 
@@ -78,3 +79,7 @@ func _on_Timer_timeout():
 
 func _on_GotoLevelDialog_level_selected(level: int, password: String):
 	emit_signal("level_selected", level, password)
+
+
+func _on_TilesetSelectDialog_browse_activated() -> void:
+	pass # Replace with function body.
