@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/timefont-new.png-de1587de0bdd26f61ab52a6c45ae17d2.stex"
+path="res://.import/floor.png-fc3651d52bf28fffebe5f63110074f09.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/timefont-new.png"
-dest_files=[ "res://.import/timefont-new.png-de1587de0bdd26f61ab52a6c45ae17d2.stex" ]
+source_file="res://res/new-render/floor.png"
+dest_files=[ "res://.import/floor.png-fc3651d52bf28fffebe5f63110074f09.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

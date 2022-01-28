@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/movableblock.png-471c3b77ef5a920ceeb86f84f287badf.stex"
+path="res://.import/movableblock.png-4ed3054d9aa03e152521bcd0970a6dfa.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/new-render/movableblock.png"
-dest_files=[ "res://.import/movableblock.png-471c3b77ef5a920ceeb86f84f287badf.stex" ]
+source_file="res://res/new-render/movableblock.png"
+dest_files=[ "res://.import/movableblock.png-4ed3054d9aa03e152521bcd0970a6dfa.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

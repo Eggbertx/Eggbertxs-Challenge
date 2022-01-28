@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/background-new.png-6bd5b11bbff26b18b884875b96111eb0.s3tc.stex"
-path.etc="res://.import/background-new.png-6bd5b11bbff26b18b884875b96111eb0.etc.stex"
+path.s3tc="res://.import/background-new.png-6a66292566208a5986df615c49bad790.s3tc.stex"
+path.etc="res://.import/background-new.png-6a66292566208a5986df615c49bad790.etc.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://images/background-new.png"
-dest_files=[ "res://.import/background-new.png-6bd5b11bbff26b18b884875b96111eb0.s3tc.stex", "res://.import/background-new.png-6bd5b11bbff26b18b884875b96111eb0.etc.stex" ]
+source_file="res://res/background-new.png"
+dest_files=[ "res://.import/background-new.png-6a66292566208a5986df615c49bad790.s3tc.stex", "res://.import/background-new.png-6a66292566208a5986df615c49bad790.etc.stex" ]
 
 [params]
 
@@ -30,6 +30,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

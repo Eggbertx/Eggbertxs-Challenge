@@ -15,7 +15,7 @@ func _ready():
 
 func attach_datfile(file: DatFile):
 	df = file
-	var err = $CCTileset.set_image("images/tiles.bmp")
+	var err = $CCTileset.set_image("res/tiles.bmp")
 	if err != OK:
 		Console.write_line("Error loading tileset")
 

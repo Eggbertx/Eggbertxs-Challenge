@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=1]
-[ext_resource path="res://images/background-new.png" type="Texture" id=2]
+[ext_resource path="res://res/background-new.png" type="Texture" id=2]
 [ext_resource path="res://src/ui/SevenSegmentDisplay.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/ui/GotoLevelDialog.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/ui/TilesetSelectDialog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://theme/9x.tres" type="Theme" id=6]
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 6 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -58,7 +60,7 @@ __meta__ = {
 }
 
 [node name="GameMenu" type="MenuButton" parent="Panel/HBoxContainer"]
-margin_right = 50.0
+margin_right = 33.0
 margin_bottom = 20.0
 size_flags_vertical = 3
 text = "Game"
@@ -66,8 +68,8 @@ items = [ "New game", null, 0, false, false, 0, 0, null, "", false, "Pause", nul
 switch_on_hover = true
 
 [node name="LevelMenu" type="MenuButton" parent="Panel/HBoxContainer"]
-margin_left = 54.0
-margin_right = 100.0
+margin_left = 37.0
+margin_right = 69.0
 margin_bottom = 20.0
 text = "Level"
 items = [ "Restart", null, 0, false, false, 0, 0, null, "", false, "Next", null, 0, false, false, 1, 0, null, "", false, "Previous", null, 0, false, true, 2, 0, null, "", false, "Go To...", null, 0, false, false, 3, 0, null, "", false ]

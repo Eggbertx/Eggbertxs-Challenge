@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/block.png-8797e4cc24013b10ed67d50f1cd7ae69.stex"
+path="res://.import/water.png-451d4b310eb2c927f1290733b5d5c457.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/new-render/block.png"
-dest_files=[ "res://.import/block.png-8797e4cc24013b10ed67d50f1cd7ae69.stex" ]
+source_file="res://res/new-render/water.png"
+dest_files=[ "res://.import/water.png-451d4b310eb2c927f1290733b5d5c457.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

@@ -4,7 +4,7 @@ var tiles_tex: ImageTexture
 
 func _ready():
 	tiles_tex = ImageTexture.new()
-	var err = set_tileset("res://images/old/tileset.png", 32)
+	var err = set_tileset("res://res/old/tileset.png", 32)
 	if err != "":
 		Console.write_line(err)
 		get_tree().quit()
