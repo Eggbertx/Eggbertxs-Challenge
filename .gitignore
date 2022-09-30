@@ -6,7 +6,8 @@ images/old/
 *.dat
 *.blend1
 .import/
-out/
+/out/
+/tests/out*.xml
 export.cfg
 export_presets.cfg
 .vscode/

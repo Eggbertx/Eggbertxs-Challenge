@@ -16,6 +16,14 @@ class Test:
 	# if the test has been marked pending at anypont during
 	# execution.
 	var pending = false
+	# the line number when the  test fails
+	var line_number = -1
+
+	func did_pass():
+		return passed and !pending and assert_count > 0
+
+	func did_assert():
+		return assert_count > 0 or pending
 
 
 # ------------------------------------------------------------------------------
@@ -152,7 +160,7 @@ func _get_inner_test_class_names(loaded):
 	var const_map = loaded.get_script_constant_map()
 	for key in const_map:
 		var thing = const_map[key]
-		if(typeof(thing) == TYPE_OBJECT):
+		if(_utils.is_gdscript(thing)):
 			if(key.begins_with(_test_class_prefix)):
 				if(_does_inherit_from_test(thing)):
 					inner_classes.append(key)
