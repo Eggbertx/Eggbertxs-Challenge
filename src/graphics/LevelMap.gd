@@ -4,11 +4,14 @@ var tiles_tex: ImageTexture
 
 func _ready():
 	tiles_tex = ImageTexture.new()
+	for y in range(32):
+		for x in range(32):
+			$Layer1.set_cell(x,y,Objects.FLOOR)
+
 	var err = set_tileset("res://res/old/tileset.png", 32)
 	if err != "":
 		Console.write_line(err)
 		get_tree().quit()
-	$Layer1.set_cell(1,1,1)
 
 func _get_atlas(texture: Texture, rect: Rect2) -> AtlasTexture:
 	var atlas = AtlasTexture.new()
@@ -17,13 +20,20 @@ func _get_atlas(texture: Texture, rect: Rect2) -> AtlasTexture:
 	return atlas
 
 func set_tileset(path: String, tile_size: int) -> String:
-	var img = Image.new()
-	if img.load(path) != OK:
-		return "Unable to load tileset texture %s" % path
-	tiles_tex.create_from_image(img)
+	var img:Image
+	if path.begins_with("res://"):
+		var stream_tex:StreamTexture = load(path)
+		if stream_tex == null:
+			return "Could not load tileset texture %s" % path
+		tiles_tex.create_from_image(stream_tex.get_data())
+	else:
+		img = Image.new()
+		if img.load(path) != OK:
+			return "Unable to load tileset texture %s" % path
+		tiles_tex.create_from_image(img)
 
-	var img_width = img.get_width()
-	var img_height = img.get_height()
+	var img_width = tiles_tex.get_width()
+	var img_height = tiles_tex.get_height()
 	if img_width % tile_size > 0 or img_height % tile_size > 0:
 		return "Tileset has an invalid size, tile width and height must be multiples of %d" % tile_size
 
