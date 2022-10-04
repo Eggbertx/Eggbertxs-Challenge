@@ -21,6 +21,9 @@ enum {
 
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
+var ticker = 0.0
+var seconds_passed = 0
+var paused = true
 
 func load_file(file = ""):
 	if $UI.file_mode == $UI.FILEMODE_TILESET:
@@ -38,6 +41,10 @@ func load_file(file = ""):
 		return
 	$UI.set_max_level(df.num_levels)
 	$UI.enable_level_menu()
+	paused = false
+	$UI/TimeDisplay.show()
+	$UI/LevelDisplay.set_number(1)
+	$UI/LevelDisplay.show()
 
 func print_info():
 	if df.file_path == "":
@@ -72,9 +79,13 @@ func register_commands():
 		.set_description("Prints info about the loaded dat file if one is currently loaded")\
 		.register()
 
+	Console.add_command("quit", self, "quit")\
+		.set_description("Exits the game")\
+		.register()
+
 
 func quit(status:int = 0):
-	df.free()
+	df.queue_free()
 	get_tree().quit(status)
 
 func _input(event):
@@ -84,8 +95,11 @@ func _input(event):
 				if is_debug:
 					quit()
 			KEY_R:
-				if event.control and !event.pressed:
+				if event.control and !event.pressed: # Ctrl+R released
 					Console.write_line("Restarting level")
+			KEY_PAUSE:
+				if not event.pressed:
+					paused = not paused
 
 func _ready():
 	is_debug = OS.is_debug_build()
@@ -101,8 +115,13 @@ func _notification(what):
 		quit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta: float):
+	if not paused:
+		ticker += delta
+		if ticker >= 1:
+			seconds_passed += 1
+			ticker = 0
+			$UI/TimeDisplay.set_number(seconds_passed)
 
 func _on_UI_file_selected(path: String):
 	load_file(path)
@@ -116,8 +135,10 @@ func _on_UI_game_item_selected(id):
 			$UI.game_menu.toggle_item_checked(id)
 			if $UI.game_menu.is_item_checked(id):
 				Console.write_line("Pausing level")
+				paused = true
 			else:
 				Console.write_line("Unpausing level")
+				paused = false
 		GAME_ITEM_DATFILE:
 			$UI.show_file_dialog($UI.FILEMODE_DATFILE)
 		GAME_ITEM_TILESET:

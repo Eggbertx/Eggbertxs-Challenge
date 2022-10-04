@@ -50,5 +50,8 @@ func set_image(path: String):
 func _draw():
 	pass
 
+func _exit_tree():
+	s.queue_free()
+
 func _process(delta: float) -> void:
 	update()
