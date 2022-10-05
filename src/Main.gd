@@ -96,6 +96,19 @@ func _input(event):
 			KEY_PAUSE:
 				if not event.pressed:
 					paused = not paused
+			KEY_UP:
+				if event.pressed:
+					$LevelMap.emit_signal("player_move_attempted", LevelMap.NORTH)
+			KEY_LEFT:
+				if event.pressed:
+					$LevelMap.emit_signal("player_move_attempted", LevelMap.WEST)
+			KEY_DOWN:
+				if event.pressed:
+					$LevelMap.emit_signal("player_move_attempted", LevelMap.SOUTH)
+			KEY_RIGHT:
+				if event.pressed:
+					$LevelMap.emit_signal("player_move_attempted", LevelMap.EAST)
+
 
 func _ready():
 	is_debug = OS.is_debug_build()
@@ -104,7 +117,9 @@ func _ready():
 	if df.default_exists():
 		load_file("CHIPS.DAT")
 	df.levels[0].apply_to($LevelMap)
+	$LevelMap.viewport_offset = $UI/ViewWindow.rect_position
 	$LevelMap.position = $UI/ViewWindow.rect_position
+	$LevelMap.center_camera()
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:

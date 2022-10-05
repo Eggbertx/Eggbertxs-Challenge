@@ -16,3 +16,5 @@ format = 1
 tile_set = SubResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1
+
+[connection signal="player_move_attempted" from="." to="." method="_on_LevelMap_player_move_attempted"]

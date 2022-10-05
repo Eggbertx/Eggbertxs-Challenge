@@ -2,9 +2,14 @@ extends Node2D
 
 class_name LevelMap
 
+enum { NORTH, WEST, SOUTH, EAST }
+
+signal player_move_attempted
+
 var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
 var player_layer = 0
+var viewport_offset: Vector2 # the base offset of the map view
 
 func _ready():
 	tiles_tex = ImageTexture.new()
@@ -23,11 +28,64 @@ func _get_atlas(texture: Texture, rect: Rect2) -> AtlasTexture:
 	atlas.set_region(rect)
 	return atlas
 
+func get_tile(x: int, y: int, layer: int) -> int:
+	if layer == 1:
+		return $Layer1.get_cell(x, y)
+	return $Layer2.get_cell(x, y)
+
 func set_tile(x: int, y: int, layer: int, tileID: int):
 	if layer == 1:
 		$Layer1.set_cell(x, y, tileID)
 	else:
 		$Layer2.set_cell(x, y, tileID)
+
+func change_tile_location(x1: int, y1: int, l1: int, x2: int, y2: int, l2: int):
+	var tile: int
+	if l1 == 1:
+		tile = $Layer1.get_cell(x1, y1)
+		$Layer1.set_cell(x1, y1, -1)
+	else:
+		tile = $Layer2.get_cell(x1, y1)
+		$Layer2.set_cell(x1, y1, -1)
+	if l2 == 1:
+		$Layer1.set_cell(x2, y2, tile)
+	else:
+		$Layer2.set_cell(x2, y2, tile)
+
+func shift_player(direction: int):
+	shift_tile(player_pos.x, player_pos.y, player_layer, direction)
+	match direction:
+		NORTH:
+			player_pos.y -= 1
+		WEST:
+			player_pos.x -= 1
+		SOUTH:
+			player_pos.y += 1
+		EAST:
+			player_pos.x += 1
+
+func shift_tile(x: int, y: int, layer: int, direction: int):
+	var new_x = x
+	var new_y = y
+	match direction:
+		NORTH:
+			if y <= 0:
+				return
+			new_y = y - 1
+		WEST:
+			if x <= 0:
+				return
+			new_x = x - 1
+		SOUTH:
+			if y >= 31:
+				return
+			new_y = y + 1
+		EAST:
+			if x >= 31:
+				return
+			new_x = x + 1
+	change_tile_location(x, y, layer, new_x, new_y, layer)
+
 
 func set_tileset(path: String, tile_size: int) -> String:
 	var img:Image
@@ -67,3 +125,35 @@ func set_tileset(path: String, tile_size: int) -> String:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func center_camera():
+	var camera_x = 0
+	var camera_y = 0
+	if player_pos.x <= 4:
+		camera_x = 0
+	else:
+		camera_x = (player_pos.x - 4) * 32
+	if player_pos.y <= 4:
+		camera_y = 0
+	else:
+		camera_y = (player_pos.y - 4) * 32
+	transform.origin.x = viewport_offset.x - camera_x
+	transform.origin.y = viewport_offset.y - camera_y
+
+func _on_LevelMap_player_move_attempted(direction: int):
+	match direction:
+		NORTH:
+			if player_pos.y < 1:
+				return
+		WEST:
+			if player_pos.x < 1:
+				return
+		SOUTH:
+			if player_pos.y >= 31:
+				return
+		EAST:
+			if player_pos.x >= 31:
+				return
+
+	shift_player(direction)
+	center_camera()

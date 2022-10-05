@@ -101,15 +101,15 @@ func apply_to(map: LevelMap):
 		map.set_tile(pos.x, pos.y, 1, layer1_bytes[b])
 		map.set_tile(pos.x, pos.y, 2, layer2_bytes[b])
 		if layer1_bytes[b] >= Objects.CHIP_N and layer1_bytes[b] <= Objects.CHIP_E:
-			last_chip_index = layer1_bytes[b]
+			last_chip_index = b
 			chip_layer = 1
 		if layer2_bytes[b] >= Objects.CHIP_N and layer2_bytes[b] <= Objects.CHIP_E:
-			last_chip_index = layer1_bytes[b]
+			last_chip_index = b
 			chip_layer = 2
-	print("Chip has tile index %d and layer %d" % [last_chip_index, chip_layer])
 	if last_chip_index > -1:
 		map.player_pos = index_to_2d(last_chip_index)
 		map.player_layer = chip_layer
+	map.center_camera()
 
 # RLE bytes are stored: 0xFF, num_rel_bytes, byte1, byte2, byte3, ...
 func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):
