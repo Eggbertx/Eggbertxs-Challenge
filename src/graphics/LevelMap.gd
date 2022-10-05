@@ -1,6 +1,10 @@
 extends Node2D
 
+class_name LevelMap
+
 var tiles_tex: ImageTexture
+var player_pos = Vector2(0, 0)
+var player_layer = 0
 
 func _ready():
 	tiles_tex = ImageTexture.new()
@@ -18,6 +22,12 @@ func _get_atlas(texture: Texture, rect: Rect2) -> AtlasTexture:
 	atlas.set_atlas(texture)
 	atlas.set_region(rect)
 	return atlas
+
+func set_tile(x: int, y: int, layer: int, tileID: int):
+	if layer == 1:
+		$Layer1.set_cell(x, y, tileID)
+	else:
+		$Layer2.set_cell(x, y, tileID)
 
 func set_tileset(path: String, tile_size: int) -> String:
 	var img:Image

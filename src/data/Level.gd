@@ -25,7 +25,8 @@ var red_button_field = PoolByteArray()
 var password = ""
 var hint = ""
 var monster_locations = []
-
+var last_chip_index = -1
+var chip_layer = 0
 
 
 var no_time_limit = false
@@ -89,8 +90,29 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 		print_info()
 	return ""
 
+func index_to_2d(num: int):
+	var x = num % 32
+	var y = floor((num - x) / 32)
+	return Vector2(x, y)
+
+func apply_to(map: LevelMap):
+	for b in range(1024):
+		var pos = index_to_2d(b)
+		map.set_tile(pos.x, pos.y, 1, layer1_bytes[b])
+		map.set_tile(pos.x, pos.y, 2, layer2_bytes[b])
+		if layer1_bytes[b] >= Objects.CHIP_N and layer1_bytes[b] <= Objects.CHIP_E:
+			last_chip_index = layer1_bytes[b]
+			chip_layer = 1
+		if layer2_bytes[b] >= Objects.CHIP_N and layer2_bytes[b] <= Objects.CHIP_E:
+			last_chip_index = layer1_bytes[b]
+			chip_layer = 2
+	print("Chip has tile index %d and layer %d" % [last_chip_index, chip_layer])
+	if last_chip_index > -1:
+		map.player_pos = index_to_2d(last_chip_index)
+		map.player_layer = chip_layer
+
+# RLE bytes are stored: 0xFF, num_rel_bytes, byte1, byte2, byte3, ...
 func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):
-	# 0xFF,<num_rel_bytes>,<byte_to_copy>
 	var can_read = (stream.get_position() + num_rel_bytes) <= stream.get_size()
 	if not can_read:
 		Console.write_line(rle_too_large)
@@ -126,6 +148,7 @@ func print_info():
 	#Console.write_line("\tRed button field: %d" % red_button_field)
 	Console.write_line("\tPassword: %s" % password)
 	Console.write_line("\tHint: %s" % hint)
+	Console.write_line("Chip found at byte index %d and layer %d" % [last_chip_index, chip_layer])
 	for loc in monster_locations:
 		Console.write_line("\tMonster at %d,%d" % [loc.x, loc.y])
 

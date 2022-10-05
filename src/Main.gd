@@ -79,10 +79,6 @@ func register_commands():
 		.set_description("Prints info about the loaded dat file if one is currently loaded")\
 		.register()
 
-	Console.add_command("quit", self, "quit")\
-		.set_description("Exits the game")\
-		.register()
-
 
 func quit(status:int = 0):
 	df.queue_free()
@@ -107,7 +103,7 @@ func _ready():
 	register_commands()
 	if df.default_exists():
 		load_file("CHIPS.DAT")
-
+	df.levels[0].apply_to($LevelMap)
 	$LevelMap.position = $UI/ViewWindow.rect_position
 
 func _notification(what):
