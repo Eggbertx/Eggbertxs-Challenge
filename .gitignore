@@ -1,13 +1,10 @@
 docs/
 sounds/
 music/
-images/old/
-*.DAT
-*.dat
+/CHIPS.DAT
 *.blend1
 .import/
 /out/
 /tests/out*.xml
 export.cfg
 export_presets.cfg
-.vscode/
