@@ -96,19 +96,6 @@ func _input(event):
 			KEY_PAUSE:
 				if not event.pressed:
 					paused = not paused
-			KEY_UP:
-				if event.pressed:
-					$LevelMap.emit_signal("player_move_attempted", LevelMap.NORTH)
-			KEY_LEFT:
-				if event.pressed:
-					$LevelMap.emit_signal("player_move_attempted", LevelMap.WEST)
-			KEY_DOWN:
-				if event.pressed:
-					$LevelMap.emit_signal("player_move_attempted", LevelMap.SOUTH)
-			KEY_RIGHT:
-				if event.pressed:
-					$LevelMap.emit_signal("player_move_attempted", LevelMap.EAST)
-
 
 func _ready():
 	is_debug = OS.is_debug_build()
@@ -189,3 +176,6 @@ func _on_UI_level_selected(level:int, password:String):
 			$UI.alert("Wrong password")
 		DatFile.NONEXISTENT_LEVEL:
 			$UI.alert("%s has fewer than %d levels" % [df.filename(), level])
+
+func _on_LevelMap_collected_chip():
+	pass # Replace with function body.

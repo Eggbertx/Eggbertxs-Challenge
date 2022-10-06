@@ -5,11 +5,14 @@ class_name LevelMap
 enum { NORTH, WEST, SOUTH, EAST }
 
 signal player_move_attempted
+signal collected_chip
 
+const move_delay = 0.3
 var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
 var player_layer = 0
 var viewport_offset: Vector2 # the base offset of the map view
+var last_move_time = 0
 
 func _ready():
 	tiles_tex = ImageTexture.new()
@@ -122,10 +125,6 @@ func set_tileset(path: String, tile_size: int) -> String:
 	$Layer2.tile_set = tileset
 	return ""
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
 func center_camera():
 	var camera_x = 0
 	var camera_y = 0
@@ -140,20 +139,75 @@ func center_camera():
 	transform.origin.x = viewport_offset.x - camera_x
 	transform.origin.y = viewport_offset.y - camera_y
 
+func check_movement():
+	if Input.is_key_pressed(KEY_UP):
+		emit_signal("player_move_attempted", NORTH)
+	elif Input.is_key_pressed(KEY_LEFT):
+		emit_signal("player_move_attempted", WEST)
+	elif Input.is_key_pressed(KEY_DOWN):
+		emit_signal("player_move_attempted", SOUTH)
+	elif Input.is_key_pressed(KEY_RIGHT):
+		emit_signal("player_move_attempted", EAST)
+	
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+func _physics_process(delta):
+	last_move_time += delta
+	if last_move_time >= move_delay:
+		last_move_time = 0.0
+	if Input.is_action_just_pressed("ui_up", false)\
+	or Input.is_action_just_pressed("ui_left", false)\
+	or Input.is_action_just_pressed("ui_down", false)\
+	or Input.is_action_just_pressed("ui_right", false):
+		last_move_time = 0
+	
+	var can_move = last_move_time == 0.0
+
+	if can_move:
+		check_movement()
+
 func _on_LevelMap_player_move_attempted(direction: int):
+	var new_x = player_pos.x
+	var new_y = player_pos.y
+	# next_x and next_y are used for checking the thing immediately after the destination.
+	# So for example, if the tile at (new_x,new_y) is DIRT_MOVABLE and the tile at
+	# (next_x,next_y) is FLOOR, it'll move, but if it's WALL, it won't
+	var next_x = player_pos.x
+	var next_y = player_pos.y
 	match direction:
 		NORTH:
 			if player_pos.y < 1:
 				return
+			new_y = player_pos.y - 1
+			next_y = player_pos.y - 2
 		WEST:
 			if player_pos.x < 1:
 				return
+			new_x = player_pos.x - 1
+			next_x = player_pos.x - 2
 		SOUTH:
 			if player_pos.y >= 31:
 				return
+			new_y = player_pos.y + 1
+			next_y = player_pos.y + 2
 		EAST:
 			if player_pos.x >= 31:
 				return
+			new_x = player_pos.x + 1
+			next_x = player_pos.x + 2
 
+	var dest_tile = get_tile(new_x, new_y, player_layer)
+	var next_tile = get_tile(next_x, next_y, player_layer)
+	if dest_tile == Objects.WALL:
+		return
+	if dest_tile == Objects.DIRT_MOVABLE:
+		match next_tile:
+			Objects.FLOOR, -1:
+				shift_tile(new_x, new_y, player_layer, direction)
+			_:
+				return
 	shift_player(direction)
 	center_camera()

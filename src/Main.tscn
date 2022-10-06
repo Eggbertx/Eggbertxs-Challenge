@@ -11,6 +11,7 @@ script = ExtResource( 1 )
 
 [node name="UI" parent="." instance=ExtResource( 3 )]
 
+[connection signal="collected_chip" from="LevelMap" to="." method="_on_LevelMap_collected_chip"]
 [connection signal="file_selected" from="UI" to="." method="_on_UI_file_selected"]
 [connection signal="game_item_selected" from="UI" to="." method="_on_UI_game_item_selected"]
 [connection signal="level_item_selected" from="UI" to="." method="_on_UI_level_item_selected"]
