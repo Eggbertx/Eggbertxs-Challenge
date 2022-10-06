@@ -3,7 +3,7 @@ extends Node
 class_name DatFile
 
 enum { CORRECT_PASSWORD, NONEXISTENT_LEVEL, WRONG_PASSWORD }
-
+const default_files = ["CHIPS.DAT", "chips.dat", "ec.dat", "ec_testing.dat"]
 var file_path = ""
 var num_levels = 0
 var levels = []
@@ -27,11 +27,12 @@ func load_file(filepath: String):
 func filename() -> String:
 	return file_path.get_file()
 
-func default_exists():
+func get_default_file() -> String:
 	var file = File.new()
-	var exists = file.file_exists("CHIPS.DAT")
-	file.close()
-	return exists
+	for fn in default_files:
+		if file.file_exists(fn):
+			return fn
+	return ""
 	
 func level_info(l:int):
 	for level in levels:

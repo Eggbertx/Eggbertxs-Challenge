@@ -110,6 +110,11 @@ func apply_to(map: LevelMap):
 		map.player_pos = index_to_2d(last_chip_index)
 		map.player_layer = chip_layer
 	map.center_camera()
+	var window_title = "Eggbertx's Challenge - " + map_title
+	if OS.is_debug_build():
+		window_title += " (DEBUG)"
+
+	OS.set_window_title(window_title)
 
 # RLE bytes are stored: 0xFF, num_rel_bytes, byte1, byte2, byte3, ...
 func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):

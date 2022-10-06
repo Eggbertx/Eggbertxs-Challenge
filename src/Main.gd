@@ -45,6 +45,8 @@ func load_file(file = ""):
 	$UI/TimeDisplay.show()
 	$UI/LevelDisplay.set_number(1)
 	$UI/LevelDisplay.show()
+	df.levels[0].apply_to($LevelMap)
+	$LevelMap.center_camera()
 
 func print_info():
 	if df.file_path == "":
@@ -101,12 +103,14 @@ func _ready():
 	is_debug = OS.is_debug_build()
 	df = DatFile.new()
 	register_commands()
-	if df.default_exists():
-		load_file("CHIPS.DAT")
-	df.levels[0].apply_to($LevelMap)
 	$LevelMap.viewport_offset = $UI/ViewWindow.rect_position
 	$LevelMap.position = $UI/ViewWindow.rect_position
-	$LevelMap.center_camera()
+	var datfile_path = df.get_default_file()
+	if datfile_path == "":
+		$UI.alert("Unable to find a default .dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
+		return
+	load_file(datfile_path)
+
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:

@@ -7,6 +7,8 @@ enum { NORTH, WEST, SOUTH, EAST }
 signal player_move_attempted
 signal collected_chip
 
+const DEFAULT_TILESET_PATH = "res://res/tiles.png"
+const DEFAULT_TILESET_SIZE = 32
 const move_delay = 0.3
 var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
@@ -20,7 +22,7 @@ func _ready():
 		for x in range(32):
 			$Layer1.set_cell(x,y,Objects.FLOOR)
 
-	var err = set_tileset("res://res/old/tileset.png", 32)
+	var err = set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 	if err != "":
 		Console.write_line(err)
 		get_tree().quit()
