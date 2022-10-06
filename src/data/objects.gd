@@ -16,7 +16,7 @@ enum {
 	DIRT_MOVABLE,
 	DIRT_FLOOR,
 	ICE_FLOOR,
-	FORCE_SOUTH,
+	FORCE_S,
 	CLONING_BLK_N,
 	CLONING_BLK_W,
 	CLONING_BLK_S,
@@ -29,10 +29,10 @@ enum {
 	DOOR_RED,
 	DOOR_GREEN,
 	DOOR_YELLOW,
-	SLIDE_SE,
-	SLIDE_SW,
-	SLIDE_NW,
-	SLIDE_NE,
+	SLIDE_S2E,
+	SLIDE_S2W,
+	SLIDE_N2W,
+	SLIDE_N2E,
 	BLOCK_TO_FLOOR, # Blue Block, becomes FLOOR when pushed
 	BLOCK_TO_WALL # Blue Block, becomes WALL when pushed
 	COMBINATION, # shows Chip or a monster, see https://wiki.bitbusters.club/Combination
