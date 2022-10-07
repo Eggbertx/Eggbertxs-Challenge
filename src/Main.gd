@@ -22,8 +22,8 @@ enum {
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
 var ticker = 0.0
-var seconds_passed = 0
 var paused = true
+var time_left = -1
 
 func load_file(file = ""):
 	if $UI.file_mode == $UI.FILEMODE_TILESET:
@@ -121,9 +121,15 @@ func _process(delta: float):
 	if not paused:
 		ticker += delta
 		if ticker >= 1:
-			seconds_passed += 1
+			# if time_left < 0, no time limit
+			if time_left > 0:
+				time_left -= 1
+				$UI/TimeDisplay.set_number(time_left)
+			elif time_left == 0:
+				print("out of time :(")
+				$LevelMap.emit_signal("out_of_time")
+				paused = true
 			ticker = 0
-			$UI/TimeDisplay.set_number(seconds_passed)
 
 func _on_UI_file_selected(path: String):
 	load_file(path)
@@ -187,3 +193,8 @@ func _on_LevelMap_update_chips_left(left: int):
 
 func _on_LevelMap_player_reached_exit():
 	print("Exit reached")
+
+func _on_LevelMap_update_time_limit(limit: int):
+	if limit > 0:
+		$UI/TimeDisplay.set_number(limit)
+		time_left = limit

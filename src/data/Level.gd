@@ -9,7 +9,7 @@ const invalid_rle_byte = "Invalid RLE byte (byte should be 0xFF or >= 0x00 and <
 
 var num_bytes = 0 # uint16
 var level_num = 0 # uint16
-var time_left = 0 # uint16
+var time_limit = 0 # uint16
 var chips_left = 0 # uint16
 var level_detail = 0 # uint16
 
@@ -34,8 +34,8 @@ var no_time_limit = false
 func parse_data(stream: StreamPeerBuffer, debug = false):
 	num_bytes = stream.get_u16()
 	level_num = stream.get_u16()
-	time_left = stream.get_u16() # if time_left == 0, no time limit
-	no_time_limit = time_left == 0
+	time_limit = stream.get_u16() # if time_left == 0, no time limit
+	no_time_limit = time_limit == 0
 	chips_left = stream.get_u16() 
 	level_detail = stream.get_u16()
 	if level_detail > 1:
@@ -113,6 +113,7 @@ func apply_to(map: LevelMap):
 	var window_title = "Eggbertx's Challenge - " + map_title
 	if OS.is_debug_build():
 		window_title += " (DEBUG)"
+	map.emit_signal("update_time_limit", time_limit)
 	map.emit_signal("update_chips_left", chips_left)
 	OS.set_window_title(window_title)
 
@@ -143,7 +144,7 @@ func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):
 func print_info():
 	Console.write_line("Level %d details:" % level_num)
 	Console.write_line("\tNumber of compressed bytes in level: %d" % num_bytes)
-	Console.write_line("\tTime left: %d" % time_left)
+	Console.write_line("\tTime limit: %d" % time_limit)
 	Console.write_line("\tChips left: %d" % chips_left)
 	Console.write_line("\tLevel detail: %d" % level_detail)
 	Console.write_line("\tNumber of bytes in layer 1: %d" % layer1_numbytes)

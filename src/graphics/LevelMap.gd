@@ -5,7 +5,9 @@ class_name LevelMap
 enum { NORTH, WEST, SOUTH, EAST }
 
 signal player_move_attempted
+signal update_time_limit
 signal update_chips_left
+signal out_of_time
 signal player_reached_exit
 
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
@@ -16,6 +18,7 @@ var player_pos = Vector2(0, 0)
 var player_layer = 0
 var viewport_offset: Vector2 # the base offset of the map view
 var last_move_time = 0
+var time_limit = 0
 var chips_left = 0
 
 func _ready():
