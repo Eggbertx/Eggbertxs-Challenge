@@ -5,7 +5,8 @@ class_name LevelMap
 enum { NORTH, WEST, SOUTH, EAST }
 
 signal player_move_attempted
-signal collected_chip
+signal update_chips_left
+signal player_reached_exit
 
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
 const DEFAULT_TILESET_SIZE = 32
@@ -15,6 +16,7 @@ var player_pos = Vector2(0, 0)
 var player_layer = 0
 var viewport_offset: Vector2 # the base offset of the map view
 var last_move_time = 0
+var chips_left = 0
 
 func _ready():
 	tiles_tex = ImageTexture.new()
@@ -144,11 +146,11 @@ func center_camera():
 func check_movement():
 	if Input.is_key_pressed(KEY_UP):
 		emit_signal("player_move_attempted", NORTH)
-	elif Input.is_key_pressed(KEY_LEFT):
+	if Input.is_key_pressed(KEY_LEFT):
 		emit_signal("player_move_attempted", WEST)
-	elif Input.is_key_pressed(KEY_DOWN):
+	if Input.is_key_pressed(KEY_DOWN):
 		emit_signal("player_move_attempted", SOUTH)
-	elif Input.is_key_pressed(KEY_RIGHT):
+	if Input.is_key_pressed(KEY_RIGHT):
 		emit_signal("player_move_attempted", EAST)
 	
 
@@ -203,13 +205,27 @@ func _on_LevelMap_player_move_attempted(direction: int):
 
 	var dest_tile = get_tile(new_x, new_y, player_layer)
 	var next_tile = get_tile(next_x, next_y, player_layer)
-	if dest_tile == Objects.WALL:
-		return
-	if dest_tile == Objects.DIRT_MOVABLE:
-		match next_tile:
-			Objects.FLOOR, -1:
-				shift_tile(new_x, new_y, player_layer, direction)
-			_:
-				return
+	match dest_tile:
+		Objects.FLOOR, -1:
+			pass
+		Objects.WALL:
+			return
+		Objects.DIRT_MOVABLE:
+			match next_tile:
+				Objects.FLOOR, -1:
+					shift_tile(new_x, new_y, player_layer, direction)
+				_:
+					return
+		Objects.COMPUTER_CHIP:
+			if chips_left > 0:
+				emit_signal("update_chips_left", chips_left - 1)
+		Objects.EXIT:
+			emit_signal("player_reached_exit")
+		_:
+			print("Destination tile: %d" % dest_tile)
+			return
 	shift_player(direction)
 	center_camera()
+
+func _on_LevelMap_update_chips_left(left: int):
+	chips_left = left

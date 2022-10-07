@@ -181,5 +181,9 @@ func _on_UI_level_selected(level:int, password:String):
 		DatFile.NONEXISTENT_LEVEL:
 			$UI.alert("%s has fewer than %d levels" % [df.filename(), level])
 
-func _on_LevelMap_collected_chip():
-	pass # Replace with function body.
+func _on_LevelMap_update_chips_left(left: int):
+	$UI/ChipsDisplay.show()
+	$UI/ChipsDisplay.set_number(left)
+
+func _on_LevelMap_player_reached_exit():
+	print("Exit reached")

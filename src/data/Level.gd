@@ -113,7 +113,7 @@ func apply_to(map: LevelMap):
 	var window_title = "Eggbertx's Challenge - " + map_title
 	if OS.is_debug_build():
 		window_title += " (DEBUG)"
-
+	map.emit_signal("update_chips_left", chips_left)
 	OS.set_window_title(window_title)
 
 # RLE bytes are stored: 0xFF, num_rel_bytes, byte1, byte2, byte3, ...

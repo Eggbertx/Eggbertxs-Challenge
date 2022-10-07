@@ -18,3 +18,4 @@ cell_size = Vector2( 32, 32 )
 format = 1
 
 [connection signal="player_move_attempted" from="." to="." method="_on_LevelMap_player_move_attempted"]
+[connection signal="update_chips_left" from="." to="." method="_on_LevelMap_update_chips_left"]
