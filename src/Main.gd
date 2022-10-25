@@ -127,7 +127,7 @@ func _process(delta: float):
 				$CanvasLayer/UI/TimeDisplay.set_number(time_left)
 			elif time_left == 0:
 				Console.write_line("out of time :(")
-				$Viewport/LevelMap.emit_signal("out_of_time")
+				levelmap.emit_signal("out_of_time")
 				paused = true
 			ticker = 0
 

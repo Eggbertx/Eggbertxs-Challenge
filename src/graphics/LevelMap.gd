@@ -213,7 +213,7 @@ func request_move(direction: String):
 	match dest_tile:
 		Objects.FLOOR, -1:
 			pass
-		Objects.WALL:
+		Objects.WALL, Objects.SOCKET:
 			return
 		Objects.DIRT_MOVABLE:
 			match next_tile:
@@ -224,12 +224,20 @@ func request_move(direction: String):
 		Objects.COMPUTER_CHIP:
 			if chips_left > 0:
 				emit_signal("update_chips_left", chips_left - 1)
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
 		_:
-			# print("Destination tile: %d" % dest_tile)
+			print("Unhandled destination tile: %d" % dest_tile)
 			return
 	change_character_location(player_character, new_x, new_y, player_layer, true)
 
 func _on_LevelMap_update_chips_left(left: int):
 	chips_left = left
+	if chips_left == 0:
+		for y in range(32):
+			for x in range(32):
+				if get_tile(x, y, 1) == Objects.SOCKET:
+					set_tile(x, y, 1, Objects.FLOOR)
+				if get_tile(x, y, 2) == Objects.SOCKET:
+					set_tile(x, y, 2, Objects.FLOOR)
