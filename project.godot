@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/graphics/LevelMap.gd"
 }, {
+"base": "Node2D",
+"class": "MapCharacter",
+"language": "GDScript",
+"path": "res://src/gameplay/MapCharacter.gd"
+}, {
 "base": "Node",
 "class": "Objects",
 "language": "GDScript",
@@ -56,6 +61,7 @@ _global_script_class_icons={
 "GutTest": "",
 "Level": "",
 "LevelMap": "",
+"MapCharacter": "",
 "Objects": "",
 "SevenSegmentDisplay": ""
 }

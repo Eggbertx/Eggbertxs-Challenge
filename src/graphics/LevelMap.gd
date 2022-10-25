@@ -2,9 +2,6 @@ extends Node2D
 
 class_name LevelMap
 
-enum { NORTH, WEST, SOUTH, EAST }
-
-signal player_move_attempted
 signal update_time_limit
 signal update_chips_left
 signal out_of_time
@@ -16,16 +13,17 @@ const move_delay = 0.3
 var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
 var player_layer = 0
-var viewport_offset: Vector2 # the base offset of the map view
 var last_move_time = 0
 var time_limit = 0
 var chips_left = 0
+var player_character: MapCharacter
 
 func _ready():
+	player_character = MapCharacter.new()
 	tiles_tex = ImageTexture.new()
 	for y in range(32):
 		for x in range(32):
-			$Layer1.set_cell(x,y,Objects.FLOOR)
+			$Layer1.set_cell(x, y, Objects.FLOOR)
 
 	var err = set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 	if err != "":
@@ -62,35 +60,51 @@ func change_tile_location(x1: int, y1: int, l1: int, x2: int, y2: int, l2: int):
 	else:
 		$Layer2.set_cell(x2, y2, tile)
 
-func shift_player(direction: int):
-	shift_tile(player_pos.x, player_pos.y, player_layer, direction)
-	match direction:
-		NORTH:
-			player_pos.y -= 1
-		WEST:
-			player_pos.x -= 1
-		SOUTH:
-			player_pos.y += 1
-		EAST:
-			player_pos.x += 1
+func change_character_location(character: MapCharacter, x: int, y: int, layer: int, is_player: bool):
+	character.position.x = x * 32
+	character.position.y = y * 32
+	if layer == 1:
+		$Layer1.add_child(character)
+	else:
+		$Layer2.add_child(character)
+	if is_player:
+		player_pos.x = x
+		player_pos.y = y
+		player_layer = layer
 
-func shift_tile(x: int, y: int, layer: int, direction: int):
+func shift_player(direction: String):
+	# shift_tile(player_pos.x, player_pos.y, player_layer, direction)
+	match direction:
+		"north":
+			player_pos.y -= 1
+			player_character.position.y -= 32
+		"west":
+			player_pos.x -= 1
+			player_character.position.x -= 32
+		"south":
+			player_pos.y += 1
+			player_character.position.y += 32
+		"east":
+			player_pos.x += 1
+			player_character.position.x += 32
+
+func shift_tile(x: int, y: int, layer: int, direction: String):
 	var new_x = x
 	var new_y = y
 	match direction:
-		NORTH:
+		"north":
 			if y <= 0:
 				return
 			new_y = y - 1
-		WEST:
+		"west":
 			if x <= 0:
 				return
 			new_x = x - 1
-		SOUTH:
+		"south":
 			if y >= 31:
 				return
 			new_y = y + 1
-		EAST:
+		"east":
 			if x >= 31:
 				return
 			new_x = x + 1
@@ -118,7 +132,7 @@ func set_tileset(path: String, tile_size: int) -> String:
 	var tileset = TileSet.new()
 	var x = 0
 	var y = 0
-	for t in range(111):
+	for t in range(112):
 		var atlas = _get_atlas(tiles_tex, Rect2(x, y, tile_size, tile_size))
 
 		tileset.create_tile(t)
@@ -130,53 +144,40 @@ func set_tileset(path: String, tile_size: int) -> String:
 			y += tile_size
 	$Layer1.tile_set = tileset
 	$Layer2.tile_set = tileset
+
+	player_character.add_sprite_frame("north", tileset.tile_get_texture(Objects.CHIP_N))
+	player_character.add_sprite_frame("west", tileset.tile_get_texture(Objects.CHIP_W))
+	player_character.add_sprite_frame("south", tileset.tile_get_texture(Objects.CHIP_S))
+	player_character.add_sprite_frame("east", tileset.tile_get_texture(Objects.CHIP_E))
+
 	return ""
 
-func center_camera():
-	var camera_x = 0
-	var camera_y = 0
-	if player_pos.x <= 4:
-		camera_x = 0
+# sets the player position when the map is first loaded, replacing the Objects.CHIP_E tile
+# with a sprite
+func init_player_pos(x: int, y: int, layer: int, direction: String):
+	player_character.position.x = x * 32
+	player_character.position.y = y * 32
+	player_pos.x = x
+	player_pos.y = y
+	player_layer = layer
+	player_character.player_controlled = true
+	if layer == 1:
+		$Layer1.add_child(player_character)
+		$Layer1.set_cell(x, y, -1)
 	else:
-		camera_x = (player_pos.x - 4) * 32
-	if player_pos.y <= 4:
-		camera_y = 0
-	else:
-		camera_y = (player_pos.y - 4) * 32
-	transform.origin.x = viewport_offset.x - camera_x
-	transform.origin.y = viewport_offset.y - camera_y
-
-func check_movement():
-	if Input.is_key_pressed(KEY_UP):
-		emit_signal("player_move_attempted", NORTH)
-	if Input.is_key_pressed(KEY_LEFT):
-		emit_signal("player_move_attempted", WEST)
-	if Input.is_key_pressed(KEY_DOWN):
-		emit_signal("player_move_attempted", SOUTH)
-	if Input.is_key_pressed(KEY_RIGHT):
-		emit_signal("player_move_attempted", EAST)
+		$Layer2.add_child(player_character)
+		$Layer2.set_cell(x, y, -1)
+	
+	player_character.sprite.animation = direction
+	player_character.show()
+	player_character.z_index = 1
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
-func _physics_process(delta):
-	last_move_time += delta
-	if last_move_time >= move_delay:
-		last_move_time = 0.0
-	if Input.is_action_just_pressed("ui_up", false)\
-	or Input.is_action_just_pressed("ui_left", false)\
-	or Input.is_action_just_pressed("ui_down", false)\
-	or Input.is_action_just_pressed("ui_right", false):
-		last_move_time = 0
-	
-	var can_move = last_move_time == 0.0
-
-	if can_move:
-		check_movement()
-
-func _on_LevelMap_player_move_attempted(direction: int):
+func request_move(direction: String):
 	var new_x = player_pos.x
 	var new_y = player_pos.y
 	# next_x and next_y are used for checking the thing immediately after the destination.
@@ -185,27 +186,28 @@ func _on_LevelMap_player_move_attempted(direction: int):
 	var next_x = player_pos.x
 	var next_y = player_pos.y
 	match direction:
-		NORTH:
+		"north":
 			if player_pos.y < 1:
 				return
 			new_y = player_pos.y - 1
 			next_y = player_pos.y - 2
-		WEST:
+		"west":
 			if player_pos.x < 1:
 				return
 			new_x = player_pos.x - 1
 			next_x = player_pos.x - 2
-		SOUTH:
+		"south":
 			if player_pos.y >= 31:
 				return
 			new_y = player_pos.y + 1
 			next_y = player_pos.y + 2
-		EAST:
+		"east":
 			if player_pos.x >= 31:
 				return
 			new_x = player_pos.x + 1
 			next_x = player_pos.x + 2
-
+		_:
+			pass
 	var dest_tile = get_tile(new_x, new_y, player_layer)
 	var next_tile = get_tile(next_x, next_y, player_layer)
 	match dest_tile:
@@ -225,10 +227,9 @@ func _on_LevelMap_player_move_attempted(direction: int):
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
 		_:
-			print("Destination tile: %d" % dest_tile)
+			# print("Destination tile: %d" % dest_tile)
 			return
-	shift_player(direction)
-	center_camera()
+	change_character_location(player_character, new_x, new_y, player_layer, true)
 
 func _on_LevelMap_update_chips_left(left: int):
 	chips_left = left

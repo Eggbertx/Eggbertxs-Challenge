@@ -24,29 +24,31 @@ var is_debug: bool
 var ticker = 0.0
 var paused = true
 var time_left = -1
+onready var ui = $CanvasLayer/UI
+onready var levelmap = $LevelMap
 
 func load_file(file = ""):
-	if $UI.file_mode == $UI.FILEMODE_TILESET:
-		var err = $LevelMap.set_tileset(file, 32)
+	if ui.file_mode == ui.FILEMODE_TILESET:
+		var err = levelmap.set_tileset(file, 32)
 		if err != "":
-			$UI.alert(err)
+			ui.alert(err)
 		return
 	if file == "":
-		$UI.alert("File path required", is_debug)
+		ui.alert("File path required", is_debug)
 		return
 	Console.write_line("Loading %s" % file)
 	var err = df.load_file(file)
 	if err != "":
-		$UI.alert(err, is_debug)
+		ui.alert(err, is_debug)
 		return
-	$UI.set_max_level(df.num_levels)
-	$UI.enable_level_menu()
+	ui.set_max_level(df.num_levels)
+	ui.enable_level_menu()
 	paused = false
-	$UI/TimeDisplay.show()
-	$UI/LevelDisplay.set_number(1)
-	$UI/LevelDisplay.show()
-	df.levels[0].apply_to($LevelMap)
-	$LevelMap.center_camera()
+
+	ui.get_node("TimeDisplay").show()
+	ui.get_node("LevelDisplay").set_number(1)
+	ui.get_node("LevelDisplay").show()
+	df.levels[0].apply_to(levelmap)
 
 func print_info():
 	if df.file_path == "":
@@ -57,10 +59,10 @@ func print_info():
 
 func level_info(level):
 	if df.file_path == "":
-		$UI.alert("No dat file loaded", is_debug)
+		ui.alert("No dat file loaded", is_debug)
 		return
 	if level == -1:
-		$UI.alert("No level specified", is_debug)
+		ui.alert("No level specified", is_debug)
 		return
 
 	if !df.level_info(level):
@@ -103,11 +105,9 @@ func _ready():
 	is_debug = OS.is_debug_build()
 	df = DatFile.new()
 	register_commands()
-	$LevelMap.viewport_offset = $UI/ViewWindow.rect_position
-	$LevelMap.position = $UI/ViewWindow.rect_position
 	var datfile_path = df.get_default_file()
 	if datfile_path == "":
-		$UI.alert("Unable to find a default .dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
+		$CanvasLayer/UI.alert("Unable to find a default .dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
 		return
 	load_file(datfile_path)
 
@@ -124,10 +124,10 @@ func _process(delta: float):
 			# if time_left < 0, no time limit
 			if time_left > 0:
 				time_left -= 1
-				$UI/TimeDisplay.set_number(time_left)
+				$CanvasLayer/UI/TimeDisplay.set_number(time_left)
 			elif time_left == 0:
-				print("out of time :(")
-				$LevelMap.emit_signal("out_of_time")
+				Console.write_line("out of time :(")
+				$Viewport/LevelMap.emit_signal("out_of_time")
 				paused = true
 			ticker = 0
 
@@ -135,25 +135,25 @@ func _on_UI_file_selected(path: String):
 	load_file(path)
 
 func _on_UI_game_item_selected(id):
-	$UI/FileDialog.clear_filters()
+	$CanvasLayer/UI/FileDialog.clear_filters()
 	match id:
 		GAME_ITEM_NEWGAME:
 			Console.write_line("Starting a new game")
 		GAME_ITEM_PAUSE:
-			$UI.game_menu.toggle_item_checked(id)
-			if $UI.game_menu.is_item_checked(id):
+			$CanvasLayer/UI.game_menu.toggle_item_checked(id)
+			if $CanvasLayer/UI.game_menu.is_item_checked(id):
 				Console.write_line("Pausing level")
 				paused = true
 			else:
 				Console.write_line("Unpausing level")
 				paused = false
 		GAME_ITEM_DATFILE:
-			$UI.show_file_dialog($UI.FILEMODE_DATFILE)
+			ui.show_file_dialog(ui.FILEMODE_DATFILE)
 		GAME_ITEM_TILESET:
-			$UI.show_file_dialog($UI.FILEMODE_TILESET)
+			ui.show_file_dialog(ui.FILEMODE_TILESET)
 		GAME_ITEM_MUSIC:
-			$UI.game_menu.toggle_item_checked(id)
-			if $UI.game_menu.is_item_checked(id):
+			$CanvasLayer/UI.game_menu.toggle_item_checked(id)
+			if $CanvasLayer/UI.game_menu.is_item_checked(id):
 				Console.write_line("Playing music")
 			else:
 				Console.write_line("Stopped playing music")
@@ -171,11 +171,11 @@ func _on_UI_level_item_selected(id):
 		LEVEL_ITEM_PREVIOUS:
 			Console.write_line("Previous level")
 		LEVEL_ITEM_GOTO:
-			$UI.show_goto()
+			ui.show_goto()
 
 func _on_UI_level_selected(level:int, password:String):
 	if df.file_path == "":
-		$UI.alert("No datfile loaded")
+		$CanvasLayer/UI.alert("No datfile loaded")
 		return
 
 	var password_success = df.check_password(level, password)
@@ -183,18 +183,18 @@ func _on_UI_level_selected(level:int, password:String):
 		DatFile.CORRECT_PASSWORD:
 			Console.write_line("Going to level %d" % level)
 		DatFile.WRONG_PASSWORD:
-			$UI.alert("Wrong password")
+			ui.alert("Wrong password")
 		DatFile.NONEXISTENT_LEVEL:
-			$UI.alert("%s has fewer than %d levels" % [df.filename(), level])
+			ui.alert("%s has fewer than %d levels" % [df.filename(), level])
 
 func _on_LevelMap_update_chips_left(left: int):
-	$UI/ChipsDisplay.show()
-	$UI/ChipsDisplay.set_number(left)
+	$CanvasLayer/UI/ChipsDisplay.show()
+	$CanvasLayer/UI/ChipsDisplay.set_number(left)
 
 func _on_LevelMap_player_reached_exit():
 	print("Exit reached")
 
 func _on_LevelMap_update_time_limit(limit: int):
 	if limit > 0:
-		$UI/TimeDisplay.set_number(limit)
+		$CanvasLayer/UI/TimeDisplay.set_number(limit)
 		time_left = limit

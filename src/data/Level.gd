@@ -96,20 +96,39 @@ func index_to_2d(num: int):
 	return Vector2(x, y)
 
 func apply_to(map: LevelMap):
+	var direction = "south"
 	for b in range(1024):
 		var pos = index_to_2d(b)
 		map.set_tile(pos.x, pos.y, 1, layer1_bytes[b])
 		map.set_tile(pos.x, pos.y, 2, layer2_bytes[b])
 		if layer1_bytes[b] >= Objects.CHIP_N and layer1_bytes[b] <= Objects.CHIP_E:
+			match layer1_bytes[b]:
+				Objects.CHIP_N:
+					direction = "north"
+				Objects.CHIP_W:
+					direction = "west"
+				Objects.CHIP_E:
+					direction = "east"
+				_:
+					direction = "south"
 			last_chip_index = b
 			chip_layer = 1
 		if layer2_bytes[b] >= Objects.CHIP_N and layer2_bytes[b] <= Objects.CHIP_E:
+			match layer1_bytes[b]:
+				Objects.CHIP_N:
+					direction = "north"
+				Objects.CHIP_W:
+					direction = "west"
+				Objects.CHIP_E:
+					direction = "east"
+				_:
+					direction = "south"
 			last_chip_index = b
 			chip_layer = 2
 	if last_chip_index > -1:
-		map.player_pos = index_to_2d(last_chip_index)
-		map.player_layer = chip_layer
-	map.center_camera()
+		var pos = index_to_2d(last_chip_index)
+		map.init_player_pos(pos.x, pos.y, chip_layer, direction)
+
 	var window_title = "Eggbertx's Challenge - " + map_title
 	if OS.is_debug_build():
 		window_title += " (DEBUG)"
