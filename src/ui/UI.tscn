@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=1]
 [ext_resource path="res://res/background-new.png" type="Texture" id=2]
@@ -6,6 +6,18 @@
 [ext_resource path="res://src/ui/GotoLevelDialog.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/ui/TilesetSelectDialog.tscn" type="PackedScene" id=5]
 [ext_resource path="res://theme/9x.tres" type="Theme" id=6]
+[ext_resource path="res://res/LiberationSans-Bold.ttf" type="DynamicFontData" id=7]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="DynamicFont" id=2]
+size = 11
+font_data = ExtResource( 7 )
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
@@ -18,9 +30,6 @@ margin_top = 20.0
 margin_right = 480.0
 margin_bottom = 340.0
 texture = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="FileDialog" type="FileDialog" parent="."]
 anchor_left = 0.5
@@ -100,6 +109,27 @@ visible = false
 
 [node name="TilesetSelectDialog" parent="." instance=ExtResource( 5 )]
 visible = false
+
+[node name="HintPanel" type="Panel" parent="."]
+visible = false
+margin_left = 24.0
+margin_top = 202.0
+margin_right = 296.0
+margin_bottom = 314.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="HintText" type="Label" parent="HintPanel"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 268.0
+margin_bottom = 107.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "Hint text goes here"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

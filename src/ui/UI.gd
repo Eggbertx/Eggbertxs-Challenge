@@ -67,6 +67,10 @@ func show_file_dialog(filemode = FILEMODE_DATFILE):
 			$FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
 	$FileDialog.popup()
 
+func set_hint_visible(visible: bool, text: String):
+	$HintPanel.visible = visible
+	$HintPanel/HintText.text = text
+
 func _on_FileDialog_file_selected(path):
 	emit_signal("file_selected", path)
 

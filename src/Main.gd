@@ -198,3 +198,6 @@ func _on_LevelMap_update_time_limit(limit: int):
 	if limit > 0:
 		$CanvasLayer/UI/TimeDisplay.set_number(limit)
 		time_left = limit
+
+func _on_LevelMap_update_hint_status(visible: bool):
+	ui.set_hint_visible(visible, levelmap.hint_text)

@@ -6,6 +6,7 @@ signal update_time_limit
 signal update_chips_left
 signal out_of_time
 signal player_reached_exit
+signal update_hint_status
 
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
 const DEFAULT_TILESET_SIZE = 32
@@ -17,6 +18,8 @@ var last_move_time = 0
 var time_limit = 0
 var chips_left = 0
 var player_character: MapCharacter
+var on_hint = false
+var hint_text = ""
 
 func _ready():
 	player_character = MapCharacter.new()
@@ -64,29 +67,14 @@ func change_character_location(character: MapCharacter, x: int, y: int, layer: i
 	character.position.x = x * 32
 	character.position.y = y * 32
 	if layer == 1:
-		$Layer1.add_child(character)
+		character.parent = $Layer1
 	else:
-		$Layer2.add_child(character)
+		character.parent = $Layer2
 	if is_player:
 		player_pos.x = x
 		player_pos.y = y
 		player_layer = layer
 
-func shift_player(direction: String):
-	# shift_tile(player_pos.x, player_pos.y, player_layer, direction)
-	match direction:
-		"north":
-			player_pos.y -= 1
-			player_character.position.y -= 32
-		"west":
-			player_pos.x -= 1
-			player_character.position.x -= 32
-		"south":
-			player_pos.y += 1
-			player_character.position.y += 32
-		"east":
-			player_pos.x += 1
-			player_character.position.x += 32
 
 func shift_tile(x: int, y: int, layer: int, direction: String):
 	var new_x = x
@@ -171,7 +159,11 @@ func init_player_pos(x: int, y: int, layer: int, direction: String):
 	player_character.sprite.animation = direction
 	player_character.show()
 	player_character.z_index = 1
-	
+	on_hint = tile_has_hint(x, y)
+	emit_signal("update_hint_status", on_hint)
+
+func tile_has_hint(x: int, y: int):
+	return get_tile(x, y, 1) == Objects.HINT or get_tile(x, y, 2) == Objects.HINT
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -211,33 +203,36 @@ func request_move(direction: String):
 	var dest_tile = get_tile(new_x, new_y, player_layer)
 	var next_tile = get_tile(next_x, next_y, player_layer)
 	match dest_tile:
-		Objects.FLOOR, -1:
+		Objects.FLOOR, Objects.HINT, -1:
 			pass
-		Objects.WALL, Objects.SOCKET:
-			return
+		Objects.WALL:
+			return		
+		Objects.COMPUTER_CHIP:
+			if chips_left > 0:
+				emit_signal("update_chips_left", chips_left - 1)
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.DIRT_MOVABLE:
 			match next_tile:
 				Objects.FLOOR, -1:
 					shift_tile(new_x, new_y, player_layer, direction)
 				_:
-					return
-		Objects.COMPUTER_CHIP:
-			if chips_left > 0:
-				emit_signal("update_chips_left", chips_left - 1)
-			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+					return		
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
+		Objects.SOCKET:
+			if chips_left > 0:
+				return
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		_:
 			print("Unhandled destination tile: %d" % dest_tile)
 			return
+	if on_hint and !tile_has_hint(new_x, new_y):
+		on_hint = false
+		emit_signal("update_hint_status", false)
+	elif !on_hint and tile_has_hint(new_x, new_y):
+		on_hint = true
+		emit_signal("update_hint_status", true)
 	change_character_location(player_character, new_x, new_y, player_layer, true)
 
 func _on_LevelMap_update_chips_left(left: int):
 	chips_left = left
-	if chips_left == 0:
-		for y in range(32):
-			for x in range(32):
-				if get_tile(x, y, 1) == Objects.SOCKET:
-					set_tile(x, y, 1, Objects.FLOOR)
-				if get_tile(x, y, 2) == Objects.SOCKET:
-					set_tile(x, y, 2, Objects.FLOOR)

@@ -125,6 +125,7 @@ func apply_to(map: LevelMap):
 					direction = "south"
 			last_chip_index = b
 			chip_layer = 2
+	map.hint_text = hint
 	if last_chip_index > -1:
 		var pos = index_to_2d(last_chip_index)
 		map.init_player_pos(pos.x, pos.y, chip_layer, direction)
