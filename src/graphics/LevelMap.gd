@@ -6,6 +6,7 @@ signal update_time_limit
 signal update_chips_left
 signal out_of_time
 signal player_reached_exit
+signal next_level_requested
 signal update_hint_status
 
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
@@ -20,6 +21,8 @@ var chips_left = 0
 var player_character: MapCharacter
 var on_hint = false
 var hint_text = ""
+
+var game_status = MapCharacter.STATUS_PAUSED
 
 func _ready():
 	player_character = MapCharacter.new()
@@ -43,6 +46,12 @@ func get_tile(x: int, y: int, layer: int) -> int:
 	if layer == 1:
 		return $Layer1.get_cell(x, y)
 	return $Layer2.get_cell(x, y)
+
+func get_player_tiles():
+	return [
+		$Layer1.get_cell(player_pos.x, player_pos.y),
+		$Layer2.get_cell(player_pos.x, player_pos.y)
+	]
 
 func set_tile(x: int, y: int, layer: int, tileID: int):
 	if layer == 1:
@@ -213,12 +222,13 @@ func request_move(direction: String):
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.DIRT_MOVABLE:
 			match next_tile:
-				Objects.FLOOR, -1:
+				Objects.FLOOR, Objects.HINT, -1:
 					shift_tile(new_x, new_y, player_layer, direction)
 				_:
 					return		
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
+			game_status = MapCharacter.STATUS_EXIT
 		Objects.SOCKET:
 			if chips_left > 0:
 				return

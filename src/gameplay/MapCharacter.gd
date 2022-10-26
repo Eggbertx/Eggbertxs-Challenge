@@ -4,6 +4,13 @@ class_name MapCharacter
 
 const move_delay = 0.3
 
+enum {
+	STATUS_PLAYING,
+	STATUS_PAUSED,
+	STATUS_DEAD,
+	STATUS_EXIT
+}
+
 var player_controlled = false
 var parent: Node2D
 var last_move_time = 0
@@ -39,16 +46,19 @@ func _enter_tree():
 	if player_controlled:
 		camera.make_current()
 
-	
+# It can be assumed that if this MapCharacter's parent is not a TileMap object, then it is a LevelMap
+# (which contains) TileMaps
+func get_levelmap():
+	if parent is TileMap:
+		return parent.get_parent()
+	return parent
 
 func add_sprite_frame(direction:String, frame: Texture, at_position: int = -1):
 	sprite.frames.add_frame(direction, frame, at_position)
 
 func try_move(direction: String):
-	if parent is TileMap:
-		parent.get_parent().request_move(direction)
-	else:
-		parent.request_move(direction)
+	get_levelmap().request_move(direction)
+
 
 func check_movement():
 	if not player_controlled:
@@ -67,15 +77,31 @@ func check_movement():
 		sprite.animation = "east"
 		try_move("east")
 
-func _process(delta):
-	last_move_time += delta
-	if last_move_time >= move_delay:
-		last_move_time = 0.0
-	if Input.is_action_just_pressed("ui_up", false)\
-	or Input.is_action_just_pressed("ui_left", false)\
-	or Input.is_action_just_pressed("ui_down", false)\
-	or Input.is_action_just_pressed("ui_right", false):
-		last_move_time = 0
+func check_exit():
+	if not player_controlled:
+		return
+	if get_levelmap().game_status == STATUS_PAUSED:
+		var player_tiles = get_levelmap().get_player_tiles()
+		if player_tiles[0] == Objects.EXIT or player_tiles[1] == Objects.EXIT:
+			print("Loading next level")
 
-	if last_move_time == 0.0:
-		check_movement()
+
+func _process(delta):
+	var levelmap = get_levelmap()
+	match levelmap.game_status:
+		STATUS_PLAYING, STATUS_PAUSED:
+			levelmap.game_status = STATUS_PLAYING
+			last_move_time += delta
+			if last_move_time >= move_delay:
+				last_move_time = 0.0
+			if Input.is_action_just_pressed("ui_up", false)\
+			or Input.is_action_just_pressed("ui_left", false)\
+			or Input.is_action_just_pressed("ui_down", false)\
+			or Input.is_action_just_pressed("ui_right", false):
+				last_move_time = 0
+			if last_move_time == 0.0:
+				check_movement()
+		STATUS_EXIT:
+			if Input.is_action_just_pressed("ui_accept", false):
+				get_levelmap().emit_signal("next_level_requested")
+				check_exit()

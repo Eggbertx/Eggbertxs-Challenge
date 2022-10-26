@@ -18,6 +18,7 @@ position = Vector2( 16, 36 )
 [connection signal="game_item_selected" from="CanvasLayer/UI" to="." method="_on_UI_game_item_selected"]
 [connection signal="level_item_selected" from="CanvasLayer/UI" to="." method="_on_UI_level_item_selected"]
 [connection signal="level_selected" from="CanvasLayer/UI" to="." method="_on_UI_level_selected"]
+[connection signal="next_level_requested" from="LevelMap" to="." method="_on_LevelMap_next_level_requested"]
 [connection signal="player_reached_exit" from="LevelMap" to="." method="_on_LevelMap_player_reached_exit"]
 [connection signal="update_chips_left" from="LevelMap" to="." method="_on_LevelMap_update_chips_left"]
 [connection signal="update_hint_status" from="LevelMap" to="." method="_on_LevelMap_update_hint_status"]

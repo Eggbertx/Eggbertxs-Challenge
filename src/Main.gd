@@ -24,6 +24,7 @@ var is_debug: bool
 var ticker = 0.0
 var paused = true
 var time_left = -1
+var current_level_no = 1
 onready var ui = $CanvasLayer/UI
 onready var levelmap = $LevelMap
 
@@ -175,7 +176,7 @@ func _on_UI_level_item_selected(id):
 
 func _on_UI_level_selected(level:int, password:String):
 	if df.file_path == "":
-		$CanvasLayer/UI.alert("No datfile loaded")
+		ui.alert("No datfile loaded")
 		return
 
 	var password_success = df.check_password(level, password)
@@ -192,6 +193,10 @@ func _on_LevelMap_update_chips_left(left: int):
 	$CanvasLayer/UI/ChipsDisplay.set_number(left)
 
 func _on_LevelMap_player_reached_exit():
+	$LevelMap.game_status = MapCharacter.STATUS_EXIT
+	if df.num_levels <= current_level_no:
+		print("Finished last level")
+		return
 	print("Exit reached")
 
 func _on_LevelMap_update_time_limit(limit: int):
@@ -201,3 +206,15 @@ func _on_LevelMap_update_time_limit(limit: int):
 
 func _on_LevelMap_update_hint_status(visible: bool):
 	ui.set_hint_visible(visible, levelmap.hint_text)
+
+
+func _on_LevelMap_next_level_requested():
+	if $LevelMap.game_status != MapCharacter.STATUS_EXIT:
+		return
+	if df.num_levels <= current_level_no:
+		print("Finished last level")
+		return
+	current_level_no += 1
+	$CanvasLayer/UI/LevelDisplay.set_number(current_level_no)
+	df.levels[current_level_no - 1].apply_to(levelmap)
+	$LevelMap.game_status = MapCharacter.STATUS_PAUSED
