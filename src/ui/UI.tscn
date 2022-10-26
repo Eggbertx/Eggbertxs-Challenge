@@ -16,7 +16,6 @@ border_width_right = 4
 border_width_bottom = 4
 
 [sub_resource type="DynamicFont" id=2]
-size = 11
 font_data = ExtResource( 7 )
 
 [node name="UI" type="Control"]
@@ -111,7 +110,6 @@ visible = false
 visible = false
 
 [node name="HintPanel" type="Panel" parent="."]
-visible = false
 margin_left = 24.0
 margin_top = 202.0
 margin_right = 296.0

@@ -198,6 +198,7 @@ func _on_LevelMap_player_reached_exit():
 		print("Finished last level")
 		return
 	print("Exit reached")
+	ui.set_hint_visible(true, "Level cleared! Press Enter to continue.")
 
 func _on_LevelMap_update_time_limit(limit: int):
 	if limit > 0:
