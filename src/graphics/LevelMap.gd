@@ -21,6 +21,14 @@ var chips_left = 0
 var player_character: MapCharacter
 var on_hint = false
 var hint_text = ""
+var water_boots = false
+var fire_boots = false
+var ice_boots = false
+var force_boots = false
+var blue_keys = 0
+var red_keys = 0
+var green_keys = 0
+var yellow_keys = 0
 
 var game_status = MapCharacter.STATUS_PAUSED
 
@@ -229,9 +237,44 @@ func request_move(direction: String):
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
 			game_status = MapCharacter.STATUS_EXIT
+		Objects.DOOR_BLUE:
+			if blue_keys > 0:
+				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+				blue_keys -= 1
+			else:
+				return
+		Objects.DOOR_RED:
+			if red_keys > 0:
+				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+				red_keys -= 1
+			else:
+				return
+		Objects.DOOR_GREEN:
+			if green_keys > 0:
+				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+			else:
+				return
+		Objects.DOOR_YELLOW:
+			if yellow_keys > 0:
+				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+				yellow_keys -= 1
+			else:
+				return
 		Objects.SOCKET:
 			if chips_left > 0:
 				return
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+		Objects.KEY_BLUE:
+			blue_keys += 1
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+		Objects.KEY_RED:
+			red_keys += 1
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+		Objects.KEY_GREEN:
+			green_keys += 1
+			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
+		Objects.KEY_YELLOW:
+			yellow_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		_:
 			print("Unhandled destination tile: %d" % dest_tile)
