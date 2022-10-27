@@ -169,6 +169,8 @@ func init_player_pos(x: int, y: int, layer: int, direction: String):
 	player_pos.y = y
 	player_layer = layer
 	player_character.player_controlled = true
+	if player_character.parent != null:
+		player_character.parent.remove_child(player_character)
 	if layer == 1:
 		$Layer1.add_child(player_character)
 		$Layer1.set_cell(x, y, -1)

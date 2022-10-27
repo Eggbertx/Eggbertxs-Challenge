@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node2D",
-"class": "CCTileset",
-"language": "GDScript",
-"path": "res://src/graphics/CCTileset.gd"
-}, {
 "base": "Node",
 "class": "DatFile",
 "language": "GDScript",
@@ -37,7 +32,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "LevelMap",
 "language": "GDScript",
-"path": "res://src/graphics/LevelMap.gd"
+"path": "res://src/gameplay/LevelMap.gd"
 }, {
 "base": "Node2D",
 "class": "MapCharacter",
@@ -55,7 +50,6 @@ _global_script_classes=[ {
 "path": "res://src/ui/SevenSegmentDisplay.gd"
 } ]
 _global_script_class_icons={
-"CCTileset": "",
 "DatFile": "",
 "GutHookScript": "",
 "GutTest": "",
