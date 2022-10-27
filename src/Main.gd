@@ -111,7 +111,7 @@ func _ready():
 		$CanvasLayer/UI.alert("Unable to find a default .dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
 		return
 	load_file(datfile_path)
-
+	ui.inventory_tiles = levelmap.tileset
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
@@ -197,7 +197,6 @@ func _on_LevelMap_player_reached_exit():
 	if df.num_levels <= current_level_no:
 		print("Finished last level")
 		return
-	print("Exit reached")
 	ui.set_hint_visible(true, "Level cleared! Press Enter to continue.")
 
 func _on_LevelMap_update_time_limit(limit: int):
@@ -207,7 +206,6 @@ func _on_LevelMap_update_time_limit(limit: int):
 
 func _on_LevelMap_update_hint_status(visible: bool):
 	ui.set_hint_visible(visible, levelmap.hint_text)
-
 
 func _on_LevelMap_next_level_requested():
 	if $LevelMap.game_status != MapCharacter.STATUS_EXIT:
@@ -219,3 +217,9 @@ func _on_LevelMap_next_level_requested():
 	$CanvasLayer/UI/LevelDisplay.set_number(current_level_no)
 	df.levels[current_level_no - 1].apply_to(levelmap)
 	$LevelMap.game_status = MapCharacter.STATUS_PAUSED
+
+func _on_LevelMap_pickup_item(item_code: int):
+	ui.add_inventory(item_code)
+
+func _on_LevelMap_remove_item(item_code: int):
+	ui.remove_inventory(item_code)

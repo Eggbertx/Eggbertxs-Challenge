@@ -23,12 +23,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 6 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="UIImage" type="TextureRect" parent="."]
 margin_top = 20.0
 margin_right = 480.0
 margin_bottom = 340.0
 texture = ExtResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="FileDialog" type="FileDialog" parent="."]
 anchor_left = 0.5
@@ -128,6 +134,15 @@ align = 1
 valign = 1
 autowrap = true
 clip_text = true
+
+[node name="InventoryContainer" type="GridContainer" parent="."]
+margin_left = 326.0
+margin_top = 251.0
+margin_right = 458.0
+margin_bottom = 317.0
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 4
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

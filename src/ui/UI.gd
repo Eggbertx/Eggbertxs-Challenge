@@ -16,6 +16,7 @@ onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
 var time_left = 100
 var file_mode = FILEMODE_DATFILE
 var viewport_size: Vector2
+var inventory_tiles: TileSet
 
 func _ready() -> void:
 	enable_level_menu(false)
@@ -38,6 +39,27 @@ func alert(text:String, console = false):
 	$AcceptDialog.set_position(center)
 	if console:
 		Console.write_line(text)
+
+
+func add_inventory(id: int):
+	var tr = TextureRect.new()
+	tr.texture = inventory_tiles.tile_get_texture(id)
+	tr.name = ("inv%d" % id)
+	var found = false
+
+	var children = $InventoryContainer.get_children()
+	for child in children:
+		if child.name == ("inv%d" % id):
+			found = true
+			break
+	if !found:
+		$InventoryContainer.add_child(tr)
+
+func remove_inventory(id: int):
+	var children = $InventoryContainer.get_children()
+	for child in children:
+		if child.name == ("inv%d" % id):
+			$InventoryContainer.remove_child(child)
 
 func show_goto():
 	$GotoLevelDialog/PopupDialog.show()

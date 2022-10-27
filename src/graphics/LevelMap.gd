@@ -8,12 +8,15 @@ signal out_of_time
 signal player_reached_exit
 signal next_level_requested
 signal update_hint_status
+signal pickup_item
+signal remove_item
 
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
 const DEFAULT_TILESET_SIZE = 32
 const move_delay = 0.3
 var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
+var tileset: TileSet
 var player_layer = 0
 var last_move_time = 0
 var time_limit = 0
@@ -33,6 +36,7 @@ var yellow_keys = 0
 var game_status = MapCharacter.STATUS_PAUSED
 
 func _ready():
+	tileset = TileSet.new()
 	player_character = MapCharacter.new()
 	tiles_tex = ImageTexture.new()
 	for y in range(32):
@@ -134,7 +138,6 @@ func set_tileset(path: String, tile_size: int) -> String:
 	if img_width % tile_size > 0 or img_height % tile_size > 0:
 		return "Tileset has an invalid size, tile width and height must be multiples of %d" % tile_size
 
-	var tileset = TileSet.new()
 	var x = 0
 	var y = 0
 	for t in range(112):
@@ -241,12 +244,16 @@ func request_move(direction: String):
 			if blue_keys > 0:
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 				blue_keys -= 1
+				if blue_keys == 0:
+					emit_signal("remove_item", Objects.KEY_BLUE)
 			else:
 				return
 		Objects.DOOR_RED:
 			if red_keys > 0:
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 				red_keys -= 1
+				if red_keys == 0:
+					emit_signal("remove_item", Objects.KEY_RED)
 			else:
 				return
 		Objects.DOOR_GREEN:
@@ -258,6 +265,8 @@ func request_move(direction: String):
 			if yellow_keys > 0:
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 				yellow_keys -= 1
+				if yellow_keys == 0:
+					emit_signal("remove_item", Objects.KEY_YELLOW)
 			else:
 				return
 		Objects.SOCKET:
@@ -265,15 +274,19 @@ func request_move(direction: String):
 				return
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_BLUE:
+			emit_signal("pickup_item", Objects.KEY_BLUE)
 			blue_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_RED:
+			emit_signal("pickup_item", Objects.KEY_RED)
 			red_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_GREEN:
+			emit_signal("pickup_item", Objects.KEY_GREEN)
 			green_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_YELLOW:
+			emit_signal("pickup_item", Objects.KEY_YELLOW)
 			yellow_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		_:
