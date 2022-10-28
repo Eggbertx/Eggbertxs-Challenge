@@ -228,7 +228,7 @@ func request_move(direction: String):
 		Objects.FLOOR, Objects.HINT, -1:
 			pass
 		Objects.WALL:
-			return		
+			return
 		Objects.COMPUTER_CHIP:
 			if chips_left > 0:
 				emit_signal("update_chips_left", chips_left - 1)
@@ -238,7 +238,7 @@ func request_move(direction: String):
 				Objects.FLOOR, Objects.HINT, -1:
 					shift_tile(new_x, new_y, player_layer, direction)
 				_:
-					return		
+					return
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
 			game_status = MapCharacter.STATUS_EXIT

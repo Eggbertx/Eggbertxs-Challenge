@@ -119,7 +119,7 @@ func _notification(what):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float):
-	if not paused:
+	if levelmap.game_status == MapCharacter.STATUS_PLAYING:
 		ticker += delta
 		if ticker >= 1:
 			# if time_left < 0, no time limit
@@ -223,3 +223,7 @@ func _on_LevelMap_pickup_item(item_code: int):
 
 func _on_LevelMap_remove_item(item_code: int):
 	ui.remove_inventory(item_code)
+
+func _on_LevelMap_out_of_time():
+	levelmap.game_status = MapCharacter.STATUS_DEAD
+	ui.alert("Out of time!")

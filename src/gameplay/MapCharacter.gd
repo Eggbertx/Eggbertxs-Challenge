@@ -90,7 +90,6 @@ func _process(delta):
 	var levelmap = get_levelmap()
 	match levelmap.game_status:
 		STATUS_PLAYING, STATUS_PAUSED:
-			levelmap.game_status = STATUS_PLAYING
 			last_move_time += delta
 			if last_move_time >= move_delay:
 				last_move_time = 0.0
@@ -98,6 +97,7 @@ func _process(delta):
 			or Input.is_action_just_pressed("ui_left", false)\
 			or Input.is_action_just_pressed("ui_down", false)\
 			or Input.is_action_just_pressed("ui_right", false):
+				levelmap.game_status = STATUS_PLAYING
 				last_move_time = 0
 			if last_move_time == 0.0:
 				check_movement()
