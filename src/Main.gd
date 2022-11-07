@@ -50,12 +50,12 @@ func load_level(level_no: int):
 	df.levels[level_index].apply_to(levelmap)
 	levelmap.change_game_state(GameState.STATE_PAUSED)
 	time_left = df.levels[level_index].time_limit
-	print("Time limit for level #%d: %d" % [level_no, time_left])
 	
 	ui.set_time_display(time_left, time_left > 0)
 	ui.set_level_display(level_no)
 	current_level_no = level_no
-
+	ui.level_menu.set_item_disabled(LEVEL_ITEM_PREVIOUS, current_level_no < 2)
+	ui.level_menu.set_item_disabled(LEVEL_ITEM_NEXT, current_level_no >= df.num_levels)
 
 func print_info():
 	if df.file_path == "":
@@ -165,10 +165,17 @@ func _on_UI_level_item_selected(id):
 	match id:
 		LEVEL_ITEM_RESTART:
 			Console.write_line("Restarting level")
+			load_level(current_level_no)
 		LEVEL_ITEM_NEXT:
-			Console.write_line("Next level")
+			if df.num_levels > current_level_no:
+				Console.write_line("Loading next level")
+				load_level(current_level_no + 1)
+			else:
+				ui.alert("No more levels")
 		LEVEL_ITEM_PREVIOUS:
-			Console.write_line("Previous level")
+			if current_level_no > 1:
+				Console.write_line("Loading previous level")
+				load_level(current_level_no - 1)
 		LEVEL_ITEM_GOTO:
 			ui.show_goto()
 
@@ -181,6 +188,7 @@ func _on_UI_level_selected(level:int, password:String):
 	match password_success:
 		DatFile.CORRECT_PASSWORD:
 			Console.write_line("Going to level %d" % level)
+			load_level(level)
 		DatFile.WRONG_PASSWORD:
 			ui.alert("Wrong password")
 		DatFile.NONEXISTENT_LEVEL:
@@ -224,17 +232,19 @@ func _on_Timer_timeout():
 		levelmap.change_game_state(GameState.STATE_OUT_OF_TIME)
 
 func _on_LevelMap_game_state_changed(state: int, old_state: int):
-	print("Changing from state %d to %d" % [state, old_state])
 	match state:
 		GameState.STATE_PLAYING:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
 			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, false)
 			$Timer.start()
-			Console.write_line("Game unpaused")
+			if old_state == GameState.STATE_PAUSED:
+				Console.write_line("Game unpaused")
 		GameState.STATE_PAUSED:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
 			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, true)
 			$Timer.stop()
+			if old_state == GameState.STATE_PLAYING:
+				Console.write_line("Game paused")
 		GameState.STATE_OUT_OF_TIME:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
 			$Timer.stop()
