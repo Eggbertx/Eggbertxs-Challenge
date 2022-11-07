@@ -21,10 +21,8 @@ enum {
 
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
-var ticker = 0.0
-var paused = true
 var time_left = -1
-var current_level_no = 1
+var current_level_no = 0
 onready var ui = $CanvasLayer/UI
 onready var levelmap = $LevelMap
 
@@ -44,12 +42,20 @@ func load_file(file = ""):
 		return
 	ui.set_max_level(df.num_levels)
 	ui.enable_level_menu()
-	paused = false
+	load_level(1)
 
-	ui.get_node("TimeDisplay").show()
-	ui.get_node("LevelDisplay").set_number(1)
-	ui.get_node("LevelDisplay").show()
-	df.levels[0].apply_to(levelmap)
+# load_level loads the level number (not the index in the array) and sets all the values (time, chips left, etc)
+func load_level(level_no: int):
+	var level_index = level_no - 1
+	df.levels[level_index].apply_to(levelmap)
+	levelmap.change_game_state(GameState.STATE_PAUSED)
+	time_left = df.levels[level_index].time_limit
+	print("Time limit for level #%d: %d" % [level_no, time_left])
+	
+	ui.set_time_display(time_left, time_left > 0)
+	ui.set_level_display(level_no)
+	current_level_no = level_no
+
 
 func print_info():
 	if df.file_path == "":
@@ -87,10 +93,12 @@ func register_commands():
 
 func quit(status:int = 0):
 	df.queue_free()
+	levelmap.queue_free()
 	get_tree().quit(status)
 
 func _input(event):
 	if event is InputEventKey:
+		var state = levelmap.get_game_state()
 		match event.scancode:
 			KEY_ESCAPE:
 				if is_debug:
@@ -100,7 +108,10 @@ func _input(event):
 					Console.write_line("Restarting level")
 			KEY_PAUSE:
 				if not event.pressed:
-					paused = not paused
+					if state == GameState.STATE_PAUSED:
+						levelmap.change_game_state(GameState.STATE_PLAYING)
+					elif state == GameState.STATE_PLAYING:
+						levelmap.change_game_state(GameState.STATE_PAUSED)
 
 func _ready():
 	is_debug = OS.is_debug_build()
@@ -118,19 +129,8 @@ func _notification(what):
 		quit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float):
-	if levelmap.game_status == MapCharacter.STATUS_PLAYING:
-		ticker += delta
-		if ticker >= 1:
-			# if time_left < 0, no time limit
-			if time_left > 0:
-				time_left -= 1
-				$CanvasLayer/UI/TimeDisplay.set_number(time_left)
-			elif time_left == 0:
-				Console.write_line("out of time :(")
-				levelmap.emit_signal("out_of_time")
-				paused = true
-			ticker = 0
+# func _process(delta: float):
+# 	pass
 
 func _on_UI_file_selected(path: String):
 	load_file(path)
@@ -141,13 +141,11 @@ func _on_UI_game_item_selected(id):
 		GAME_ITEM_NEWGAME:
 			Console.write_line("Starting a new game")
 		GAME_ITEM_PAUSE:
-			$CanvasLayer/UI.game_menu.toggle_item_checked(id)
-			if $CanvasLayer/UI.game_menu.is_item_checked(id):
-				Console.write_line("Pausing level")
-				paused = true
-			else:
-				Console.write_line("Unpausing level")
-				paused = false
+			var state = levelmap.get_game_state()
+			if state == GameState.STATE_PAUSED:
+				levelmap.change_game_state(GameState.STATE_PLAYING)
+			elif state == GameState.STATE_PLAYING:
+				levelmap.change_game_state(GameState.STATE_PAUSED)
 		GAME_ITEM_DATFILE:
 			ui.show_file_dialog(ui.FILEMODE_DATFILE)
 		GAME_ITEM_TILESET:
@@ -193,30 +191,22 @@ func _on_LevelMap_update_chips_left(left: int):
 	$CanvasLayer/UI/ChipsDisplay.set_number(left)
 
 func _on_LevelMap_player_reached_exit():
-	$LevelMap.game_status = MapCharacter.STATUS_EXIT
 	if df.num_levels <= current_level_no:
 		print("Finished last level")
 		return
 	ui.set_hint_visible(true, "Level cleared! Press Enter to continue.")
 
-func _on_LevelMap_update_time_limit(limit: int):
-	if limit > 0:
-		$CanvasLayer/UI/TimeDisplay.set_number(limit)
-		time_left = limit
-
 func _on_LevelMap_update_hint_status(visible: bool):
 	ui.set_hint_visible(visible, levelmap.hint_text)
 
 func _on_LevelMap_next_level_requested():
-	if $LevelMap.game_status != MapCharacter.STATUS_EXIT:
+	if $LevelMap.get_game_state() != GameState.STATE_LEVEL_EXIT:
 		return
-	if df.num_levels <= current_level_no:
-		print("Finished last level")
+	if df.num_levels <= current_level_no + 1:
+		Console.write_line("Finished last level")
 		return
-	current_level_no += 1
-	$CanvasLayer/UI/LevelDisplay.set_number(current_level_no)
-	df.levels[current_level_no - 1].apply_to(levelmap)
-	$LevelMap.game_status = MapCharacter.STATUS_PAUSED
+	Console.write_line("Next level requested")
+	load_level(current_level_no + 1)
 
 func _on_LevelMap_pickup_item(item_code: int):
 	ui.add_inventory(item_code)
@@ -224,6 +214,30 @@ func _on_LevelMap_pickup_item(item_code: int):
 func _on_LevelMap_remove_item(item_code: int):
 	ui.remove_inventory(item_code)
 
-func _on_LevelMap_out_of_time():
-	levelmap.game_status = MapCharacter.STATUS_DEAD
-	ui.alert("Out of time!")
+func _on_Timer_timeout():
+	if df.levels[current_level_no-1].time_limit == 0 or levelmap.get_game_state() != GameState.STATE_PLAYING:
+		return
+	time_left -= 1
+	if time_left >= 0:
+		$CanvasLayer/UI/TimeDisplay.set_number(time_left)
+	if time_left <= 0:
+		levelmap.change_game_state(GameState.STATE_OUT_OF_TIME)
+
+func _on_LevelMap_game_state_changed(state: int, old_state: int):
+	print("Changing from state %d to %d" % [state, old_state])
+	match state:
+		GameState.STATE_PLAYING:
+			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
+			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, false)
+			$Timer.start()
+			Console.write_line("Game unpaused")
+		GameState.STATE_PAUSED:
+			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
+			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, true)
+			$Timer.stop()
+		GameState.STATE_OUT_OF_TIME:
+			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
+			$Timer.stop()
+			ui.alert("Out of time!")
+		GameState.STATE_LEVEL_EXIT:
+			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)

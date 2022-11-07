@@ -13,7 +13,6 @@ enum {
 onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
 onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
 
-var time_left = 100
 var file_mode = FILEMODE_DATFILE
 var viewport_size: Vector2
 var inventory_tiles: TileSet
@@ -39,6 +38,15 @@ func alert(text:String, console = false):
 	$AcceptDialog.set_position(center)
 	if console:
 		Console.write_line(text)
+
+func set_time_display(time: int, visible = true):
+	$TimeDisplay.set_number(time)
+	$TimeDisplay.set_visible(visible)
+
+
+func set_level_display(level: int, visible = true):
+	$LevelDisplay.set_number(level)
+	$LevelDisplay.set_visible(visible)
 
 
 func add_inventory(id: int):
@@ -96,12 +104,6 @@ func set_hint_visible(visible: bool, text: String):
 func _on_FileDialog_file_selected(path):
 	emit_signal("file_selected", path)
 
-func _on_Timer_timeout():
-	time_left -= 1
-	$TimeDisplay.set_number(time_left)
-	if time_left == 0:
-		alert("Ding!")
-		$Timer.stop()
 
 func _on_GotoLevelDialog_level_selected(level: int, password: String):
 	emit_signal("level_selected", level, password)

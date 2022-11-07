@@ -22,7 +22,7 @@ func change_state(new_state: int):
 	if _current_state == new_state:
 		return
 	_current_state = new_state
-	emit_signal("game_state_changed", new_state)
+	emit_signal("game_state_changed", new_state, _current_state)
 
 func current_state() -> int:
 	return _current_state

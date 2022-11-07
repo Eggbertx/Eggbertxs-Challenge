@@ -2,9 +2,8 @@ extends Node2D
 
 class_name LevelMap
 
-signal update_time_limit
+signal game_state_changed
 signal update_chips_left
-signal out_of_time
 signal player_reached_exit
 signal next_level_requested
 signal update_hint_status
@@ -18,8 +17,6 @@ var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
 var tileset: TileSet
 var player_layer = 0
-var last_move_time = 0
-var time_limit = 0
 var chips_left = 0
 var player_character: MapCharacter
 var on_hint = false
@@ -32,8 +29,6 @@ var blue_keys = 0
 var red_keys = 0
 var green_keys = 0
 var yellow_keys = 0
-
-var game_status = MapCharacter.STATUS_PAUSED
 
 func _ready():
 	tileset = TileSet.new()
@@ -53,6 +48,12 @@ func _get_atlas(texture: Texture, rect: Rect2) -> AtlasTexture:
 	atlas.set_atlas(texture)
 	atlas.set_region(rect)
 	return atlas
+
+func change_game_state(new_state: int):
+	$GameState.change_state(new_state)
+
+func get_game_state() -> int:
+	return $GameState.current_state()
 
 func get_tile(x: int, y: int, layer: int) -> int:
 	if layer == 1:
@@ -157,7 +158,6 @@ func set_tileset(path: String, tile_size: int) -> String:
 	player_character.add_sprite_frame("west", tileset.tile_get_texture(Objects.CHIP_W))
 	player_character.add_sprite_frame("south", tileset.tile_get_texture(Objects.CHIP_S))
 	player_character.add_sprite_frame("east", tileset.tile_get_texture(Objects.CHIP_E))
-
 	return ""
 
 # sets the player position when the map is first loaded, replacing the Objects.CHIP_E tile
@@ -241,7 +241,7 @@ func request_move(direction: String):
 					return
 		Objects.EXIT:
 			emit_signal("player_reached_exit")
-			game_status = MapCharacter.STATUS_EXIT
+			$GameState.change_state(GameState.STATE_LEVEL_EXIT)
 		Objects.DOOR_BLUE:
 			if blue_keys > 0:
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
@@ -304,3 +304,6 @@ func request_move(direction: String):
 
 func _on_LevelMap_update_chips_left(left: int):
 	chips_left = left
+
+func _on_GameState_game_state_changed(new_state: int, old_state: int):
+	emit_signal("game_state_changed", new_state, old_state)

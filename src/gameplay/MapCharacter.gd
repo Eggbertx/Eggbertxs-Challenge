@@ -4,17 +4,9 @@ class_name MapCharacter
 
 const move_delay = 0.3
 
-enum {
-	STATUS_PLAYING,
-	STATUS_PAUSED,
-	STATUS_DEAD,
-	STATUS_EXIT
-}
-
 var player_controlled = false
 var parent: Node2D
 var last_move_time = 0
-
 var camera: Camera2D
 var sprite: AnimatedSprite
 
@@ -48,16 +40,19 @@ func _enter_tree():
 
 # It can be assumed that if this MapCharacter's parent is not a TileMap object, then it is a LevelMap
 # (which contains) TileMaps
-func get_levelmap():
+func _get_levelmap():
 	if parent is TileMap:
 		return parent.get_parent()
 	return parent
+
+func _get_game_state() -> int:
+	return _get_levelmap().get_game_state()
 
 func add_sprite_frame(direction:String, frame: Texture, at_position: int = -1):
 	sprite.frames.add_frame(direction, frame, at_position)
 
 func try_move(direction: String):
-	get_levelmap().request_move(direction)
+	_get_levelmap().request_move(direction)
 
 
 func check_movement():
@@ -80,16 +75,18 @@ func check_movement():
 func check_exit():
 	if not player_controlled:
 		return
-	if get_levelmap().game_status == STATUS_PAUSED:
-		var player_tiles = get_levelmap().get_player_tiles()
+	if _get_game_state() == GameState.STATE_PAUSED:
+		var player_tiles = _get_levelmap().get_player_tiles()
 		if player_tiles[0] == Objects.EXIT or player_tiles[1] == Objects.EXIT:
 			print("Loading next level")
 
 
 func _process(delta):
-	var levelmap = get_levelmap()
-	match levelmap.game_status:
-		STATUS_PLAYING, STATUS_PAUSED:
+	var levelmap = _get_levelmap()
+
+	match _get_game_state():
+		GameState.STATE_PLAYING, GameState.STATE_PAUSED:
+
 			last_move_time += delta
 			if last_move_time >= move_delay:
 				last_move_time = 0.0
@@ -97,11 +94,11 @@ func _process(delta):
 			or Input.is_action_just_pressed("ui_left", false)\
 			or Input.is_action_just_pressed("ui_down", false)\
 			or Input.is_action_just_pressed("ui_right", false):
-				levelmap.game_status = STATUS_PLAYING
+				levelmap.change_game_state(GameState.STATE_PLAYING)
 				last_move_time = 0
 			if last_move_time == 0.0:
 				check_movement()
-		STATUS_EXIT:
+		GameState.STATE_LEVEL_EXIT:
 			if Input.is_action_just_pressed("ui_accept", false):
-				get_levelmap().emit_signal("next_level_requested")
+				_get_levelmap().emit_signal("next_level_requested")
 				check_exit()
