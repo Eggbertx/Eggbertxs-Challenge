@@ -7,6 +7,7 @@ signal update_chips_left
 signal player_reached_exit
 signal next_level_requested
 signal update_hint_status
+signal update_window_title
 signal pickup_item
 signal remove_item
 
@@ -42,7 +43,6 @@ func _ready():
 
 	var err = set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 	if err != "":
-		#Console.write_line(err)
 		get_tree().quit()
 
 func _get_atlas(texture: Texture2D, rect: Rect2) -> AtlasTexture:
@@ -58,6 +58,8 @@ func get_game_state() -> int:
 	return $GameState.current_state()
 
 func get_tile(x: int, y: int, layer: int) -> int:
+	return 0
+	$Layer1.get_cell_tile_data(1, Vector2i(x, y))
 	if layer == 1:
 		return $Layer1.get_cell(x, y)
 	return $Layer2.get_cell(x, y)
@@ -70,9 +72,11 @@ func get_player_tiles():
 
 func set_tile(x: int, y: int, layer: int, tileID: int):
 	if layer == 1:
-		$Layer1.set_cell(x, y, tileID)
+		$Layer1.set_cell(layer, Vector2i(x, y), -1)
+		# $Layer1.set_cell(x, y, tileID)
 	else:
-		$Layer2.set_cell(x, y, tileID)
+		$Layer2.set_cell(layer, Vector2i(x, y), -1)
+		# $Layer2.set_cell(x, y, tileID)
 
 func change_tile_location(x1: int, y1: int, l1: int, x2: int, y2: int, l2: int):
 	var tile: int
@@ -139,13 +143,16 @@ func set_tileset(path: String, tile_size: int) -> String:
 	var img_height = tiles_tex.get_height()
 	if img_width % tile_size > 0 or img_height % tile_size > 0:
 		return "Tileset has an invalid size, tile width and height must be multiples of %d" % tile_size
+	tileset_src.texture = tiles_tex
+	tileset_src.texture_region_size = Vector2i(tile_size, tile_size)
 
 	var x = 0
 	var y = 0
 	var atlases = []
 	for t in range(112):
 		atlases.push_back(_get_atlas(tiles_tex, Rect2(x, y, tile_size, tile_size)))
-		tileset_src.create_tile(Vector2i(x, y), Vector2i(tile_size, tile_size))
+		# tileset_src.create_tile(Vector2i(x, y), Vector2i(tile_size, tile_size))
+		
 		# tileset.tile_set_texture(t, atlas)
 		if y + tile_size == img_height:
 			y = 0
@@ -174,10 +181,12 @@ func init_player_pos(x: int, y: int, layer: int, direction: String):
 		player_character.parent.remove_child(player_character)
 	if layer == 1:
 		$Layer1.add_child(player_character)
-		$Layer1.set_cell(x, y, -1)
+		# $Layer1.set_cell(x, y, -1)
+		$Layer1.set_cell(layer, Vector2i(x, y), -1)
 	else:
 		$Layer2.add_child(player_character)
-		$Layer2.set_cell(x, y, -1)
+		$Layer2.set_cell(layer, Vector2i(x, y), -1)
+		# $Layer2.set_cell(x, y, -1)
 	
 	player_character.sprite.animation = direction
 	player_character.show()
@@ -308,3 +317,7 @@ func _on_LevelMap_update_chips_left(left: int):
 
 func _on_GameState_game_state_changed(new_state: int, old_state: int):
 	emit_signal("game_state_changed", new_state, old_state)
+
+
+func _on_update_window_title(title: String):
+	get_window().title = title

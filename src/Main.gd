@@ -35,7 +35,7 @@ func load_file(file = ""):
 	if file == "":
 		ui.alert("File path required", is_debug)
 		return
-	Console.write_line("Loading %s" % file)
+	print("Loading %s" % file)
 	var err = df.load_file(file)
 	if err != "":
 		ui.alert(err, is_debug)
@@ -59,10 +59,10 @@ func load_level(level_no: int):
 
 func print_info():
 	if df.file_path == "":
-		Console.write_line("No dat file loaded")
+		print("No dat file loaded")
 		return
-	Console.write_line("Currently loaded dat file: %s" % df.file_path)
-	Console.write_line("Number of levels: %d" % df.num_levels)
+	print("Currently loaded dat file: %s" % df.file_path)
+	print("Number of levels: %d" % df.num_levels)
 
 func level_info(level):
 	if df.file_path == "":
@@ -73,23 +73,7 @@ func level_info(level):
 		return
 
 	if !df.level_info(level):
-		Console.write_line("Level #%d not found" % level)
-
-func register_commands():
-	Console.add_command("loadDAT", self, "load_file")\
-		super.set_description("Loads a Chip's Challenge-compatible DAT file")\
-		super.add_argument("file", TYPE_STRING, "The dat file to be loaded")\
-		super.register()
-
-	Console.add_command("levelInfo", self, "level_info")\
-		super.set_description("Prints info about the current level")\
-		super.add_argument("level", TYPE_INT)\
-		super.register()
-
-	Console.add_command("printInfo", self, "print_info")\
-		super.set_description("Prints info about the loaded dat file if one is currently loaded")\
-		super.register()
-
+		ui.alert("Level #%d not found" % level)
 
 func quit(status:int = 0):
 	df.queue_free()
@@ -105,7 +89,7 @@ func _input(event):
 					quit()
 			KEY_R:
 				if event.control and !event.pressed: # Ctrl+R released
-					Console.write_line("Restarting level")
+					print("Restarting level")
 			KEY_PAUSE:
 				if not event.pressed:
 					if state == GameState.STATE_PAUSED:
@@ -116,7 +100,6 @@ func _input(event):
 func _ready():
 	is_debug = OS.is_debug_build()
 	df = DatFile.new()
-	register_commands()
 	var datfile_path = df.get_default_file()
 	if datfile_path == "":
 		$CanvasLayer/UI.alert("Unable to find a default super.dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
@@ -125,7 +108,7 @@ func _ready():
 	ui.inventory_tiles = levelmap.tileset
 
 func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		quit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -139,7 +122,7 @@ func _on_UI_game_item_selected(id):
 	$CanvasLayer/UI/FileDialog.clear_filters()
 	match id:
 		GAME_ITEM_NEWGAME:
-			Console.write_line("Starting a new game")
+			print("Starting a new game")
 		GAME_ITEM_PAUSE:
 			var state = levelmap.get_game_state()
 			if state == GameState.STATE_PAUSED:
@@ -153,9 +136,9 @@ func _on_UI_game_item_selected(id):
 		GAME_ITEM_MUSIC:
 			$CanvasLayer/UI.game_menu.toggle_item_checked(id)
 			if $CanvasLayer/UI.game_menu.is_item_checked(id):
-				Console.write_line("Playing music")
+				print("Playing music")
 			else:
-				Console.write_line("Stopped playing music")
+				print("Stopped playing music")
 		GAME_ITEM_REPO:
 			OS.shell_open(REPO_URL)
 		GAME_ITEM_QUIT:
@@ -164,17 +147,17 @@ func _on_UI_game_item_selected(id):
 func _on_UI_level_item_selected(id):
 	match id:
 		LEVEL_ITEM_RESTART:
-			Console.write_line("Restarting level")
+			print("Restarting level")
 			load_level(current_level_no)
 		LEVEL_ITEM_NEXT:
 			if df.num_levels > current_level_no:
-				Console.write_line("Loading next level")
+				print("Loading next level")
 				load_level(current_level_no + 1)
 			else:
 				ui.alert("No more levels")
 		LEVEL_ITEM_PREVIOUS:
 			if current_level_no > 1:
-				Console.write_line("Loading previous level")
+				print("Loading previous level")
 				load_level(current_level_no - 1)
 		LEVEL_ITEM_GOTO:
 			ui.show_goto()
@@ -187,7 +170,7 @@ func _on_UI_level_selected(level:int, password:String):
 	var password_success = df.check_password(level, password)
 	match password_success:
 		DatFile.CORRECT_PASSWORD:
-			Console.write_line("Going to level %d" % level)
+			print("Going to level %d" % level)
 			load_level(level)
 		DatFile.WRONG_PASSWORD:
 			ui.alert("Wrong password")
@@ -211,9 +194,9 @@ func _on_LevelMap_next_level_requested():
 	if $LevelMap.get_game_state() != GameState.STATE_LEVEL_EXIT:
 		return
 	if df.num_levels <= current_level_no + 1:
-		Console.write_line("Finished last level")
+		ui.alert("Finished last level")
 		return
-	Console.write_line("Next level requested")
+	print("Next level requested")
 	load_level(current_level_no + 1)
 
 func _on_LevelMap_pickup_item(item_code: int):
@@ -238,13 +221,13 @@ func _on_LevelMap_game_state_changed(state: int, old_state: int):
 			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, false)
 			$Timer.start()
 			if old_state == GameState.STATE_PAUSED:
-				Console.write_line("Game unpaused")
+				print("Game unpaused")
 		GameState.STATE_PAUSED:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
 			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, true)
 			$Timer.stop()
 			if old_state == GameState.STATE_PLAYING:
-				Console.write_line("Game paused")
+				print("Game paused")
 		GameState.STATE_OUT_OF_TIME:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
 			$Timer.stop()

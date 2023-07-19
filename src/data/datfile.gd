@@ -15,10 +15,7 @@ func _init():
 
 func load_file(filepath: String):
 	file_path = filepath
-	var file = File.new()
-	var err = file.open(filepath, File.READ)
-	if err:
-		return err
+	var file = FileAccess.open(filepath, FileAccess.READ)
 
 	stream.data_array = file.get_buffer(file.get_length())
 	file.close()
@@ -28,9 +25,8 @@ func filename() -> String:
 	return file_path.get_file()
 
 func get_default_file() -> String:
-	var file = File.new()
 	for fn in default_files:
-		if file.file_exists(fn):
+		if FileAccess.file_exists(fn):
 			return fn
 	return ""
 	
@@ -50,7 +46,7 @@ func parse_file(debug = false):
 		return "Invalid datfile signature in %s" % file_path.get_file()
 
 	num_levels = stream.get_u16()
-	Console.write_line("Number of levels: %d" % num_levels)
+	print("Number of levels: %d" % num_levels)
 	for _l in range(num_levels):
 		var level = Level.new()
 		var err = level.parse_data(stream, debug)

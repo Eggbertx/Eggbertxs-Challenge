@@ -36,8 +36,6 @@ func alert(text:String, console = false):
 		viewport_size.y/2 - $AcceptDialog.get_rect().size.y/2
 	)
 	$AcceptDialog.set_position(center)
-	#if console:
-	#	Console.write_line(text)
 
 func set_time_display(time: int, visible = true):
 	$TimeDisplay.set_number(time)

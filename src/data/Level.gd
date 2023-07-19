@@ -48,12 +48,12 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 
 	var num_optional = stream.get_u16()
 	var optional_read = 0
-	# Console.write_line("\tNumber of optional field bytes: %d" % num_optional)
+	# print("\tNumber of optional field bytes: %d" % num_optional)
 	# var optional_buf = file.get_buffer(num_optional)
 	while optional_read <= num_optional and num_optional > 0:
 		var field_type = stream.get_u8()
 		var field_numbytes = stream.get_u8()
-		# Console.write_line("Number of bytes in field type %d: %d" % [field_type, field_numbytes])
+		# print("Number of bytes in field type %d: %d" % [field_type, field_numbytes])
 		match field_type:
 			1:
 				return "Invalid map field (level time field isn't used)"
@@ -131,16 +131,14 @@ func apply_to(map: LevelMap):
 		map.init_player_pos(pos.x, pos.y, chip_layer, direction)
 
 	var window_title = "Eggbertx's Challenge - " + map_title
-	if OS.is_debug_build():
-		window_title += " (DEBUG)"
+	map.emit_signal("update_window_title", window_title)
 	map.emit_signal("update_chips_left", chips_left)
-	get_window().set_title(window_title)
 
 # RLE bytes are stored: 0xFF, num_rel_bytes, byte1, byte2, byte3, ...
 func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):
 	var can_read = (stream.get_position() + num_rel_bytes) <= stream.get_size()
 	if not can_read:
-		Console.write_line(rle_too_large)
+		print(rle_too_large)
 		return null
 	var decoded = []
 	while num_rel_bytes > 0:
@@ -156,26 +154,26 @@ func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):
 				num_repeats -= 1
 				decoded.append(data)
 		else:
-			Console.write_line(invalid_rle_byte)
+			print(invalid_rle_byte)
 			return null
 	return decoded
 
 func print_info():
-	Console.write_line("Level %d details:" % level_num)
-	Console.write_line("\tNumber of compressed bytes in level: %d" % num_bytes)
-	Console.write_line("\tTime limit: %d" % time_limit)
-	Console.write_line("\tChips left: %d" % chips_left)
-	Console.write_line("\tLevel detail: %d" % level_detail)
-	Console.write_line("\tNumber of bytes in layer 1: %d" % layer1_numbytes)
-	Console.write_line("\tNumber of bytes in layer 2: %d" % layer2_numbytes)
-	Console.write_line("\tMap title: %s" % map_title)
-	#Console.write_line("\tBrown button field: %d" % brown_button_field)
-	#Console.write_line("\tRed button field: %d" % red_button_field)
-	Console.write_line("\tPassword: %s" % password)
-	Console.write_line("\tHint: %s" % hint)
-	Console.write_line("Chip found at byte index %d and layer %d" % [last_chip_index, chip_layer])
+	print("Level %d details:" % level_num)
+	print("\tNumber of compressed bytes in level: %d" % num_bytes)
+	print("\tTime limit: %d" % time_limit)
+	print("\tChips left: %d" % chips_left)
+	print("\tLevel detail: %d" % level_detail)
+	print("\tNumber of bytes in layer 1: %d" % layer1_numbytes)
+	print("\tNumber of bytes in layer 2: %d" % layer2_numbytes)
+	print("\tMap title: %s" % map_title)
+	#print("\tBrown button field: %d" % brown_button_field)
+	#print("\tRed button field: %d" % red_button_field)
+	print("\tPassword: %s" % password)
+	print("\tHint: %s" % hint)
+	print("Chip found at byte index %d and layer %d" % [last_chip_index, chip_layer])
 	for loc in monster_locations:
-		Console.write_line("\tMonster at %d,%d" % [loc.x, loc.y])
+		print("\tMonster at %d,%d" % [loc.x, loc.y])
 
 
 func _ready() -> void:
