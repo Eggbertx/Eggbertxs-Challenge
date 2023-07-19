@@ -21,8 +21,6 @@ func _ready() -> void:
 	enable_level_menu(false)
 	game_menu.connect("id_pressed", Callable(self, "game_menu_selected"))
 	level_menu.connect("id_pressed", Callable(self, "level_menu_selected"))
-	$UIImage.set_size(get_viewport().size, false)
-	$UIImage.set_position(Vector2(0, $Panel.get_rect().size.y))
 
 	$ViewWindow.set_position(Vector2(16, 16 + $Panel.size.y))
 	$ViewWindow.visible = false
