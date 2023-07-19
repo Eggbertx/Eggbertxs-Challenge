@@ -6,110 +6,22 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Node",
-"class": "DatFile",
-"language": "GDScript",
-"path": "res://src/data/datfile.gd"
-}, {
-"base": "Node",
-"class": "GameState",
-"language": "GDScript",
-"path": "res://src/gameplay/GameState.gd"
-}, {
-"base": "Reference",
-"class": "GutHookScript",
-"language": "GDScript",
-"path": "res://addons/gut/hook_script.gd"
-}, {
-"base": "Node",
-"class": "GutTest",
-"language": "GDScript",
-"path": "res://addons/gut/test.gd"
-}, {
-"base": "Node",
-"class": "Level",
-"language": "GDScript",
-"path": "res://src/data/Level.gd"
-}, {
-"base": "Node2D",
-"class": "LevelMap",
-"language": "GDScript",
-"path": "res://src/gameplay/LevelMap.gd"
-}, {
-"base": "Node2D",
-"class": "MapCharacter",
-"language": "GDScript",
-"path": "res://src/gameplay/MapCharacter.gd"
-}, {
-"base": "Node",
-"class": "Objects",
-"language": "GDScript",
-"path": "res://src/data/objects.gd"
-}, {
-"base": "Node2D",
-"class": "SevenSegmentDisplay",
-"language": "GDScript",
-"path": "res://src/ui/SevenSegmentDisplay.gd"
-} ]
-_global_script_class_icons={
-"DatFile": "",
-"GameState": "",
-"GutHookScript": "",
-"GutTest": "",
-"Level": "",
-"LevelMap": "",
-"MapCharacter": "",
-"Objects": "",
-"SevenSegmentDisplay": ""
-}
+config_version=5
 
 [application]
 
 config/name="Eggbertx's Challenge"
 config/description="A \"Chip's Challenge\" implementation in Godot"
 run/main_scene="res://src/Main.tscn"
+config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 
-[autoload]
-
-Console="*res://addons/quentincaffeino/console/src/Console.tscn"
-
 [display]
 
-window/size/width=480
-window/size/height=340
+window/size/viewport_width=480
+window/size/viewport_height=352
 window/size/resizable=false
-
-[editor_plugins]
-
-enabled=PoolStringArray( "res://addons/quentincaffeino/console/plugin.cfg" )
-
-[input]
-
-quentincaffeino_console_toggle={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":96,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-quentincaffeino_console_autocomplete={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-quentincaffeino_console_history_up={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777232,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-quentincaffeino_console_history_down={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777234,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
 
 [physics]
 
@@ -117,12 +29,11 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+environment/defaults/default_environment="res://default_env.tres"
 quality/driver/driver_name="GLES2"
 2d/options/use_nvidia_rect_flicker_workaround=true
 quality/intended_usage/framebuffer_allocation=0
 quality/intended_usage/framebuffer_allocation.mobile=0
 vram_compression/import_etc=true
-vram_compression/import_etc2=false
 quality/filters/use_nearest_mipmap_filter=true
-environment/default_clear_color=Color( 0, 0, 0, 1 )
-environment/default_environment="res://default_env.tres"

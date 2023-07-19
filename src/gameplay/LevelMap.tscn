@@ -1,26 +1,24 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://lik5hbaoghpj"]
 
-[ext_resource path="res://src/gameplay/GameState.gd" type="Script" id=1]
-[ext_resource path="res://src/gameplay/LevelMap.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://src/gameplay/GameState.gd" id="1"]
+[ext_resource type="Script" path="res://src/gameplay/LevelMap.gd" id="2"]
 
-[sub_resource type="TileSet" id=1]
+[sub_resource type="TileSet" id="1"]
 
 [node name="LevelMap" type="Node2D"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="Layer1" type="TileMap" parent="."]
-tile_set = SubResource( 1 )
-cell_size = Vector2( 32, 32 )
-format = 1
+tile_set = SubResource("1")
+format = 2
 
 [node name="Layer2" type="TileMap" parent="."]
 z_index = -1
-tile_set = SubResource( 1 )
-cell_size = Vector2( 32, 32 )
-format = 1
+tile_set = SubResource("1")
+format = 2
 
 [node name="GameState" type="Node" parent="."]
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [connection signal="update_chips_left" from="." to="." method="_on_LevelMap_update_chips_left"]
 [connection signal="game_state_changed" from="GameState" to="." method="_on_GameState_game_state_changed"]

@@ -16,6 +16,7 @@ const move_delay = 0.3
 var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
 var tileset: TileSet
+var tileset_src: TileSetAtlasSource
 var player_layer = 0
 var chips_left = 0
 var player_character: MapCharacter
@@ -32,21 +33,22 @@ var yellow_keys = 0
 
 func _ready():
 	tileset = TileSet.new()
+	tileset_src = TileSetAtlasSource.new()
 	player_character = MapCharacter.new()
 	tiles_tex = ImageTexture.new()
 	for y in range(32):
 		for x in range(32):
-			$Layer1.set_cell(x, y, Objects.FLOOR)
+			$Layer1.set_cell(0, Vector2i(x, y), Objects.FLOOR)
 
 	var err = set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 	if err != "":
-		Console.write_line(err)
+		#Console.write_line(err)
 		get_tree().quit()
 
-func _get_atlas(texture: Texture, rect: Rect2) -> AtlasTexture:
+func _get_atlas(texture: Texture2D, rect: Rect2) -> AtlasTexture:
 	var atlas = AtlasTexture.new()
 	atlas.set_atlas(texture)
-	atlas.set_region(rect)
+	# atlas.set_region_enabled(rect)
 	return atlas
 
 func change_game_state(new_state: int):
@@ -124,15 +126,14 @@ func shift_tile(x: int, y: int, layer: int, direction: String):
 func set_tileset(path: String, tile_size: int) -> String:
 	var img:Image
 	if path.begins_with("res://"):
-		var stream_tex:StreamTexture = load(path)
-		if stream_tex == null:
+		tiles_tex = ImageTexture.create_from_image(Image.load_from_file(path))
+		if tiles_tex == null:
 			return "Could not load tileset texture %s" % path
-		tiles_tex.create_from_image(stream_tex.get_data())
 	else:
 		img = Image.new()
 		if img.load(path) != OK:
 			return "Unable to load tileset texture %s" % path
-		tiles_tex.create_from_image(img)
+		tiles_tex = ImageTexture.create_from_image(img)
 
 	var img_width = tiles_tex.get_width()
 	var img_height = tiles_tex.get_height()
@@ -141,11 +142,11 @@ func set_tileset(path: String, tile_size: int) -> String:
 
 	var x = 0
 	var y = 0
+	var atlases = []
 	for t in range(112):
-		var atlas = _get_atlas(tiles_tex, Rect2(x, y, tile_size, tile_size))
-
-		tileset.create_tile(t)
-		tileset.tile_set_texture(t, atlas)
+		atlases.push_back(_get_atlas(tiles_tex, Rect2(x, y, tile_size, tile_size)))
+		tileset_src.create_tile(Vector2i(x, y), Vector2i(tile_size, tile_size))
+		# tileset.tile_set_texture(t, atlas)
 		if y + tile_size == img_height:
 			y = 0
 			x += tile_size
@@ -154,10 +155,10 @@ func set_tileset(path: String, tile_size: int) -> String:
 	$Layer1.tile_set = tileset
 	$Layer2.tile_set = tileset
 
-	player_character.add_sprite_frame("north", tileset.tile_get_texture(Objects.CHIP_N))
-	player_character.add_sprite_frame("west", tileset.tile_get_texture(Objects.CHIP_W))
-	player_character.add_sprite_frame("south", tileset.tile_get_texture(Objects.CHIP_S))
-	player_character.add_sprite_frame("east", tileset.tile_get_texture(Objects.CHIP_E))
+	player_character.add_sprite_frame("north", atlases[Objects.CHIP_N])
+	player_character.add_sprite_frame("west", atlases[Objects.CHIP_W])
+	player_character.add_sprite_frame("south", atlases[Objects.CHIP_S])
+	player_character.add_sprite_frame("east", atlases[Objects.CHIP_E])
 	return ""
 
 # sets the player position when the map is first loaded, replacing the Objects.CHIP_E tile

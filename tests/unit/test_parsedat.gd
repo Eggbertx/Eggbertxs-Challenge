@@ -16,14 +16,14 @@ var num_tests = 0
 var tests_done = 0
 
 func _init():
-	._init()
+	super._init()
 	for method in get_method_list():
 		if method.name.begins_with("test_"):
 			num_tests += 1
 
 # Called when the node enters the scene tree for the first time.
 func test_parse_file():
-	levelset.stream.data_array = PoolByteArray(sample_dat)
+	levelset.stream.data_array = PackedByteArray(sample_dat)
 	# assert_true(true, "true test")
 	assert_eq(levelset.parse_file(true), "", "tests Chip's Challenge levelset parsing")
 	finish_test()

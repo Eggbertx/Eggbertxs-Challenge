@@ -20,8 +20,8 @@ var layer2_bytes = []
 
 # optional fields
 var map_title = ""
-var brown_button_field = PoolByteArray()
-var red_button_field = PoolByteArray()
+var brown_button_field = PackedByteArray()
+var red_button_field = PackedByteArray()
 var password = ""
 var hint = ""
 var monster_locations = []
@@ -134,7 +134,7 @@ func apply_to(map: LevelMap):
 	if OS.is_debug_build():
 		window_title += " (DEBUG)"
 	map.emit_signal("update_chips_left", chips_left)
-	OS.set_window_title(window_title)
+	get_window().set_title(window_title)
 
 # RLE bytes are stored: 0xFF, num_rel_bytes, byte1, byte2, byte3, ...
 func decode_rle(stream: StreamPeerBuffer, num_rel_bytes: int):

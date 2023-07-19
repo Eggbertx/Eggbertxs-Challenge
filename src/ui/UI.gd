@@ -10,8 +10,8 @@ enum {
 	FILEMODE_TILESET
 }
 
-onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
-onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
+@onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
+@onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
 
 var file_mode = FILEMODE_DATFILE
 var viewport_size: Vector2
@@ -19,12 +19,12 @@ var inventory_tiles: TileSet
 
 func _ready() -> void:
 	enable_level_menu(false)
-	game_menu.connect("id_pressed", self, "game_menu_selected")
-	level_menu.connect("id_pressed", self, "level_menu_selected")
+	game_menu.connect("id_pressed", Callable(self, "game_menu_selected"))
+	level_menu.connect("id_pressed", Callable(self, "level_menu_selected"))
 	$UIImage.set_size(get_viewport().size, false)
 	$UIImage.set_position(Vector2(0, $Panel.get_rect().size.y))
 
-	$ViewWindow.set_position(Vector2(16, 16 + $Panel.rect_size.y))
+	$ViewWindow.set_position(Vector2(16, 16 + $Panel.size.y))
 	$ViewWindow.visible = false
 	viewport_size = get_viewport_rect().size
 
@@ -36,8 +36,8 @@ func alert(text:String, console = false):
 		viewport_size.y/2 - $AcceptDialog.get_rect().size.y/2
 	)
 	$AcceptDialog.set_position(center)
-	if console:
-		Console.write_line(text)
+	#if console:
+	#	Console.write_line(text)
 
 func set_time_display(time: int, visible = true):
 	$TimeDisplay.set_number(time)
@@ -70,7 +70,7 @@ func remove_inventory(id: int):
 			$InventoryContainer.remove_child(child)
 
 func show_goto():
-	$GotoLevelDialog/PopupDialog.show()
+	$GotoLevelDialog/Popup.show()
 
 func game_menu_selected(id):
 	emit_signal("game_item_selected", id)
@@ -79,7 +79,7 @@ func level_menu_selected(id):
 	emit_signal("level_item_selected", id)
 	
 func set_max_level(levels:int):
-	$GotoLevelDialog/PopupDialog/VBoxContainer/GridContainer/LevelNoEdit.max_value = levels
+	$GotoLevelDialog/Popup/VBoxContainer/GridContainer/LevelNoEdit.max_value = levels
 
 func enable_level_menu(enabled = true):
 	$Panel/HBoxContainer/LevelMenu.disabled = !enabled

@@ -8,7 +8,7 @@ enum {
 	COMPUTER_CHIP,
 	WATER,
 	FIRE,
-	WALL_INVIS_NOAPPEAR
+	WALL_INVIS_NOAPPEAR,
 	BLOCKED_N,
 	BLOCKED_W,
 	BLOCKED_S,
@@ -34,7 +34,7 @@ enum {
 	SLIDE_N2W,
 	SLIDE_N2E,
 	BLOCK_TO_FLOOR, # Blue Block, becomes FLOOR when pushed
-	BLOCK_TO_WALL # Blue Block, becomes WALL when pushed
+	BLOCK_TO_WALL, # Blue Block, becomes WALL when pushed
 	COMBINATION, # shows Chip or a monster, see https://wiki.bitbusters.club/Combination
 	THIEF,
 	SOCKET,

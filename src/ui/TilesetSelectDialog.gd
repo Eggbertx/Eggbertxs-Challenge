@@ -13,21 +13,21 @@ func _ready() -> void:
 
 func reset_values():
 	tileset_path = ""
-	$PopupDialog/VBoxContainer/HBoxContainer/ColorButton.color = default_color
-	$PopupDialog/VBoxContainer/HBoxContainer/ChromakeyCheckbox.set_pressed_no_signal(false)
+	$Popup/VBoxContainer/HBoxContainer/ColorButton.color = default_color
+	$Popup/VBoxContainer/HBoxContainer/ChromakeyCheckbox.set_pressed_no_signal(false)
 
 func using_alpha() -> bool:
-	return $PopupDialog/VBoxContainer/HBoxContainer/ChromakeyCheckbox.is_pressed()
+	return $Popup/VBoxContainer/HBoxContainer/ChromakeyCheckbox.is_pressed()
 
 func chromakey_color() -> Color:
-	return $PopupDialog/VBoxContainer/HBoxContainer/ColorButton.color
+	return $Popup/VBoxContainer/HBoxContainer/ColorButton.color
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta: float) -> void:
 #	pass
 
 func show_dialog():
-	$PopupDialog.show()
+	$Popup.show()
 
 func _on_BrowseButton_button_up():
 	emit_signal("browse_activated")
@@ -38,8 +38,8 @@ func _on_OKButton_button_up():
 		using_alpha(),
 		chromakey_color()
 	)
-	$PopupDialog.hide()
+	$Popup.hide()
 
 func _on_CancelButton_button_up():
-	$PopupDialog.hide()
+	$Popup.hide()
 	reset_values()

@@ -20,7 +20,7 @@ func load_file(filepath: String):
 	if err:
 		return err
 
-	stream.data_array = file.get_buffer(file.get_len())
+	stream.data_array = file.get_buffer(file.get_length())
 	file.close()
 	return parse_file()
 

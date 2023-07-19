@@ -8,3 +8,4 @@ music/
 /tests/out*.xml
 export.cfg
 export_presets.cfg
+/.godot/

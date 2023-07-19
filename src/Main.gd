@@ -23,8 +23,8 @@ const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
 var time_left = -1
 var current_level_no = 0
-onready var ui = $CanvasLayer/UI
-onready var levelmap = $LevelMap
+@onready var ui = $CanvasLayer/UI
+@onready var levelmap = $LevelMap
 
 func load_file(file = ""):
 	if ui.file_mode == ui.FILEMODE_TILESET:
@@ -77,18 +77,18 @@ func level_info(level):
 
 func register_commands():
 	Console.add_command("loadDAT", self, "load_file")\
-		.set_description("Loads a Chip's Challenge-compatible DAT file")\
-		.add_argument("file", TYPE_STRING, "The dat file to be loaded")\
-		.register()
+		super.set_description("Loads a Chip's Challenge-compatible DAT file")\
+		super.add_argument("file", TYPE_STRING, "The dat file to be loaded")\
+		super.register()
 
 	Console.add_command("levelInfo", self, "level_info")\
-		.set_description("Prints info about the current level")\
-		.add_argument("level", TYPE_INT)\
-		.register()
+		super.set_description("Prints info about the current level")\
+		super.add_argument("level", TYPE_INT)\
+		super.register()
 
 	Console.add_command("printInfo", self, "print_info")\
-		.set_description("Prints info about the loaded dat file if one is currently loaded")\
-		.register()
+		super.set_description("Prints info about the loaded dat file if one is currently loaded")\
+		super.register()
 
 
 func quit(status:int = 0):
@@ -99,7 +99,7 @@ func quit(status:int = 0):
 func _input(event):
 	if event is InputEventKey:
 		var state = levelmap.get_game_state()
-		match event.scancode:
+		match event.keycode:
 			KEY_ESCAPE:
 				if is_debug:
 					quit()
@@ -119,7 +119,7 @@ func _ready():
 	register_commands()
 	var datfile_path = df.get_default_file()
 	if datfile_path == "":
-		$CanvasLayer/UI.alert("Unable to find a default .dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
+		$CanvasLayer/UI.alert("Unable to find a default super.dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
 		return
 	load_file(datfile_path)
 	ui.inventory_tiles = levelmap.tileset

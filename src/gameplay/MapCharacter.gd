@@ -8,16 +8,17 @@ var player_controlled = false
 var parent: Node2D
 var last_move_time = 0
 var camera: Camera2D
-var sprite: AnimatedSprite
+var sprite: AnimatedSprite2D
 
 func _init(player_character = false):
 	player_controlled = player_character
-	sprite = AnimatedSprite.new()
-	sprite.frames = SpriteFrames.new()
-	sprite.frames.add_animation("north")
-	sprite.frames.add_animation("west")
-	sprite.frames.add_animation("south")
-	sprite.frames.add_animation("east")
+	sprite = AnimatedSprite2D.new()
+	sprite.sprite_frames = SpriteFrames.new()
+	
+	sprite.sprite_frames.add_animation("north")
+	sprite.sprite_frames.add_animation("west")
+	sprite.sprite_frames.add_animation("south")
+	sprite.sprite_frames.add_animation("east")
 	sprite.offset.x = 16
 	sprite.offset.y = 16
 
@@ -48,8 +49,9 @@ func _get_levelmap():
 func _get_game_state() -> int:
 	return _get_levelmap().get_game_state()
 
-func add_sprite_frame(direction:String, frame: Texture, at_position: int = -1):
-	sprite.frames.add_frame(direction, frame, at_position)
+func add_sprite_frame(direction:String, frame: Texture2D, at_position: int = -1):
+#	sprite.frames.add_frame(direction, frame, at_position)
+	sprite.sprite_frames.add_frame(direction, frame, 1, at_position)
 
 func try_move(direction: String):
 	_get_levelmap().request_move(direction)

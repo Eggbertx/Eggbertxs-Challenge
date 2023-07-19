@@ -8,11 +8,11 @@ func _ready():
 
 func _on_OkButton_pressed():
 	emit_signal("level_selected",
-		$PopupDialog/VBoxContainer/GridContainer/LevelNoEdit.value,
-		$PopupDialog/VBoxContainer/GridContainer/PasswordEdit.text
+		$Popup/VBoxContainer/GridContainer/LevelNoEdit.value,
+		$Popup/VBoxContainer/GridContainer/PasswordEdit.text
 	)
-	$PopupDialog.hide()
+	$Popup.hide()
 
 
 func _on_CancelButton_pressed():
-	$PopupDialog.hide()
+	$Popup.hide()

@@ -10,100 +10,100 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PopupDialog" type="PopupDialog" parent="."]
+[node name="Popup" type="Popup" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -147.0
-margin_top = -67.0
-margin_right = 147.0
-margin_bottom = 66.0
+offset_left = -147.0
+offset_top = -67.0
+offset_right = 147.0
+offset_bottom = 66.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PopupDialog"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 12.0
-margin_right = -12.0
-margin_bottom = -12.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="InfoLabel" type="Label" parent="PopupDialog/VBoxContainer"]
-margin_top = 1.0
-margin_right = 270.0
-margin_bottom = 32.0
+[node name="InfoLabel" type="Label" parent="Popup/VBoxContainer"]
+offset_top = 1.0
+offset_right = 270.0
+offset_bottom = 32.0
 text = "Select a tileset and a color to be replaced with transparency"
 align = 1
 autowrap = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="PopupDialog/VBoxContainer"]
-margin_top = 36.0
-margin_right = 270.0
-margin_bottom = 56.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="Popup/VBoxContainer"]
+offset_top = 36.0
+offset_right = 270.0
+offset_bottom = 56.0
 
-[node name="Label" type="Label" parent="PopupDialog/VBoxContainer/HBoxContainer2"]
-margin_top = 3.0
-margin_right = 43.0
-margin_bottom = 17.0
+[node name="Label" type="Label" parent="Popup/VBoxContainer/HBoxContainer2"]
+offset_top = 3.0
+offset_right = 43.0
+offset_bottom = 17.0
 text = "Tileset"
 
-[node name="BrowseButton" type="Button" parent="PopupDialog/VBoxContainer/HBoxContainer2"]
-margin_left = 47.0
-margin_right = 118.0
-margin_bottom = 20.0
+[node name="BrowseButton" type="Button" parent="Popup/VBoxContainer/HBoxContainer2"]
+offset_left = 47.0
+offset_right = 118.0
+offset_bottom = 20.0
 text = "Browse..."
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PopupDialog/VBoxContainer"]
-margin_top = 60.0
-margin_right = 270.0
-margin_bottom = 84.0
-hint_tooltip = "If the checkbox is checked, the selected color
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer"]
+offset_top = 60.0
+offset_right = 270.0
+offset_bottom = 84.0
+tooltip_text = "If the checkbox is checked, the selected color
 will be replaced with transparency"
 
-[node name="ChromaLabel" type="Label" parent="PopupDialog/VBoxContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 84.0
-margin_bottom = 19.0
+[node name="ChromaLabel" type="Label" parent="Popup/VBoxContainer/HBoxContainer"]
+offset_top = 5.0
+offset_right = 84.0
+offset_bottom = 19.0
 text = "Transparency"
 
-[node name="ChromakeyCheckbox" type="CheckBox" parent="PopupDialog/VBoxContainer/HBoxContainer"]
-margin_left = 88.0
-margin_right = 112.0
-margin_bottom = 24.0
+[node name="ChromakeyCheckbox" type="CheckBox" parent="Popup/VBoxContainer/HBoxContainer"]
+offset_left = 88.0
+offset_right = 112.0
+offset_bottom = 24.0
 
-[node name="ColorButton" type="ColorPickerButton" parent="PopupDialog/VBoxContainer/HBoxContainer"]
-margin_left = 116.0
-margin_right = 160.0
-margin_bottom = 24.0
+[node name="ColorButton" type="ColorPickerButton" parent="Popup/VBoxContainer/HBoxContainer"]
+offset_left = 116.0
+offset_right = 160.0
+offset_bottom = 24.0
 text = "        "
 color = Color( 1, 0, 1, 1 )
 edit_alpha = false
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="PopupDialog/VBoxContainer"]
-margin_top = 88.0
-margin_right = 270.0
-margin_bottom = 108.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="Popup/VBoxContainer"]
+offset_top = 88.0
+offset_right = 270.0
+offset_bottom = 108.0
 alignment = 1
 
-[node name="OKButton" type="Button" parent="PopupDialog/VBoxContainer/HBoxContainer3"]
-margin_left = 90.0
-margin_right = 121.0
-margin_bottom = 20.0
+[node name="OKButton" type="Button" parent="Popup/VBoxContainer/HBoxContainer3"]
+offset_left = 90.0
+offset_right = 121.0
+offset_bottom = 20.0
 text = "OK"
 
-[node name="CancelButton" type="Button" parent="PopupDialog/VBoxContainer/HBoxContainer3"]
-margin_left = 125.0
-margin_right = 179.0
-margin_bottom = 20.0
+[node name="CancelButton" type="Button" parent="Popup/VBoxContainer/HBoxContainer3"]
+offset_left = 125.0
+offset_right = 179.0
+offset_bottom = 20.0
 text = "Cancel"
 
-[connection signal="button_up" from="PopupDialog/VBoxContainer/HBoxContainer2/BrowseButton" to="." method="_on_BrowseButton_button_up"]
-[connection signal="button_up" from="PopupDialog/VBoxContainer/HBoxContainer3/OKButton" to="." method="_on_OKButton_button_up"]
-[connection signal="button_up" from="PopupDialog/VBoxContainer/HBoxContainer3/CancelButton" to="." method="_on_CancelButton_button_up"]
+[connection signal="button_up" from="Popup/VBoxContainer/HBoxContainer2/BrowseButton" to="." method="_on_BrowseButton_button_up"]
+[connection signal="button_up" from="Popup/VBoxContainer/HBoxContainer3/OKButton" to="." method="_on_OKButton_button_up"]
+[connection signal="button_up" from="Popup/VBoxContainer/HBoxContainer3/CancelButton" to="." method="_on_CancelButton_button_up"]
