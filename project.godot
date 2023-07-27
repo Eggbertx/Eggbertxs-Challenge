@@ -17,11 +17,19 @@ config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 
+[autoload]
+
+Panku="*res://addons/panku_console/console.tscn"
+
 [display]
 
 window/size/viewport_width=480
 window/size/viewport_height=352
 window/size/resizable=false
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/panku_console/plugin.cfg")
 
 [physics]
 
