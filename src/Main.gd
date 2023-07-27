@@ -98,6 +98,14 @@ func _input(event):
 						levelmap.change_game_state(GameState.STATE_PAUSED)
 
 func _ready():
+	PankuConfig.set_config({
+		"native_logger": {
+			"screen_overlay": false
+		},
+		"common_settings": {
+			"enable_os_window": true
+		}
+	})
 	is_debug = OS.is_debug_build()
 	df = DatFile.new()
 	var datfile_path = df.get_default_file()
