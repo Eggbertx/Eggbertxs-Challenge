@@ -19,8 +19,8 @@ var inventory_tiles: TileSet
 
 func _ready() -> void:
 	enable_level_menu(false)
-	game_menu.connect("id_pressed", Callable(self, "game_menu_selected"))
-	level_menu.connect("id_pressed", Callable(self, "level_menu_selected"))
+	game_menu.connect("id_pressed", game_menu_selected)
+	level_menu.connect("id_pressed", level_menu_selected)
 
 	$ViewWindow.set_position(Vector2(16, 16 + $Panel.size.y))
 	$ViewWindow.visible = false
@@ -69,6 +69,7 @@ func show_goto():
 	$GotoLevelDialog/Popup.show()
 
 func game_menu_selected(id):
+	print("Selected:", id)
 	emit_signal("game_item_selected", id)
 
 func level_menu_selected(id):

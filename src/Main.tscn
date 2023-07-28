@@ -16,5 +16,7 @@ position = Vector2(16, 36)
 
 [node name="Timer" type="Timer" parent="."]
 
+[connection signal="game_item_selected" from="CanvasLayer/UI" to="." method="_on_ui_game_item_selected"]
+[connection signal="level_item_selected" from="CanvasLayer/UI" to="." method="_on_ui_level_item_selected"]
 [connection signal="update_window_title" from="LevelMap" to="LevelMap" method="_on_update_window_title"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

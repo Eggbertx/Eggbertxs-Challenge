@@ -97,15 +97,18 @@ func _input(event):
 					elif state == GameState.STATE_PLAYING:
 						levelmap.change_game_state(GameState.STATE_PAUSED)
 
-func _ready():
+func _init():
 	PankuConfig.set_config({
 		"native_logger": {
 			"screen_overlay": false
 		},
-		"common_settings": {
-			"enable_os_window": true
+		"general_settings": {
+			"lynx_window_blur_effect": false,
+			"lynx_window_base_color": Color(0.0, 0.05, 0.1, 0.9)
 		}
 	})
+
+func _ready():
 	is_debug = OS.is_debug_build()
 	df = DatFile.new()
 	var datfile_path = df.get_default_file()
@@ -123,10 +126,10 @@ func _notification(what):
 # func _process(delta: float):
 # 	pass
 
-func _on_UI_file_selected(path: String):
+func _on_ui_file_selected(path: String):
 	load_file(path)
 
-func _on_UI_game_item_selected(id):
+func _on_ui_game_item_selected(id):
 	$CanvasLayer/UI/FileDialog.clear_filters()
 	match id:
 		GAME_ITEM_NEWGAME:
@@ -152,7 +155,7 @@ func _on_UI_game_item_selected(id):
 		GAME_ITEM_QUIT:
 			quit()
 
-func _on_UI_level_item_selected(id):
+func _on_ui_level_item_selected(id):
 	match id:
 		LEVEL_ITEM_RESTART:
 			print("Restarting level")
@@ -242,3 +245,4 @@ func _on_LevelMap_game_state_changed(state: int, old_state: int):
 			ui.alert("Out of time!")
 		GameState.STATE_LEVEL_EXIT:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
+
