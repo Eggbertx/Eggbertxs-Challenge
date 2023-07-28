@@ -31,6 +31,10 @@ window/size/resizable=false
 
 enabled=PackedStringArray("res://addons/panku_console/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [physics]
 
 common/enable_pause_aware_picking=true

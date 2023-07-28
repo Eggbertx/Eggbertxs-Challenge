@@ -12,6 +12,7 @@ enum {
 
 @onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
 @onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
+@onready var panku_shell = Panku.module_manager.get_module("interactive_shell").interactive_shell
 
 var file_mode = FILEMODE_DATFILE
 var viewport_size: Vector2
@@ -19,6 +20,7 @@ var inventory_tiles: TileSet
 
 func _ready() -> void:
 	enable_level_menu(false)
+	get_viewport().gui_embed_subwindows = false
 	game_menu.connect("id_pressed", game_menu_selected)
 	level_menu.connect("id_pressed", level_menu_selected)
 
@@ -26,14 +28,20 @@ func _ready() -> void:
 	$ViewWindow.visible = false
 	viewport_size = get_viewport_rect().size
 
-func alert(text:String, console = false):
+func panku_output(text: String):
+	print(text)
+	panku_shell.output(text)
+
+func alert(text:String, console = true):
 	$AcceptDialog.dialog_text = text
 	$AcceptDialog.visible = true
 	var center = Vector2(
-		viewport_size.x/2 - $AcceptDialog.get_rect().size.x/2,
-		viewport_size.y/2 - $AcceptDialog.get_rect().size.y/2
+		viewport_size.x/2 - $AcceptDialog.get_visible_rect().size.x/2,
+		viewport_size.y/2 - $AcceptDialog.get_visible_rect().size.y/2
 	)
 	$AcceptDialog.set_position(center)
+	if console:
+		panku_output("Alert: %s" % text)
 
 func set_time_display(time: int, visible = true):
 	$TimeDisplay.set_number(time)
@@ -69,7 +77,6 @@ func show_goto():
 	$GotoLevelDialog/Popup.show()
 
 func game_menu_selected(id):
-	print("Selected:", id)
 	emit_signal("game_item_selected", id)
 
 func level_menu_selected(id):
@@ -104,7 +111,6 @@ func _on_FileDialog_file_selected(path):
 
 func _on_GotoLevelDialog_level_selected(level: int, password: String):
 	emit_signal("level_selected", level, password)
-
 
 func _on_TilesetSelectDialog_browse_activated() -> void:
 	pass # Replace with function body.

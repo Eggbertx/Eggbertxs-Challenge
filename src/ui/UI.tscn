@@ -43,8 +43,12 @@ offset_bottom = 351.0
 texture = ExtResource("2")
 
 [node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
 initial_position = 1
-size = Vector2i(619, 162)
+size = Vector2i(502, 300)
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+file_mode = 0
 access = 2
 
 [node name="Panel" type="Panel" parent="."]
@@ -76,6 +80,7 @@ popup/item_0/text = "New Game"
 popup/item_0/id = 0
 popup/item_1/text = "Pause"
 popup/item_1/checkable = 1
+popup/item_1/checked = true
 popup/item_1/id = 1
 popup/item_2/text = "Load levelset"
 popup/item_2/id = 2
