@@ -318,6 +318,5 @@ func _on_LevelMap_update_chips_left(left: int):
 func _on_GameState_game_state_changed(new_state: int, old_state: int):
 	emit_signal("game_state_changed", new_state, old_state)
 
-
 func _on_update_window_title(title: String):
 	get_window().title = title

@@ -173,7 +173,7 @@ func _on_ui_level_item_selected(id):
 		LEVEL_ITEM_GOTO:
 			ui.show_goto()
 
-func _on_UI_level_selected(level:int, password:String):
+func _on_ui_level_selected(level: int, password: String):
 	if df.file_path == "":
 		ui.alert("No datfile loaded")
 		return
@@ -192,16 +192,16 @@ func _on_LevelMap_update_chips_left(left: int):
 	$CanvasLayer/UI/ChipsDisplay.show()
 	$CanvasLayer/UI/ChipsDisplay.set_number(left)
 
-func _on_LevelMap_player_reached_exit():
+func _on_level_map_player_reached_exit():
 	if df.num_levels <= current_level_no:
 		print("Finished last level")
 		return
 	ui.set_hint_visible(true, "Level cleared! Press Enter to continue.")
 
-func _on_LevelMap_update_hint_status(visible: bool):
+func _on_level_map_update_hint_status(visible: bool):
 	ui.set_hint_visible(visible, levelmap.hint_text)
 
-func _on_LevelMap_next_level_requested():
+func _on_level_map_next_level_requested():
 	if $LevelMap.get_game_state() != GameState.STATE_LEVEL_EXIT:
 		return
 	if df.num_levels <= current_level_no + 1:
@@ -210,10 +210,10 @@ func _on_LevelMap_next_level_requested():
 	print("Next level requested")
 	load_level(current_level_no + 1)
 
-func _on_LevelMap_pickup_item(item_code: int):
+func _on_level_map_pickup_item(item_code: int):
 	ui.add_inventory(item_code)
 
-func _on_LevelMap_remove_item(item_code: int):
+func _on_level_map_remove_item(item_code: int):
 	ui.remove_inventory(item_code)
 
 func _on_Timer_timeout():
@@ -225,7 +225,7 @@ func _on_Timer_timeout():
 	if time_left <= 0:
 		levelmap.change_game_state(GameState.STATE_OUT_OF_TIME)
 
-func _on_LevelMap_game_state_changed(state: int, old_state: int):
+func _on_level_map_game_state_changed(state: int, old_state: int):
 	match state:
 		GameState.STATE_PLAYING:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
@@ -245,4 +245,3 @@ func _on_LevelMap_game_state_changed(state: int, old_state: int):
 			ui.alert("Out of time!")
 		GameState.STATE_LEVEL_EXIT:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
-
