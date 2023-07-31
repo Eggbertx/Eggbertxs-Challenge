@@ -78,7 +78,9 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 			10:
 				if (field_numbytes % 2) > 0:
 					return "Invalid monster field, must be a multiple of 2 bytes (got %d)" % field_numbytes
-				for _f in range(field_numbytes / 2):
+				@warning_ignore("integer_division")
+				var range_max = field_numbytes/2
+				for _f in range(range_max):
 					var monster_x = stream.get_u8()
 					var monster_y = stream.get_u8()
 					monster_locations.append(Vector2(monster_x, monster_y))
@@ -92,6 +94,7 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 
 func index_to_2d(num: int):
 	var x = num % 32
+	@warning_ignore("integer_division")
 	var y = floor((num - x) / 32)
 	return Vector2(x, y)
 

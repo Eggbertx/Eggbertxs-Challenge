@@ -14,7 +14,6 @@ signal remove_item
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
 const DEFAULT_TILESET_SIZE = 32
 const move_delay = 0.3
-var tiles_tex: ImageTexture
 var player_pos = Vector2(0, 0)
 var tileset: TileSet
 var tileset_src: TileSetAtlasSource
@@ -36,7 +35,6 @@ func _ready():
 	tileset = TileSet.new()
 	tileset_src = TileSetAtlasSource.new()
 	player_character = MapCharacter.new()
-	tiles_tex = ImageTexture.new()
 	for y in range(32):
 		for x in range(32):
 			$Layer1.set_cell(0, Vector2i(x, y), Objects.FLOOR)
@@ -58,25 +56,22 @@ func get_game_state() -> int:
 	return $GameState.current_state()
 
 func get_tile(x: int, y: int, layer: int) -> int:
-	return 0
 	$Layer1.get_cell_tile_data(1, Vector2i(x, y))
 	if layer == 1:
-		return $Layer1.get_cell(x, y)
-	return $Layer2.get_cell(x, y)
+		return $Layer1.get_cell_source_id(1, Vector2i(x, y))
+	return $Layer2.get_cell_source_id(1, Vector2i(x, y))
 
 func get_player_tiles():
 	return [
-		$Layer1.get_cell(player_pos.x, player_pos.y),
-		$Layer2.get_cell(player_pos.x, player_pos.y)
+		$Layer1.get_cell_source_id(1, Vector2i(player_pos.x, player_pos.y)),
+		$Layer2.get_cell_source_id(1, Vector2i(player_pos.x, player_pos.y))
 	]
 
 func set_tile(x: int, y: int, layer: int, tileID: int):
 	if layer == 1:
-		$Layer1.set_cell(layer, Vector2i(x, y), -1)
-		# $Layer1.set_cell(x, y, tileID)
+		$Layer1.set_cell(layer, Vector2i(x, y), tileID)
 	else:
-		$Layer2.set_cell(layer, Vector2i(x, y), -1)
-		# $Layer2.set_cell(x, y, tileID)
+		$Layer2.set_cell(layer, Vector2i(x, y), tileID)
 
 func change_tile_location(x1: int, y1: int, l1: int, x2: int, y2: int, l2: int):
 	var tile: int
@@ -130,27 +125,26 @@ func shift_tile(x: int, y: int, layer: int, direction: String):
 func set_tileset(path: String, tile_size: int) -> String:
 	var img:Image
 	if path.begins_with("res://"):
-		tiles_tex = ImageTexture.create_from_image(Image.load_from_file(path))
-		if tiles_tex == null:
+		tileset_src.texture = load(path)
+		if tileset_src.texture == null:
 			return "Could not load tileset texture %s" % path
 	else:
 		img = Image.new()
 		if img.load(path) != OK:
 			return "Unable to load tileset texture %s" % path
-		tiles_tex = ImageTexture.create_from_image(img)
+		tileset_src.texture = ImageTexture.create_from_image(img)
 
-	var img_width = tiles_tex.get_width()
-	var img_height = tiles_tex.get_height()
+	var img_width = tileset_src.texture.get_width()
+	var img_height = tileset_src.texture.get_height()
 	if img_width % tile_size > 0 or img_height % tile_size > 0:
 		return "Tileset has an invalid size, tile width and height must be multiples of %d" % tile_size
-	tileset_src.texture = tiles_tex
 	tileset_src.texture_region_size = Vector2i(tile_size, tile_size)
 
 	var x = 0
 	var y = 0
 	var atlases = []
 	for t in range(112):
-		atlases.push_back(_get_atlas(tiles_tex, Rect2(x, y, tile_size, tile_size)))
+		atlases.push_back(_get_atlas(tileset_src.texture, Rect2(x, y, tile_size, tile_size)))
 		# tileset_src.create_tile(Vector2i(x, y), Vector2i(tile_size, tile_size))
 		
 		# tileset.tile_set_texture(t, atlas)

@@ -43,20 +43,20 @@ func alert(text:String, console = true):
 	if console:
 		panku_output("Alert: %s" % text)
 
-func set_time_display(time: int, visible = true):
+func set_time_display(time: int, display_visible = true):
 	$TimeDisplay.set_number(time)
-	$TimeDisplay.set_visible(visible)
+	$TimeDisplay.set_visible(display_visible)
 
 
-func set_level_display(level: int, visible = true):
+func set_level_display(level: int, display_visible = true):
 	$LevelDisplay.set_number(level)
-	$LevelDisplay.set_visible(visible)
+	$LevelDisplay.set_visible(display_visible)
 
 
 func add_inventory(id: int):
-	var tr = TextureRect.new()
-	tr.texture = inventory_tiles.tile_get_texture(id)
-	tr.name = ("inv%d" % id)
+	var tex_rect = TextureRect.new()
+	tex_rect.texture = inventory_tiles.tile_get_texture(id)
+	tex_rect.name = ("inv%d" % id)
 	var found = false
 
 	var children = $InventoryContainer.get_children()
@@ -65,7 +65,7 @@ func add_inventory(id: int):
 			found = true
 			break
 	if !found:
-		$InventoryContainer.add_child(tr)
+		$InventoryContainer.add_child(tex_rect)
 
 func remove_inventory(id: int):
 	var children = $InventoryContainer.get_children()
@@ -101,8 +101,8 @@ func show_file_dialog(filemode = FILEMODE_DATFILE):
 			$FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
 	$FileDialog.popup()
 
-func set_hint_visible(visible: bool, text: String):
-	$HintPanel.visible = visible
+func set_hint_visible(hint_visible: bool, text: String):
+	$HintPanel.visible = hint_visible
 	$HintPanel/HintText.text = text
 
 func _on_FileDialog_file_selected(path):
