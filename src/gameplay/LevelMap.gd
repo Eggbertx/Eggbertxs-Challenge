@@ -69,9 +69,9 @@ func get_player_tiles():
 
 func set_tile(x: int, y: int, layer: int, tileID: int):
 	if layer == 1:
-		$Layer1.set_cell(layer, Vector2i(x, y), tileID)
+		$Layer1.set_cell(0, Vector2i(x, y), tileID)
 	else:
-		$Layer2.set_cell(layer, Vector2i(x, y), tileID)
+		$Layer2.set_cell(0, Vector2i(x, y), tileID)
 
 func change_tile_location(x1: int, y1: int, l1: int, x2: int, y2: int, l2: int):
 	var tile: int
@@ -175,12 +175,10 @@ func init_player_pos(x: int, y: int, layer: int, direction: String):
 		player_character.parent.remove_child(player_character)
 	if layer == 1:
 		$Layer1.add_child(player_character)
-		# $Layer1.set_cell(x, y, -1)
 		$Layer1.set_cell(layer, Vector2i(x, y), -1)
 	else:
 		$Layer2.add_child(player_character)
 		$Layer2.set_cell(layer, Vector2i(x, y), -1)
-		# $Layer2.set_cell(x, y, -1)
 	
 	player_character.sprite.animation = direction
 	player_character.show()

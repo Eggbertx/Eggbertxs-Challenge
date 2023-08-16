@@ -1,32 +1,23 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://b3cblpva2efi5"]
 
-[ext_resource path="res://src/ui/GotoLevelDialog.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://src/ui/GotoLevelDialog.gd" id="1"]
 
 [node name="GotoLevelDialog" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -0.943878
 offset_right = -0.943878
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="Popup" type="Popup" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -134.5
-offset_top = -74.5
-offset_right = 134.5
-offset_bottom = 74.5
+initial_position = 2
 exclusive = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+borderless = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -35,67 +26,44 @@ offset_left = -121.5
 offset_top = -59.5
 offset_right = 121.5
 offset_bottom = 59.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="InfoLabel" type="Label" parent="Popup/VBoxContainer"]
-offset_right = 243.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "Enter a level number and a password"
-autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="Popup/VBoxContainer"]
-offset_left = 36.0
-offset_top = 18.0
-offset_right = 206.0
-offset_bottom = 70.0
+layout_mode = 2
 size_flags_horizontal = 4
 columns = 2
 
 [node name="LevelNoLabel" type="Label" parent="Popup/VBoxContainer/GridContainer"]
-offset_top = 5.0
-offset_right = 92.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Level number:"
 
 [node name="LevelNoEdit" type="SpinBox" parent="Popup/VBoxContainer/GridContainer"]
-offset_left = 96.0
-offset_right = 170.0
-offset_bottom = 24.0
+layout_mode = 2
 min_value = 1.0
 max_value = 10.0
 value = 1.0
 rounded = true
 
 [node name="PasswordLabel" type="Label" parent="Popup/VBoxContainer/GridContainer"]
-offset_top = 33.0
-offset_right = 92.0
-offset_bottom = 47.0
+layout_mode = 2
 text = "Password:"
 
 [node name="PasswordEdit" type="LineEdit" parent="Popup/VBoxContainer/GridContainer"]
-offset_left = 96.0
-offset_top = 28.0
-offset_right = 170.0
-offset_bottom = 52.0
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer"]
-offset_left = 77.0
-offset_top = 74.0
-offset_right = 166.0
-offset_bottom = 94.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="OkButton" type="Button" parent="Popup/VBoxContainer/HBoxContainer"]
-offset_right = 31.0
-offset_bottom = 20.0
+layout_mode = 2
 text = "OK"
 
 [node name="CancelButton" type="Button" parent="Popup/VBoxContainer/HBoxContainer"]
-offset_left = 35.0
-offset_right = 89.0
-offset_bottom = 20.0
+layout_mode = 2
 text = "Cancel"
 
 [connection signal="pressed" from="Popup/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_OkButton_pressed"]

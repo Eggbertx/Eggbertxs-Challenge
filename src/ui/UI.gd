@@ -15,7 +15,6 @@ enum {
 @onready var panku_shell = Panku.module_manager.get_module("interactive_shell").interactive_shell
 
 var file_mode = FILEMODE_DATFILE
-var viewport_size: Vector2
 var inventory_tiles: TileSet
 
 func _ready() -> void:
@@ -26,7 +25,6 @@ func _ready() -> void:
 
 	$ViewWindow.set_position(Vector2(16, 16 + $Panel.size.y))
 	$ViewWindow.visible = false
-	viewport_size = get_viewport_rect().size
 
 func panku_output(text: String):
 	print(text)
@@ -35,11 +33,6 @@ func panku_output(text: String):
 func alert(text:String, console = true):
 	$AcceptDialog.dialog_text = text
 	$AcceptDialog.visible = true
-	var center = Vector2(
-		viewport_size.x/2 - $AcceptDialog.get_visible_rect().size.x/2,
-		viewport_size.y/2 - $AcceptDialog.get_visible_rect().size.y/2
-	)
-	$AcceptDialog.set_position(center)
 	if console:
 		panku_output("Alert: %s" % text)
 
@@ -95,11 +88,14 @@ func show_file_dialog(filemode = FILEMODE_DATFILE):
 	$FileDialog.clear_filters()
 	match filemode:
 		FILEMODE_DATFILE:
+			$FileDialog.title = "Select Levelset file"
 			$FileDialog.add_filter("*.dat ; CC levelset")
+			$FileDialog.popup()
 		FILEMODE_TILESET:
+			$FileDialog.title = "Select Tileset"
 			$TilesetSelectDialog.show_dialog()
+			$TilesetSelectDialog.connect("browse_activated", $FileDialog.show)
 			$FileDialog.add_filter("*.png, *.bmp, *.gif ; Tileset")
-	$FileDialog.popup()
 
 func set_hint_visible(hint_visible: bool, text: String):
 	$HintPanel.visible = hint_visible
