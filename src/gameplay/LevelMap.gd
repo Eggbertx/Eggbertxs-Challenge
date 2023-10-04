@@ -13,7 +13,9 @@ signal remove_item
 
 const DEFAULT_TILESET_PATH = "res://res/tiles.png"
 const DEFAULT_TILESET_SIZE = 32
-const move_delay = 0.3
+const MOVE_DLEAY = 0.3
+
+@onready var tilemap: TileMap = $TileMap
 var player_pos = Vector2(0, 0)
 var tileset: TileSet
 var tileset_src: TileSetAtlasSource
@@ -37,13 +39,13 @@ func _ready():
 	player_character = MapCharacter.new()
 	for y in range(32):
 		for x in range(32):
-			$Layer1.set_cell(0, Vector2i(x, y), Objects.FLOOR)
+			tilemap.set_cell(0, Vector2i(x, y), Objects.FLOOR)
 
 	var err = set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 	if err != "":
 		get_tree().quit()
 
-func _get_atlas(texture: Texture2D, rect: Rect2) -> AtlasTexture:
+func _get_atlas(texture: Texture2D, _rect: Rect2) -> AtlasTexture:
 	var atlas = AtlasTexture.new()
 	atlas.set_atlas(texture)
 	# atlas.set_region_enabled(rect)
@@ -56,43 +58,26 @@ func get_game_state() -> int:
 	return $GameState.current_state()
 
 func get_tile(x: int, y: int, layer: int) -> int:
-	$Layer1.get_cell_tile_data(1, Vector2i(x, y))
-	if layer == 1:
-		return $Layer1.get_cell_source_id(1, Vector2i(x, y))
-	return $Layer2.get_cell_source_id(1, Vector2i(x, y))
+	return $TileMap.get_cell_source_id(layer - 1, Vector2i(x, y))
 
 func get_player_tiles():
 	return [
-		$Layer1.get_cell_source_id(1, Vector2i(player_pos.x, player_pos.y)),
-		$Layer2.get_cell_source_id(1, Vector2i(player_pos.x, player_pos.y))
+		$TileMap.get_cell_source_id(0, player_pos),
+		$TileMap.get_cell_source_id(1, player_pos)
 	]
 
 func set_tile(x: int, y: int, layer: int, tileID: int):
-	if layer == 1:
-		$Layer1.set_cell(0, Vector2i(x, y), tileID)
-	else:
-		$Layer2.set_cell(0, Vector2i(x, y), tileID)
+	$TileMap.set_cell(layer - 1, Vector2i(x, y), tileID)
 
-func change_tile_location(x1: int, y1: int, l1: int, x2: int, y2: int, l2: int):
-	var tile: int
-	if l1 == 1:
-		tile = $Layer1.get_cell(x1, y1)
-		$Layer1.set_cell(x1, y1, -1)
-	else:
-		tile = $Layer2.get_cell(x1, y1)
-		$Layer2.set_cell(x1, y1, -1)
-	if l2 == 1:
-		$Layer1.set_cell(x2, y2, tile)
-	else:
-		$Layer2.set_cell(x2, y2, tile)
+func change_tile_location(pos1: Vector2i, l1: int, pos2: Vector2i, l2: int):
+	var tile :int = $TileMap.get_cell_source_id(l1-1, pos1)
+	$TileMap.set_cell(l1-1, pos1, -1)
+	$TileMap.set_cell(l2-1, pos2, tile)
 
 func change_character_location(character: MapCharacter, x: int, y: int, layer: int, is_player: bool):
 	character.position.x = x * 32
 	character.position.y = y * 32
-	if layer == 1:
-		character.parent = $Layer1
-	else:
-		character.parent = $Layer2
+	character.z_index = layer-1
 	if is_player:
 		player_pos.x = x
 		player_pos.y = y
@@ -119,7 +104,7 @@ func shift_tile(x: int, y: int, layer: int, direction: String):
 			if x >= 31:
 				return
 			new_x = x + 1
-	change_tile_location(x, y, layer, new_x, new_y, layer)
+	change_tile_location(Vector2i(x, y), layer, Vector2i(new_x, new_y), layer)
 
 
 func set_tileset(path: String, tile_size: int) -> String:
@@ -153,8 +138,7 @@ func set_tileset(path: String, tile_size: int) -> String:
 			x += tile_size
 		else:
 			y += tile_size
-	$Layer1.tile_set = tileset
-	$Layer2.tile_set = tileset
+	$TileMap.tile_set = tileset
 
 	player_character.add_sprite_frame("north", atlases[Objects.CHIP_N])
 	player_character.add_sprite_frame("west", atlases[Objects.CHIP_W])
@@ -164,26 +148,21 @@ func set_tileset(path: String, tile_size: int) -> String:
 
 # sets the player position when the map is first loaded, replacing the Objects.CHIP_E tile
 # with a sprite
-func init_player_pos(x: int, y: int, layer: int, direction: String):
-	player_character.position.x = x * 32
-	player_character.position.y = y * 32
-	player_pos.x = x
-	player_pos.y = y
+func init_player_pos(pos: Vector2i, layer: int, direction: String):
+	player_character.position.x = pos.x * 32
+	player_character.position.y = pos.y * 32
+	player_pos = pos
 	player_layer = layer
 	player_character.player_controlled = true
 	if player_character.parent != null:
 		player_character.parent.remove_child(player_character)
-	if layer == 1:
-		$Layer1.add_child(player_character)
-		$Layer1.set_cell(layer, Vector2i(x, y), -1)
-	else:
-		$Layer2.add_child(player_character)
-		$Layer2.set_cell(layer, Vector2i(x, y), -1)
+	$TileMap.add_child(player_character)
+	$TileMap.set_cell(layer-1, player_pos, -1)
 	
 	player_character.sprite.animation = direction
 	player_character.show()
 	player_character.z_index = 1
-	on_hint = tile_has_hint(x, y)
+	on_hint = tile_has_hint(player_pos.x, player_pos.y)
 	emit_signal("update_hint_status", on_hint)
 
 func tile_has_hint(x: int, y: int):

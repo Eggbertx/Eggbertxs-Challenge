@@ -8,14 +8,17 @@
 [node name="LevelMap" type="Node2D"]
 script = ExtResource("2")
 
-[node name="Layer1" type="TileMap" parent="."]
+[node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("1")
 format = 2
-
-[node name="Layer2" type="TileMap" parent="."]
-z_index = -1
-tile_set = SubResource("1")
-format = 2
+layer_0/name = "Layer1"
+layer_1/name = "Layer2"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array()
 
 [node name="GameState" type="Node" parent="."]
 script = ExtResource("1")
