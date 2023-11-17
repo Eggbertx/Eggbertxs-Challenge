@@ -100,7 +100,7 @@ func _input(event):
 func _init():
 	PankuConfig.set_config({
 		"native_logger": {
-			"screen_overlay": false
+			"screen_overlay": PankuModuleNativeLogger.ScreenOverlayDisplayMode.NeverShow
 		},
 		"general_settings": {
 			"lynx_window_blur_effect": false,
