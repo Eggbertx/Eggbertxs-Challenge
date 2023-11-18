@@ -1,17 +1,139 @@
-[gd_scene load_steps=4 format=3 uid="uid://lik5hbaoghpj"]
+[gd_scene load_steps=6 format=3 uid="uid://lik5hbaoghpj"]
 
 [ext_resource type="Script" path="res://src/gameplay/GameState.gd" id="1"]
 [ext_resource type="Script" path="res://src/gameplay/LevelMap.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://bfs46xov3dscf" path="res://res/tiles.png" id="2_gbbh1"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pvmq3"]
+texture = ExtResource("2_gbbh1")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+6:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+5:10/0 = 0
+6:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+6:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+5:12/0 = 0
+6:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+4:13/0 = 0
+5:13/0 = 0
+6:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+5:14/0 = 0
+6:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+4:15/0 = 0
+5:15/0 = 0
+6:15/0 = 0
 
 [sub_resource type="TileSet" id="1"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_pvmq3")
 
 [node name="LevelMap" type="Node2D"]
 script = ExtResource("2")
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2(16, 47)
 tile_set = SubResource("1")
+cell_quadrant_size = 32
 format = 2
 layer_0/name = "Layer1"
+layer_0/tile_data = PackedInt32Array(0, 65536, 5, 1, 65536, 5, 2, 65536, 5, 3, 65536, 5, 4, 65536, 5, 5, 65536, 5, 6, 65536, 5, 7, 65536, 5, 8, 65536, 5, 9, 65536, 5, 10, 65536, 5, 11, 65536, 5, 12, 65536, 5, 13, 65536, 5, 14, 65536, 5, 65550, 65536, 5, 131086, 65536, 5, 196622, 65536, 5, 262158, 65536, 5, 327694, 65536, 5, 393230, 65536, 5, 458766, 65536, 5, 524302, 65536, 5, 655370, 65536, 5, 655369, 65536, 5, 655368, 65536, 5, 655367, 65536, 5, 655366, 65536, 5, 655365, 65536, 5, 655364, 65536, 5, 655363, 65536, 5, 655362, 65536, 5, 655361, 65536, 5, 655360, 65536, 5, 589824, 65536, 5, 65536, 65536, 5, 524288, 65536, 5, 458752, 65536, 5, 393216, 65536, 5, 327680, 65536, 5, 262144, 65536, 5, 196608, 65536, 5, 131072, 65536, 5, 589838, 65536, 5, 655374, 65536, 5, 655373, 65536, 5, 655372, 65536, 5, 655371, 65536, 5)
 layer_1/name = "Layer2"
 layer_1/enabled = true
 layer_1/modulate = Color(1, 1, 1, 1)
@@ -20,8 +142,20 @@ layer_1/y_sort_origin = 0
 layer_1/z_index = 1
 layer_1/tile_data = PackedInt32Array()
 
+[node name="Camera2D" type="Camera2D" parent="TileMap"]
+position = Vector2(224, 160)
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
 [node name="GameState" type="Node" parent="."]
 script = ExtResource("1")
+
+[node name="ViewWindow" type="ReferenceRect" parent="."]
+visible = false
+offset_left = 16.0
+offset_top = 47.0
+offset_right = 304.0
+offset_bottom = 335.0
 
 [connection signal="update_chips_left" from="." to="." method="_on_LevelMap_update_chips_left"]
 [connection signal="game_state_changed" from="GameState" to="." method="_on_GameState_game_state_changed"]
