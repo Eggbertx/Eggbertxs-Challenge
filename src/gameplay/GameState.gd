@@ -16,6 +16,7 @@ enum {
 	STATE_LEVEL_EXIT
 }
 
+var _current_state:int = STATE_PAUSED
 @export_enum(
 	"Playing",
 	"Paused",
@@ -26,10 +27,11 @@ enum {
 	"Bombed",
 	"Crushed",
 	"Level exit"
-) var _current_state:int = STATE_PAUSED
-@export var current_state:int:
+) var current_state:int:
 	get:
 		return _current_state
+	set(s):
+		_current_state = s
 
 func change_state(new_state: int):
 	if _current_state == new_state:
