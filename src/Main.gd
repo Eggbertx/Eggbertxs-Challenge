@@ -1,7 +1,5 @@
 extends Node
 
-var df: DatFile
-
 enum {
 	GAME_ITEM_NEWGAME,
 	GAME_ITEM_PAUSE,
@@ -21,10 +19,11 @@ enum {
 
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
-var time_left = -1
-var current_level_no = 0
+var df: DatFile
+@export var time_left = -1
+@export var current_level_no = 0
 @onready var ui = $CanvasLayer/UI
-@onready var levelmap = $LevelMap
+@onready var levelmap: LevelMap = $LevelMap
 
 func load_file(file = ""):
 	if ui.file_mode == ui.FILEMODE_TILESET:

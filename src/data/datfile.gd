@@ -4,8 +4,8 @@ class_name DatFile
 
 enum { CORRECT_PASSWORD, NONEXISTENT_LEVEL, WRONG_PASSWORD }
 const default_files = ["CHIPS.DAT", "chips.dat", "ec.dat", "ec_testing.dat"]
-var file_path = ""
-var num_levels = 0
+@export var file_path = ""
+@export var num_levels = 0
 var levels = []
 var stream = StreamPeerBuffer.new()
 var signature = 0

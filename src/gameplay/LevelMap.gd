@@ -18,22 +18,22 @@ const MOVE_DLEAY = 0.3
 @onready var tilemap: TileMap = $TileMap
 @onready var camera: Camera2D = $TileMap/Camera2D
 
-var player_pos = Vector2(0, 0)
-var tileset: TileSet
-var tileset_src: TileSetAtlasSource
-var player_layer = 0
-var chips_left = 0
-var player_character: MapCharacter
-var on_hint = false
-var hint_text = ""
-var water_boots = false
-var fire_boots = false
-var ice_boots = false
-var force_boots = false
-var blue_keys = 0
-var red_keys = 0
-var green_keys = 0
-var yellow_keys = 0
+@export var tileset: TileSet
+@export var tileset_src: TileSetAtlasSource
+@export var player_character: MapCharacter
+@export var player_pos := Vector2i(0, 0)
+@export var player_layer := 0
+@export var chips_left := 0
+@export var on_hint := false
+@export var hint_text := ""
+@export var water_boots := false
+@export var fire_boots := false
+@export var ice_boots := false
+@export var force_boots := false
+@export var blue_keys := 0
+@export var red_keys := 0
+@export var green_keys := 0
+@export var yellow_keys := 0
 
 func _ready():
 	tileset = tilemap.tile_set
@@ -53,7 +53,7 @@ func change_game_state(new_state: int):
 	$GameState.change_state(new_state)
 
 func get_game_state() -> int:
-	return $GameState.current_state()
+	return $GameState.current_state
 
 func get_tile(x: int, y: int, layer: int) -> int:
 	return $TileMap.get_cell_source_id(layer - 1, Vector2i(x, y))

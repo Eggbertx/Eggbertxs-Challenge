@@ -16,7 +16,20 @@ enum {
 	STATE_LEVEL_EXIT
 }
 
-var _current_state = STATE_PAUSED
+@export_enum(
+	"Playing",
+	"Paused",
+	"Out of time",
+	"Monster",
+	"Drowned",
+	"Burned",
+	"Bombed",
+	"Crushed",
+	"Level exit"
+) var _current_state:int = STATE_PAUSED
+@export var current_state:int:
+	get:
+		return _current_state
 
 func change_state(new_state: int):
 	if _current_state == new_state:
@@ -25,6 +38,3 @@ func change_state(new_state: int):
 	@warning_ignore("int_as_enum_without_cast")
 	_current_state = new_state
 	emit_signal("game_state_changed", new_state, old_state)
-
-func current_state() -> int:
-	return _current_state
