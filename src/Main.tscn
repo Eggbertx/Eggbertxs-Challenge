@@ -12,7 +12,19 @@ script = ExtResource("1")
 [node name="UI" parent="CanvasLayer" instance=ExtResource("3")]
 
 [node name="LevelMap" parent="." instance=ExtResource("2")]
-position = Vector2(16, 36)
+player_pos = Vector2i(0, 0)
+player_layer = 0
+chips_left = 0
+on_hint = false
+hint_text = ""
+water_boots = false
+fire_boots = false
+ice_boots = false
+force_boots = false
+blue_keys = 0
+red_keys = 0
+green_keys = 0
+yellow_keys = 0
 
 [node name="Timer" type="Timer" parent="."]
 

@@ -92,7 +92,7 @@ func parse_data(stream: StreamPeerBuffer, debug = false):
 		print_info()
 	return ""
 
-func index_to_2d(num: int):
+func index_to_2d(num: int) -> Vector2:
 	var x = num % 32
 	@warning_ignore("integer_division")
 	var y = floor((num - x) / 32)
@@ -130,8 +130,8 @@ func apply_to(map: LevelMap):
 			chip_layer = 2
 	map.hint_text = hint
 	if last_chip_index > -1:
-		var pos = index_to_2d(last_chip_index)
-		map.init_player_pos(pos.x, pos.y, chip_layer, direction)
+		var pos := index_to_2d(last_chip_index)
+		map.init_player_pos(pos, chip_layer, direction)
 
 	var window_title = "Eggbertx's Challenge - " + map_title
 	map.emit_signal("update_window_title", window_title)

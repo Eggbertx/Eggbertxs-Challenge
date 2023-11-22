@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cjsrrhs05pdpb"]
+[gd_scene load_steps=10 format=3 uid="uid://cjsrrhs05pdpb"]
 
 [ext_resource type="Script" path="res://src/ui/UI.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dydoudqaj7hg7" path="res://res/background-new.png" id="2"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://b3cblpva2efi5" path="res://src/ui/GotoLevelDialog.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://6a5f1nqo5tk" path="res://src/ui/TilesetSelectDialog.tscn" id="5"]
 [ext_resource type="FontFile" uid="uid://c4l8xblfe4bys" path="res://res/LiberationSans-Bold.ttf" id="7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ce2d"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(0, 0, 0, 1)
@@ -54,10 +57,12 @@ access = 2
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(35, 31)
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = -1
 anchor_right = 1.0
-offset_bottom = 31.0
+anchor_bottom = 0.088
+offset_bottom = 0.0239983
 grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0ce2d")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 1
