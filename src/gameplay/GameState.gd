@@ -36,7 +36,7 @@ var _current_state:int = STATE_PAUSED
 func change_state(new_state: int):
 	if _current_state == new_state:
 		return
-	var old_state = _current_state
+	var old_state := _current_state
 	@warning_ignore("int_as_enum_without_cast")
 	_current_state = new_state
-	emit_signal("game_state_changed", new_state, old_state)
+	game_state_changed.emit(new_state, old_state)

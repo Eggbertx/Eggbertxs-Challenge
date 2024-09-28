@@ -4,18 +4,18 @@ class_name DatFile
 
 enum { CORRECT_PASSWORD, NONEXISTENT_LEVEL, WRONG_PASSWORD }
 const default_files = ["CHIPS.DAT", "chips.dat", "ec.dat", "ec_testing.dat"]
-@export var file_path = ""
-@export var num_levels = 0
-var levels = []
-var stream = StreamPeerBuffer.new()
-var signature = 0
+@export var file_path := ""
+@export var num_levels := 0
+var levels :Array[Level] = []
+var stream := StreamPeerBuffer.new()
+var signature := 0
 
 func _init():
 	pass
 
 func load_file(filepath: String):
 	file_path = filepath
-	var file = FileAccess.open(filepath, FileAccess.READ)
+	var file := FileAccess.open(filepath, FileAccess.READ)
 
 	stream.data_array = file.get_buffer(file.get_length())
 	file.close()
@@ -48,8 +48,8 @@ func parse_file(debug = false):
 	num_levels = stream.get_u16()
 	print("Number of levels: %d" % num_levels)
 	for _l in range(num_levels):
-		var level = Level.new()
-		var err = level.parse_data(stream, debug)
+		var level := Level.new()
+		var err := level.parse_data(stream, debug)
 		if err != "":
 			return err
 		levels.append(level)

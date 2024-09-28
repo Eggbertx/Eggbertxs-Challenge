@@ -20,10 +20,11 @@ enum {
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var is_debug: bool
 var df: DatFile
-@export var time_left = -1
-@export var current_level_no = 0
-@onready var ui = $CanvasLayer/UI
+@export var time_left := -1
+@export var current_level_no := 0
+@onready var ui: UI = $CanvasLayer/UI
 @onready var levelmap: LevelMap = $LevelMap
+@onready var timer :Timer = $Timer
 
 func load_file(file = ""):
 	var err := ""
@@ -46,7 +47,7 @@ func load_file(file = ""):
 
 # load_level loads the level number (not the index in the array) and sets all the values (time, chips left, etc)
 func load_level(level_no: int):
-	var level_index = level_no - 1
+	var level_index := level_no - 1
 	df.levels[level_index].apply_to(levelmap)
 	levelmap.change_game_state(GameState.STATE_PAUSED)
 	time_left = df.levels[level_index].time_limit
@@ -82,7 +83,7 @@ func quit(status:int = 0):
 
 func _input(event):
 	if event is InputEventKey:
-		var state = levelmap.get_game_state()
+		var state := levelmap.get_game_state()
 		match event.keycode:
 			KEY_ESCAPE:
 				if is_debug:
@@ -107,9 +108,9 @@ func _init():
 func _ready():
 	is_debug = OS.is_debug_build()
 	df = DatFile.new()
-	var datfile_path = df.get_default_file()
+	var datfile_path := df.get_default_file()
 	if datfile_path == "":
-		$CanvasLayer/UI.alert("Unable to find a default super.dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
+		ui.alert("Unable to find a default super.dat file (checked CHIPS.DAT, chips.dat, and ec.dat)", "Error!")
 		return
 	load_file(datfile_path)
 	ui.inventory_tiles = levelmap.tileset
@@ -131,7 +132,7 @@ func _on_ui_game_item_selected(id):
 		GAME_ITEM_NEWGAME:
 			ui.panku_output("Starting a new game")
 		GAME_ITEM_PAUSE:
-			var state = levelmap.get_game_state()
+			var state := levelmap.get_game_state()
 			if state == GameState.STATE_PAUSED:
 				levelmap.change_game_state(GameState.STATE_PLAYING)
 			elif state == GameState.STATE_PLAYING:
@@ -141,8 +142,8 @@ func _on_ui_game_item_selected(id):
 		GAME_ITEM_TILESET:
 			ui.show_file_dialog(ui.FILEMODE_TILESET)
 		GAME_ITEM_MUSIC:
-			$CanvasLayer/UI.game_menu.toggle_item_checked(id)
-			if $CanvasLayer/UI.game_menu.is_item_checked(id):
+			ui.game_menu.toggle_item_checked(id)
+			if ui.game_menu.is_item_checked(id):
 				ui.panku_output("Playing music")
 			else:
 				ui.panku_output("Stopped playing music")
@@ -174,7 +175,7 @@ func _on_ui_level_selected(level: int, password: String):
 		ui.alert("No datfile loaded")
 		return
 
-	var password_success = df.check_password(level, password)
+	var password_success := df.check_password(level, password)
 	match password_success:
 		DatFile.CORRECT_PASSWORD:
 			ui.panku_output("Going to level %d" % level)
@@ -198,7 +199,7 @@ func _on_level_map_update_hint_status(visible: bool):
 	ui.set_hint_visible(visible, levelmap.hint_text)
 
 func _on_level_map_next_level_requested():
-	if $LevelMap.get_game_state() != GameState.STATE_LEVEL_EXIT:
+	if levelmap.get_game_state() != GameState.STATE_LEVEL_EXIT:
 		return
 	if df.num_levels <= current_level_no + 1:
 		ui.alert("Finished last level")
@@ -226,18 +227,18 @@ func _on_level_map_game_state_changed(state: int, old_state: int):
 		GameState.STATE_PLAYING:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
 			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, false)
-			$Timer.start()
+			timer.start()
 			if old_state == GameState.STATE_PAUSED:
 				ui.panku_output("Game unpaused")
 		GameState.STATE_PAUSED:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, false)
 			ui.game_menu.set_item_checked(GAME_ITEM_PAUSE, true)
-			$Timer.stop()
+			timer.stop()
 			if old_state == GameState.STATE_PLAYING:
 				ui.panku_output("Game paused")
 		GameState.STATE_OUT_OF_TIME:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
-			$Timer.stop()
+			timer.stop()
 			ui.alert("Out of time!", is_debug)
 		GameState.STATE_LEVEL_EXIT:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)

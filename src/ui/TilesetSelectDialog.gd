@@ -5,7 +5,7 @@ signal dialog_confirmed # activated when the OK button is pressed
 
 const default_color = Color(1, 0, 1, 1)
 
-var tileset_path = ""
+var tileset_path := ""
 # var chromakey_color: Color
 
 func _ready() -> void:
@@ -30,14 +30,10 @@ func show_dialog():
 	$Popup.show()
 
 func _on_BrowseButton_button_up():
-	emit_signal("browse_activated")
+	browse_activated.emit()
 
 func _on_OKButton_button_up():
-	emit_signal("dialog_confirmed",
-		tileset_path,
-		using_alpha(),
-		chromakey_color()
-	)
+	dialog_confirmed.emit(tileset_path, using_alpha(), chromakey_color())
 	$Popup.hide()
 
 func _on_CancelButton_button_up():

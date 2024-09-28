@@ -40,12 +40,12 @@ func _ready():
 	tileset_src = tileset.get_source(0)
 	player_character = MapCharacter.new(self, camera)
 	camera.position = player_character.position
-	# var err = set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
+	# var err := set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 	# if err != "":
 	# 	get_tree().quit()
 
 func _get_atlas(texture: Texture2D, _rect: Rect2) -> AtlasTexture:
-	var atlas = AtlasTexture.new()
+	var atlas := AtlasTexture.new()
 	atlas.set_atlas(texture)
 	return atlas
 
@@ -61,7 +61,7 @@ func get_tile(x: int, y: int, layer: int) -> int:
 func tile_id_to_coords(id: int) -> Vector2i:
 	return tileset_src.get_tile_id(id)
 
-func get_player_tiles():
+func get_player_tiles() -> Array[int]:
 	return [
 		$TileMap.get_cell_source_id(0, player_pos),
 		$TileMap.get_cell_source_id(1, player_pos)
@@ -87,8 +87,8 @@ func change_character_location(character: MapCharacter, x: int, y: int, layer: i
 
 
 func shift_tile(x: int, y: int, layer: int, direction: String):
-	var new_x = x
-	var new_y = y
+	var new_x := x
+	var new_y := y
 	match direction:
 		"north":
 			if y <= 0:
@@ -121,16 +121,16 @@ func shift_tile(x: int, y: int, layer: int, direction: String):
 # 		if img.load(path) != OK:
 # 			return "Unable to load tileset texture %s" % path
 # 		tileset_src.texture = ImageTexture.create_from_image(img)
-
-# 	var img_width = tileset_src.texture.get_width()
-# 	var img_height = tileset_src.texture.get_height()
+	
+# 	var img_width := tileset_src.texture.get_width()
+# 	var img_height := tileset_src.texture.get_height()
 # 	if img_width % tile_size > 0 or img_height % tile_size > 0:
 # 		return "Tileset has an invalid size, tile width and height must be multiples of %d" % tile_size
 # 	tileset_src.texture_region_size = Vector2i(tile_size, tile_size)
 
-# 	var x = 0
-# 	var y = 0
-# 	var atlases = []
+# 	var x := 0
+# 	var y := 0
+# 	var atlases: Array[AtlasTexture] = []
 # 	for t in range(112):
 # 		break
 # 		atlases.push_back(_get_atlas(tileset_src.texture, Rect2(x, y, tile_size, tile_size)))
@@ -166,7 +166,7 @@ func init_player_pos(pos: Vector2i, layer: int, direction: String):
 	player_character.show()
 	player_character.z_index = 1
 	on_hint = tile_has_hint(player_pos.x, player_pos.y)
-	emit_signal("update_hint_status", on_hint)
+	update_hint_status.emit(on_hint)
 
 func tile_has_hint(x: int, y: int):
 	return get_tile(x, y, 1) == Objects.HINT or get_tile(x, y, 2) == Objects.HINT
@@ -176,13 +176,13 @@ func tile_has_hint(x: int, y: int):
 #	pass
 
 func request_move(direction: String):
-	var new_x = player_pos.x
-	var new_y = player_pos.y
+	var new_x := player_pos.x
+	var new_y := player_pos.y
 	# next_x and next_y are used for checking the thing immediately after the destination.
 	# So for example, if the tile at (new_x,new_y) is DIRT_MOVABLE and the tile at
 	# (next_x,next_y) is FLOOR, it'll move, but if it's WALL, it won't
-	var next_x = player_pos.x
-	var next_y = player_pos.y
+	var next_x := player_pos.x
+	var next_y := player_pos.y
 	match direction:
 		"north":
 			if player_pos.y < 1:
@@ -206,8 +206,8 @@ func request_move(direction: String):
 			next_x = player_pos.x + 2
 		_:
 			pass
-	var dest_tile = get_tile(new_x, new_y, player_layer)
-	var next_tile = get_tile(next_x, next_y, player_layer)
+	var dest_tile := get_tile(new_x, new_y, player_layer)
+	var next_tile := get_tile(next_x, next_y, player_layer)
 	match dest_tile:
 		Objects.FLOOR, Objects.HINT, -1:
 			pass
@@ -215,7 +215,7 @@ func request_move(direction: String):
 			return
 		Objects.COMPUTER_CHIP:
 			if chips_left > 0:
-				emit_signal("update_chips_left", chips_left - 1)
+				update_chips_left.emit(chips_left - 1)
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.DIRT_MOVABLE:
 			match next_tile:
@@ -224,14 +224,14 @@ func request_move(direction: String):
 				_:
 					return
 		Objects.EXIT:
-			emit_signal("player_reached_exit")
+			player_reached_exit.emit()
 			$GameState.change_state(GameState.STATE_LEVEL_EXIT)
 		Objects.DOOR_BLUE:
 			if blue_keys > 0:
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 				blue_keys -= 1
 				if blue_keys == 0:
-					emit_signal("remove_item", Objects.KEY_BLUE)
+					remove_item.emit(Objects.KEY_BLUE)
 			else:
 				return
 		Objects.DOOR_RED:
@@ -239,7 +239,7 @@ func request_move(direction: String):
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 				red_keys -= 1
 				if red_keys == 0:
-					emit_signal("remove_item", Objects.KEY_RED)
+					remove_item.emit(Objects.KEY_RED)
 			else:
 				return
 		Objects.DOOR_GREEN:
@@ -252,7 +252,7 @@ func request_move(direction: String):
 				set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 				yellow_keys -= 1
 				if yellow_keys == 0:
-					emit_signal("remove_item", Objects.KEY_YELLOW)
+					remove_item.emit(Objects.KEY_YELLOW)
 			else:
 				return
 		Objects.SOCKET:
@@ -260,19 +260,19 @@ func request_move(direction: String):
 				return
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_BLUE:
-			emit_signal("pickup_item", Objects.KEY_BLUE)
+			pickup_item.emit(Objects.KEY_BLUE)
 			blue_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_RED:
-			emit_signal("pickup_item", Objects.KEY_RED)
+			pickup_item.emit(Objects.KEY_RED)
 			red_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_GREEN:
-			emit_signal("pickup_item", Objects.KEY_GREEN)
+			pickup_item.emit(Objects.KEY_GREEN)
 			green_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		Objects.KEY_YELLOW:
-			emit_signal("pickup_item", Objects.KEY_YELLOW)
+			pickup_item.emit(Objects.KEY_YELLOW)
 			yellow_keys += 1
 			set_tile(new_x, new_y, player_layer, Objects.FLOOR)
 		_:
@@ -280,17 +280,17 @@ func request_move(direction: String):
 			return
 	if on_hint and !tile_has_hint(new_x, new_y):
 		on_hint = false
-		emit_signal("update_hint_status", false)
+		update_hint_status.emit(false)
 	elif !on_hint and tile_has_hint(new_x, new_y):
 		on_hint = true
-		emit_signal("update_hint_status", true)
+		update_hint_status.emit(true)
 	change_character_location(player_character, new_x, new_y, player_layer)
 
 func _on_LevelMap_update_chips_left(left: int):
 	chips_left = left
 
 func _on_GameState_game_state_changed(new_state: int, old_state: int):
-	emit_signal("game_state_changed", new_state, old_state)
+	game_state_changed.emit(new_state, old_state)
 
 func _on_update_window_title(title: String):
 	get_window().title = title

@@ -1,3 +1,4 @@
+class_name UI
 extends Control
 
 signal file_selected
@@ -10,11 +11,11 @@ enum {
 	FILEMODE_TILESET
 }
 
-@onready var game_menu = $Panel/HBoxContainer/GameMenu.get_popup()
-@onready var level_menu = $Panel/HBoxContainer/LevelMenu.get_popup()
-@onready var panku_shell = Panku.module_manager.get_module("interactive_shell").interactive_shell
+@onready var game_menu: PopupMenu = $Panel/HBoxContainer/GameMenu.get_popup()
+@onready var level_menu: PopupMenu = $Panel/HBoxContainer/LevelMenu.get_popup()
+@onready var panku_shell: Control = Panku.module_manager.get_module("interactive_shell").interactive_shell
 
-var file_mode = FILEMODE_DATFILE
+var file_mode := FILEMODE_DATFILE
 var inventory_tiles: TileSet
 
 func _ready() -> void:
@@ -47,12 +48,12 @@ func set_level_display(level: int, display_visible = true):
 
 
 func add_inventory(id: int):
-	var tex_rect = TextureRect.new()
+	var tex_rect := TextureRect.new()
 	tex_rect.texture = inventory_tiles.tile_get_texture(id)
 	tex_rect.name = ("inv%d" % id)
-	var found = false
+	var found := false
 
-	var children = $InventoryContainer.get_children()
+	var children := $InventoryContainer.get_children()
 	for child in children:
 		if child.name == ("inv%d" % id):
 			found = true
@@ -61,7 +62,7 @@ func add_inventory(id: int):
 		$InventoryContainer.add_child(tex_rect)
 
 func remove_inventory(id: int):
-	var children = $InventoryContainer.get_children()
+	var children := $InventoryContainer.get_children()
 	for child in children:
 		if child.name == ("inv%d" % id):
 			$InventoryContainer.remove_child(child)
@@ -70,10 +71,10 @@ func show_goto():
 	$GotoLevelDialog/Popup.show()
 
 func game_menu_selected(id):
-	emit_signal("game_item_selected", id)
+	game_item_selected.emit(id)
 
 func level_menu_selected(id):
-	emit_signal("level_item_selected", id)
+	level_item_selected.emit(id)
 	
 func set_max_level(levels:int):
 	$GotoLevelDialog/Popup/VBoxContainer/GridContainer/LevelNoEdit.max_value = levels
@@ -102,11 +103,11 @@ func set_hint_visible(hint_visible: bool, text: String):
 	$HintPanel/HintText.text = text
 
 func _on_FileDialog_file_selected(path):
-	emit_signal("file_selected", path)
+	file_selected.emit(path)
 
 
 func _on_GotoLevelDialog_level_selected(level: int, password: String):
-	emit_signal("level_selected", level, password)
+	level_selected.emit(level, password)
 
 func _on_TilesetSelectDialog_browse_activated() -> void:
 	pass # Replace with function body.

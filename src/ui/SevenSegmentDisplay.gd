@@ -10,10 +10,10 @@ func set_number(num):
 		num = 0
 		set_digits(0, 0, 0)
 	else:
-		var arr = number_to_digits(num)
+		var arr := number_to_digits(num)
 		set_digits(arr[0], arr[1], arr[2])
 
-func set_digits(h,t,o):
+func set_digits(h: int, t: int, o: int):
 	if h < 1:
 		$Hundred.visible = false
 	else:
@@ -30,10 +30,10 @@ func set_digits(h,t,o):
 		o = 0
 	$One.texture.region.position.x = o*16
 
-func number_to_digits(num):
-	var h = int(floor(num/100.0)) % 10
-	var t = int(floor(num/10.0)) % 10
-	var o = num % 10
+func number_to_digits(num:int) -> Array[int]:
+	var h := int(floor(num/100.0)) % 10
+	var t := int(floor(num/10.0)) % 10
+	var o := num % 10
 	return [h, t, o]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

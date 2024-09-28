@@ -4,9 +4,9 @@ class_name MapCharacter
 
 const move_delay = 0.3
 
-var player_controlled = false
+var player_controlled := false
 var map: LevelMap
-var last_move_time = 0
+var last_move_time := 0.0
 var camera: Camera2D
 var sprite: AnimatedSprite2D
 
@@ -55,12 +55,12 @@ func check_exit():
 	if not player_controlled:
 		return
 	if _get_game_state() == GameState.STATE_PAUSED:
-		var player_tiles = map.get_player_tiles()
+		var player_tiles := map.get_player_tiles()
 		if player_tiles[0] == Objects.EXIT or player_tiles[1] == Objects.EXIT:
 			print("Loading next level")
 
 
-func _process(delta):
+func _process(delta: float):
 	match _get_game_state():
 		GameState.STATE_PLAYING, GameState.STATE_PAUSED:
 
@@ -77,5 +77,5 @@ func _process(delta):
 				check_movement()
 		GameState.STATE_LEVEL_EXIT:
 			if Input.is_action_just_pressed("ui_accept", false):
-				map.emit_signal("next_level_requested")
+				map.next_level_requested.emit()
 				check_exit()

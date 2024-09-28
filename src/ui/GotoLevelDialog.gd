@@ -7,7 +7,7 @@ func _ready():
 	pass
 
 func _on_OkButton_pressed():
-	emit_signal("level_selected",
+	level_selected.emit(
 		$Popup/VBoxContainer/GridContainer/LevelNoEdit.value,
 		$Popup/VBoxContainer/GridContainer/PasswordEdit.text
 	)
