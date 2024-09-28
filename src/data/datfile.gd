@@ -13,7 +13,7 @@ var signature := 0
 func _init():
 	pass
 
-func load_file(filepath: String):
+func load_file(filepath: String) -> String:
 	file_path = filepath
 	var file := FileAccess.open(filepath, FileAccess.READ)
 
@@ -37,20 +37,22 @@ func level_info(l:int):
 			return true
 	return false
 
-func valid_signature():
+func valid_signature() -> bool:
 	return signature == 0x0002AAAC or signature == 0x0102AAAC
 
-func parse_file(debug = false):
+func parse_file(debug = false) -> String:
 	signature = stream.get_u32()
 	if !valid_signature():
 		return "Invalid datfile signature in %s" % file_path.get_file()
 
 	num_levels = stream.get_u16()
 	print("Number of levels: %d" % num_levels)
+	var err := ""
 	for _l in range(num_levels):
 		var level := Level.new()
-		var err := level.parse_data(stream, debug)
+		err = level.parse_data(stream, debug)
 		if err != "":
+			level.queue_free()
 			return err
 		levels.append(level)
 	return ""

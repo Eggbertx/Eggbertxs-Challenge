@@ -66,6 +66,7 @@ func remove_inventory(id: int):
 	for child in children:
 		if child.name == ("inv%d" % id):
 			$InventoryContainer.remove_child(child)
+			child.queue_free()
 
 func show_goto():
 	$GotoLevelDialog/Popup.show()
