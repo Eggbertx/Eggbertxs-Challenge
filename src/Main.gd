@@ -26,8 +26,9 @@ var df: DatFile
 @onready var levelmap: LevelMap = $LevelMap
 
 func load_file(file = ""):
+	var err := ""
 	if ui.file_mode == ui.FILEMODE_TILESET:
-		var err = levelmap.set_tileset(file, 32)
+		err = levelmap.set_tileset(file, 32)
 		if err != "":
 			ui.alert(err)
 		return
@@ -35,7 +36,7 @@ func load_file(file = ""):
 		ui.alert("File path required", is_debug)
 		return
 	ui.panku_output("Loading %s" % file)
-	var err = df.load_file(file)
+	err = df.load_file(file)
 	if err != "":
 		ui.alert(err, is_debug)
 		return
@@ -100,10 +101,6 @@ func _init():
 	PankuConfig.set_config({
 		"native_logger": {
 			"screen_overlay": PankuModuleNativeLogger.ScreenOverlayDisplayMode.NeverShow
-		},
-		"general_settings": {
-			"lynx_window_blur_effect": false,
-			"lynx_window_base_color": Color(0.0, 0.05, 0.1, 0.9)
 		}
 	})
 
