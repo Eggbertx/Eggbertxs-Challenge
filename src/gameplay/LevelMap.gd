@@ -15,8 +15,9 @@ const DEFAULT_TILESET_PATH = "res://res/tiles.png"
 const DEFAULT_TILESET_SIZE = 32
 const MOVE_DLEAY = 0.3
 
-@onready var tilemap: TileMap = $TileMap
-@onready var camera: Camera2D = $TileMap/Camera2D
+@onready var layer1_tilemap: TileMapLayer = $Layer1
+@onready var layer2_tilemap: TileMapLayer = $Layer2
+@onready var camera: Camera2D = $Camera2D
 
 @export var tileset: TileSet
 @export var tileset_src: TileSetAtlasSource
@@ -36,7 +37,7 @@ const MOVE_DLEAY = 0.3
 @export var yellow_keys := 0
 
 func _ready():
-	tileset = tilemap.tile_set
+	tileset = layer1_tilemap.tile_set
 	tileset_src = tileset.get_source(0)
 	player_character = MapCharacter.new(self, camera)
 	camera.position = player_character.position
@@ -56,24 +57,29 @@ func get_game_state() -> int:
 	return $GameState.current_state
 
 func get_tile(x: int, y: int, layer: int) -> int:
-	return $TileMap.get_cell_source_id(layer - 1, Vector2i(x, y))
+	var tmLayer := layer1_tilemap if layer == 1 else layer2_tilemap
+	return tmLayer.get_cell_source_id(Vector2i(x, y))
 
 func tile_id_to_coords(id: int) -> Vector2i:
 	return tileset_src.get_tile_id(id)
 
 func get_player_tiles() -> Array[int]:
 	return [
-		$TileMap.get_cell_source_id(0, player_pos),
-		$TileMap.get_cell_source_id(1, player_pos)
+		layer1_tilemap.get_cell_source_id(player_pos),
+		layer2_tilemap.get_cell_source_id(player_pos)
 	]
 
 func set_tile(x: int, y: int, layer: int, tileID: int):
-	tilemap.set_cell(layer-1, Vector2i(x, y), 0, tile_id_to_coords(tileID))
+	var tmLayer := layer1_tilemap if layer == 1 else layer2_tilemap
+	tmLayer.set_cell(Vector2i(x, y), 0, tile_id_to_coords(tileID))
 
 func change_tile_location(pos1: Vector2i, l1: int, pos2: Vector2i, l2: int):
-	var tile :int = $TileMap.get_cell_source_id(l1-1, pos1)
-	$TileMap.set_cell(l1-1, pos1, -1)
-	$TileMap.set_cell(l2-1, pos2, tile)
+	var layer1 = layer1_tilemap if l1 == 1 else layer2_tilemap
+	var layer2 = layer1_tilemap if l1 == 1 else layer2_tilemap
+
+	var tile := layer1.get_cell_source_id(pos1)
+	layer1.set_cell(pos1, -1)
+	layer2.set_cell(pos2, tile)
 
 func change_character_location(character: MapCharacter, x: int, y: int, layer: int):
 	character.position.x = x * 32
@@ -159,8 +165,9 @@ func init_player_pos(pos: Vector2i, layer: int, direction: String):
 	player_pos = pos
 	player_layer = layer
 	player_character.player_controlled = true
-	$TileMap.add_child(player_character)
-	$TileMap.set_cell(layer-1, player_pos, -1)
+	var tmLayer = layer1_tilemap if layer == 1 else layer2_tilemap
+	tmLayer.add_child(player_character)
+	tmLayer.set_cell(player_pos, -1)
 	
 	player_character.sprite.animation = direction
 	player_character.show()

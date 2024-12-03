@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://lik5hbaoghpj"]
+[gd_scene load_steps=6 format=4 uid="uid://lik5hbaoghpj"]
 
 [ext_resource type="Script" path="res://src/gameplay/GameState.gd" id="1"]
 [ext_resource type="Script" path="res://src/gameplay/LevelMap.gd" id="2"]
@@ -127,25 +127,23 @@ sources/0 = SubResource("TileSetAtlasSource_pvmq3")
 [node name="LevelMap" type="Node2D"]
 script = ExtResource("2")
 
-[node name="TileMap" type="TileMap" parent="."]
-position = Vector2(16, 47)
-tile_set = SubResource("1")
-cell_quadrant_size = 32
-format = 2
-layer_0/name = "Layer1"
-layer_0/tile_data = PackedInt32Array(0, 65536, 5, 1, 65536, 5, 2, 65536, 5, 3, 65536, 5, 4, 65536, 5, 5, 65536, 5, 6, 65536, 5, 7, 65536, 5, 8, 65536, 5, 9, 65536, 5, 10, 65536, 5, 11, 65536, 5, 12, 65536, 5, 13, 65536, 5, 14, 65536, 5, 65550, 65536, 5, 131086, 65536, 5, 196622, 65536, 5, 262158, 65536, 5, 327694, 65536, 5, 393230, 65536, 5, 458766, 65536, 5, 524302, 65536, 5, 655370, 65536, 5, 655369, 65536, 5, 655368, 65536, 5, 655367, 65536, 5, 655366, 65536, 5, 655365, 65536, 5, 655364, 65536, 5, 655363, 65536, 5, 655362, 65536, 5, 655361, 65536, 5, 655360, 65536, 5, 589824, 65536, 5, 65536, 65536, 5, 524288, 65536, 5, 458752, 65536, 5, 393216, 65536, 5, 327680, 65536, 5, 262144, 65536, 5, 196608, 65536, 5, 131072, 65536, 5, 589838, 65536, 5, 655374, 65536, 5, 655373, 65536, 5, 655372, 65536, 5, 655371, 65536, 5)
-layer_1/name = "Layer2"
-layer_1/enabled = true
-layer_1/modulate = Color(1, 1, 1, 1)
-layer_1/y_sort_enabled = false
-layer_1/y_sort_origin = 0
-layer_1/z_index = 1
-layer_1/tile_data = PackedInt32Array()
-
-[node name="Camera2D" type="Camera2D" parent="TileMap"]
-position = Vector2(224, 160)
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(240, 207)
 editor_draw_limits = true
 editor_draw_drag_margin = true
+
+[node name="Layer1" type="TileMapLayer" parent="."]
+use_parent_material = true
+position = Vector2(16, 47)
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAUAAAABAAAAAAABAAUAAAACAAAAAAABAAUAAAADAAAAAAABAAUAAAAEAAAAAAABAAUAAAAFAAAAAAABAAUAAAAGAAAAAAABAAUAAAAHAAAAAAABAAUAAAAIAAAAAAABAAUAAAAJAAAAAAABAAUAAAAKAAAAAAABAAUAAAALAAAAAAABAAUAAAAMAAAAAAABAAUAAAANAAAAAAABAAUAAAAOAAAAAAABAAUAAAAOAAEAAAABAAUAAAAOAAIAAAABAAUAAAAOAAMAAAABAAUAAAAOAAQAAAABAAUAAAAOAAUAAAABAAUAAAAOAAYAAAABAAUAAAAOAAcAAAABAAUAAAAOAAgAAAABAAUAAAAKAAoAAAABAAUAAAAJAAoAAAABAAUAAAAIAAoAAAABAAUAAAAHAAoAAAABAAUAAAAGAAoAAAABAAUAAAAFAAoAAAABAAUAAAAEAAoAAAABAAUAAAADAAoAAAABAAUAAAACAAoAAAABAAUAAAABAAoAAAABAAUAAAAAAAoAAAABAAUAAAAAAAkAAAABAAUAAAAAAAEAAAABAAUAAAAAAAgAAAABAAUAAAAAAAcAAAABAAUAAAAAAAYAAAABAAUAAAAAAAUAAAABAAUAAAAAAAQAAAABAAUAAAAAAAMAAAABAAUAAAAAAAIAAAABAAUAAAAOAAkAAAABAAUAAAAOAAoAAAABAAUAAAANAAoAAAABAAUAAAAMAAoAAAABAAUAAAALAAoAAAABAAUAAAA=")
+tile_set = SubResource("1")
+rendering_quadrant_size = 32
+
+[node name="Layer2" type="TileMapLayer" parent="."]
+z_index = 1
+use_parent_material = true
+position = Vector2(16, 47)
+tile_set = SubResource("1")
 
 [node name="GameState" type="Node" parent="."]
 script = ExtResource("1")
