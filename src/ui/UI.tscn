@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cjsrrhs05pdpb"]
 
-[ext_resource type="Script" path="res://src/ui/UI.gd" id="1"]
+[ext_resource type="Script" uid="uid://bjbr7fasdbyv8" path="res://src/ui/UI.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dydoudqaj7hg7" path="res://res/background-new.png" id="2"]
 [ext_resource type="PackedScene" uid="uid://dxh5gr04whbc5" path="res://src/ui/SevenSegmentDisplay.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://b3cblpva2efi5" path="res://src/ui/GotoLevelDialog.tscn" id="4"]

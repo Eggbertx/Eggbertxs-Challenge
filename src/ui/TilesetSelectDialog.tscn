@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://6a5f1nqo5tk"]
 
-[ext_resource type="Script" path="res://src/ui/TilesetSelectDialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://dpw0cxwp1x5cf" path="res://src/ui/TilesetSelectDialog.gd" id="1"]
 
 [node name="TilesetSelectDialog" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b3cblpva2efi5"]
 
-[ext_resource type="Script" path="res://src/ui/GotoLevelDialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://b1ajkgypi0kcv" path="res://src/ui/GotoLevelDialog.gd" id="1"]
 
 [node name="GotoLevelDialog" type="Control"]
 layout_mode = 3

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=4 uid="uid://lik5hbaoghpj"]
 
-[ext_resource type="Script" path="res://src/gameplay/GameState.gd" id="1"]
-[ext_resource type="Script" path="res://src/gameplay/LevelMap.gd" id="2"]
+[ext_resource type="Script" uid="uid://cfaqr1nq5hat0" path="res://src/gameplay/GameState.gd" id="1"]
+[ext_resource type="Script" uid="uid://b41r0g2kmkehh" path="res://src/gameplay/LevelMap.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bfs46xov3dscf" path="res://res/tiles.png" id="2_gbbh1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pvmq3"]
