@@ -124,11 +124,3 @@ func valid_tile_value(tile: int):
 		&& tile != UNUSED2\
 		&& tile != UNUSED3\
 		&& tile <= CHIP_E
-
-func _ready():
-	pass
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
