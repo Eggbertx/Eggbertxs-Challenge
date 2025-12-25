@@ -18,13 +18,13 @@ enum {
 }
 
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
-var is_debug: bool
 var df: DatFile
 @export var time_left := -1
 @export var current_level_no := 0
 @onready var ui: UI = $CanvasLayer/UI
 @onready var levelmap: LevelMap = $LevelMap
 @onready var timer :Timer = $Timer
+@onready var is_debug := OS.is_debug_build()
 
 func load_file(file = ""):
 	var err := ""
@@ -34,12 +34,12 @@ func load_file(file = ""):
 			ui.alert(err)
 		return
 	if file == "":
-		ui.alert("File path required", is_debug)
+		ui.alert("File path required", "Error")
 		return
 	ui.panku_output("Loading %s" % file)
 	err = df.load_file(file)
 	if err != "":
-		ui.alert(err, is_debug)
+		ui.alert(err, "Error")
 		return
 	ui.set_max_level(df.num_levels)
 	ui.enable_level_menu()
@@ -67,10 +67,10 @@ func print_info():
 
 func level_info(level):
 	if df.file_path == "":
-		ui.alert("No dat file loaded", is_debug)
+		ui.alert("No dat file loaded", "Error")
 		return
 	if level == -1:
-		ui.alert("No level specified", is_debug)
+		ui.alert("No level specified", "Error")
 		return
 
 	if !df.level_info(level):
@@ -106,7 +106,6 @@ func _init():
 	})
 
 func _ready():
-	is_debug = OS.is_debug_build()
 	df = DatFile.new()
 	var datfile_path := df.get_default_file()
 	if datfile_path == "":
@@ -162,7 +161,7 @@ func _on_ui_level_item_selected(id):
 				ui.panku_output("Loading next level")
 				load_level(current_level_no + 1)
 			else:
-				ui.alert("No more levels", is_debug)
+				ui.alert("No more levels")
 		LEVEL_ITEM_PREVIOUS:
 			if current_level_no > 1:
 				ui.panku_output("Loading previous level")
@@ -172,7 +171,7 @@ func _on_ui_level_item_selected(id):
 
 func _on_ui_level_selected(level: int, password: String):
 	if df.file_path == "":
-		ui.alert("No datfile loaded")
+		ui.alert("No datfile loaded", "Error")
 		return
 
 	var password_success := df.check_password(level, password)
@@ -181,7 +180,7 @@ func _on_ui_level_selected(level: int, password: String):
 			ui.panku_output("Going to level %d" % level)
 			load_level(level)
 		DatFile.WRONG_PASSWORD:
-			ui.alert("Wrong password")
+			ui.alert("Wrong password", "Error")
 		DatFile.NONEXISTENT_LEVEL:
 			ui.alert("%s has fewer than %d levels" % [df.filename(), level])
 
@@ -239,6 +238,6 @@ func _on_level_map_game_state_changed(state: int, old_state: int):
 		GameState.STATE_OUT_OF_TIME:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
 			timer.stop()
-			ui.alert("Out of time!", is_debug)
+			ui.alert("Out of time!", "Game Over")
 		GameState.STATE_LEVEL_EXIT:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)

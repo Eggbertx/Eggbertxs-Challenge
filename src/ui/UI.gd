@@ -14,6 +14,7 @@ enum {
 @onready var game_menu: PopupMenu = $Panel/HBoxContainer/GameMenu.get_popup()
 @onready var level_menu: PopupMenu = $Panel/HBoxContainer/LevelMenu.get_popup()
 @onready var panku_shell: Control = Panku.module_manager.get_module("interactive_shell").interactive_shell
+@onready var is_debug = OS.is_debug_build()
 
 var file_mode := FILEMODE_DATFILE
 var inventory_tiles: TileSet
@@ -31,10 +32,11 @@ func panku_output(text: String):
 	print(text)
 	panku_shell.output(text)
 
-func alert(text:String, console = true):
+func alert(text:String, title:String = "Alert"):
 	$AcceptDialog.dialog_text = text
 	$AcceptDialog.visible = true
-	if console:
+	$AcceptDialog.title = title
+	if is_debug:
 		panku_output("Alert: %s" % text)
 
 func set_time_display(time: int, display_visible = true):
