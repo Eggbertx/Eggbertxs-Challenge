@@ -15,6 +15,7 @@ script = ExtResource("1")
 
 [node name="Timer" type="Timer" parent="."]
 
+[connection signal="debug_item_selected" from="CanvasLayer/UI" to="." method="_on_ui_debug_item_selected"]
 [connection signal="file_selected" from="CanvasLayer/UI" to="." method="_on_ui_file_selected"]
 [connection signal="game_item_selected" from="CanvasLayer/UI" to="." method="_on_ui_game_item_selected"]
 [connection signal="level_item_selected" from="CanvasLayer/UI" to="." method="_on_ui_level_item_selected"]

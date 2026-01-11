@@ -17,6 +17,12 @@ enum {
 	LEVEL_ITEM_GOTO
 }
 
+enum {
+	LEVEL_ITEM_LAYER_1_VISIBLE,
+	LEVEL_ITEM_LAYER_2_VISIBLE,
+	LEVEL_ITEM_HUD_VISIBLE,
+}
+
 const REPO_URL = "https://github.com/Eggbertx/Eggbertxs-Challenge"
 var df: DatFile
 @export var time_left := -1
@@ -29,9 +35,7 @@ var df: DatFile
 func load_file(file = ""):
 	var err := ""
 	if ui.file_mode == ui.FILEMODE_TILESET:
-		err = levelmap.set_tileset(file, 32)
-		if err != "":
-			ui.alert(err)
+		# levelmap.set_tileset(file, 32)
 		return
 	if file == "":
 		ui.alert("File path required", "Error")
@@ -57,6 +61,7 @@ func load_level(level_no: int):
 	current_level_no = level_no
 	ui.level_menu.set_item_disabled(LEVEL_ITEM_PREVIOUS, current_level_no < 2)
 	ui.level_menu.set_item_disabled(LEVEL_ITEM_NEXT, current_level_no >= df.num_levels)
+	levelmap.focus_on_player()
 
 func print_info():
 	if df.file_path == "":
@@ -77,6 +82,7 @@ func level_info(level):
 		ui.alert("Level #%d not found" % level)
 
 func quit(status:int = 0):
+	timer.stop()
 	df.queue_free()
 	levelmap.queue_free()
 	get_tree().quit(status)
@@ -117,10 +123,6 @@ func _ready():
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		quit()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-# func _process(delta: float):
-# 	pass
 
 func _on_ui_file_selected(path: String):
 	load_file(path)
@@ -241,3 +243,24 @@ func _on_level_map_game_state_changed(state: int, old_state: int):
 			ui.alert("Out of time!", "Game Over")
 		GameState.STATE_LEVEL_EXIT:
 			ui.game_menu.set_item_disabled(GAME_ITEM_PAUSE, true)
+
+
+func _on_ui_debug_item_selected(id: int) -> void:
+	var checked = not ui.debug_menu.is_item_checked(id)
+	ui.debug_menu.set_item_checked(id, checked)
+	match id:
+		LEVEL_ITEM_LAYER_1_VISIBLE:
+			levelmap.layer1_tilemap.visible = checked
+			ui.panku_output("Layer 1 visibility set to %s" % checked)
+		LEVEL_ITEM_LAYER_2_VISIBLE:
+			levelmap.layer2_tilemap.visible = checked
+			ui.panku_output("Layer 2 visibility set to %s" % checked)
+		LEVEL_ITEM_HUD_VISIBLE:
+			ui.panku_output("UI visibility set to %s" % checked)
+			$CanvasLayer/UI/UIImage.visible = checked
+			$CanvasLayer/UI/LevelDisplay.visible = checked
+			$CanvasLayer/UI/TimeDisplay.visible = checked
+			$CanvasLayer/UI/ChipsDisplay.visible = checked
+			$CanvasLayer/UI/InventoryContainer.visible = checked
+			if not checked:
+				$CanvasLayer/UI/HintPanel.visible = checked

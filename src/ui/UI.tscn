@@ -118,6 +118,23 @@ popup/item_2/id = 2
 popup/item_3/text = "Go to..."
 popup/item_3/id = 3
 
+[node name="DebugMenu" type="MenuButton" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Debug"
+item_count = 3
+popup/item_0/text = "Layer 1 Visible"
+popup/item_0/checkable = 1
+popup/item_0/checked = true
+popup/item_0/id = 0
+popup/item_1/text = "Layer 2 Visible"
+popup/item_1/checkable = 1
+popup/item_1/checked = true
+popup/item_1/id = 1
+popup/item_2/text = "HUD Visible"
+popup/item_2/checkable = 1
+popup/item_2/checked = true
+popup/item_2/id = 2
+
 [node name="AcceptDialog" type="AcceptDialog" parent="."]
 initial_position = 2
 size = Vector2i(200, 100)

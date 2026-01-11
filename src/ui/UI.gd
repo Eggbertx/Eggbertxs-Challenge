@@ -2,8 +2,9 @@ class_name UI
 extends Control
 
 signal file_selected
-signal game_item_selected
-signal level_item_selected
+signal game_item_selected(id: int)
+signal level_item_selected(id: int)
+signal debug_item_selected(id: int)
 signal level_selected
 
 enum {
@@ -13,6 +14,7 @@ enum {
 
 @onready var game_menu: PopupMenu = $Panel/HBoxContainer/GameMenu.get_popup()
 @onready var level_menu: PopupMenu = $Panel/HBoxContainer/LevelMenu.get_popup()
+@onready var debug_menu: PopupMenu = $Panel/HBoxContainer/DebugMenu.get_popup()
 @onready var panku_shell: Control = Panku.module_manager.get_module("interactive_shell").interactive_shell
 @onready var is_debug = OS.is_debug_build()
 
@@ -24,6 +26,10 @@ func _ready() -> void:
 	get_viewport().gui_embed_subwindows = false
 	game_menu.connect("id_pressed", game_menu_selected)
 	level_menu.connect("id_pressed", level_menu_selected)
+	if is_debug:
+		debug_menu.connect("id_pressed", debug_menu_selected)
+	else:
+		debug_menu.visible = false
 
 	$ViewWindow.set_position(Vector2(16, 16 + $Panel.size.y))
 	$ViewWindow.visible = false
@@ -78,7 +84,10 @@ func game_menu_selected(id):
 
 func level_menu_selected(id):
 	level_item_selected.emit(id)
-	
+
+func debug_menu_selected(id):
+	debug_item_selected.emit(id)
+
 func set_max_level(levels:int):
 	$GotoLevelDialog/Popup/VBoxContainer/GridContainer/LevelNoEdit.max_value = levels
 
