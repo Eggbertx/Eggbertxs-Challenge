@@ -40,10 +40,8 @@ func _ready():
 	tileset = layer1_tilemap.tile_set
 	tileset_src = tileset.get_source(0)
 	player_character = MapCharacter.new(self, camera)
-	camera.position = player_character.position
-	# var err := set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
-	# if err != "":
-	# 	get_tree().quit()
+	focus_on_player()
+	# set_tileset(DEFAULT_TILESET_PATH, DEFAULT_TILESET_SIZE)
 
 func _get_atlas(texture: Texture2D, _rect: Rect2) -> AtlasTexture:
 	var atlas := AtlasTexture.new()
@@ -89,7 +87,7 @@ func change_character_location(character: MapCharacter, x: int, y: int, layer: i
 		player_pos.x = x
 		player_pos.y = y
 		player_layer = layer
-		camera.position = character.position
+		focus_on_player()
 
 
 func shift_tile(x: int, y: int, layer: int, direction: String):
@@ -156,9 +154,15 @@ func shift_tile(x: int, y: int, layer: int, direction: String):
 # 	player_character.add_sprite_frame("east", atlases[Objects.CHIP_E])
 # 	return ""
 
+func set_camera_position(x: float, y: float):
+	var tile_size := tileset_src.texture_region_size.x
+	camera.position = Vector2i(int(x + tile_size / 2.0), int(y + tile_size / 2.0))
 
-# sets the player position when the map is first loaded, replacing the Objects.CHIP_E tile
-# with a sprite
+func focus_on_player():
+	set_camera_position(player_character.position.x, player_character.position.y)
+
+## sets the player position when the map is first loaded, replacing the Objects.CHIP_E tile
+## with a sprite
 func init_player_pos(pos: Vector2i, layer: int, direction: String):
 	player_character.position.x = pos.x * 32
 	player_character.position.y = pos.y * 32
@@ -178,9 +182,6 @@ func init_player_pos(pos: Vector2i, layer: int, direction: String):
 func tile_has_hint(x: int, y: int):
 	return get_tile(x, y, 1) == Objects.HINT or get_tile(x, y, 2) == Objects.HINT
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 
 func request_move(direction: String):
 	var new_x := player_pos.x
